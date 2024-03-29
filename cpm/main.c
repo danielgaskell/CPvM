@@ -107,6 +107,6 @@ void main(void) {
 // whenever it starts generating a too-large file that doesn't run.
 void padding(void) __naked {
     __asm
-    .bndry 3
+    .bndry 4
     __endasm;
 }
