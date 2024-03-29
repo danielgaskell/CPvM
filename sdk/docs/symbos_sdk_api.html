@@ -1,0 +1,148 @@
+<style type="text/css">
+<!--
+body,td,th {
+	color: #FFFFFF;
+}
+body {
+	background-color: #000000;
+}
+.Estilo2 {font-family: "Konami 10pt", "Konami 12pt"}
+.Estilo9 {font-size: large}
+.Estilo11 {font-family: Georgia, "Times New Roman", Times, serif}
+.Estilo12 {
+	font-family: "Konami 10pt", "Konami 12pt";
+	font-size: large;
+	color: #FFFF00;
+}
+.Estilo17 {color: #CCCCCC}
+a:link {
+	color: #00FFCC;
+}
+a:visited {
+	color: #00CCFF;
+}
+.Estilo22 {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #33FFFF; }
+.Estilo27 {font-size: 12px}
+.Estilo29 {font-family: Georgia, "Times New Roman", Times, serif; color: #FF0000; }
+.Estilo30 {color: #FFFFFF}
+-->
+</style><table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="232"><div align="center"><img src="images/msxlogo.jpg" width="128" height="41" /><br />
+        <a href="index.html"><img src="images/nlklogo.jpg" width="128" height="40" border="0" /></a></div></td>
+    <td width="568"><div align="center" class="Estilo2"><span class="Estilo9">Bienvenido a mi rincon MSX !</span> &iexcl;<span class="Estilo9"> <br />
+          <span class="Estilo17">Welcome to my MSX corner ! </span></span></div></td>
+  </tr>
+  <tr>
+    <td bgcolor="#000000">&nbsp;</td>
+    <td bgcolor="#000000">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2"><blockquote>
+      <p class="Estilo29"><span class="Estilo12">API Symbos SDK</span><br />
+          <br />
+        <span class="Estilo30">STANDARD (symbos.h)</span><span class="Estilo27"> </span><br />
+        <span class="Estilo22">CODEBASE</span><br />
+        <span class="Estilo22">GET_DATA_AREA_ADDR()<br />
+        GET_TRANSFER_AREA_ADDR()<br />
+         GET_TIMER_0()<br />
+         GET_TIMER_1()<br />
+         GET_TIMER_2()<br />
+         GET_TIMER_3()<br />
+         GET_APPLICATION_BANK()<br />
+         GET_APPLICATION_ID()<br />
+         GET_MAIN_PROC_ID()<br />
+         symbos_app.startAddr<br />
+          symbos_app.processID<br />
+          symbos_app.msgBuffer<br />
+        </span>        <br />
+        <span class="Estilo30">DESKTOP (symbos_desktop.h)</span><span class="Estilo27"> <br />
+          </span><span class="Estilo22">unsigned char Window_Open (unsigned char bank, SYMBOS_WINDOW *win);<br />
+            void Window_Close (unsigned char winID);<br />
+            void Window_Redraw (unsigned char winID, unsigned char content, unsigned char firstControl);<br />
+            void Window_Redraw_Menu (unsigned char winID);<br />
+            void Window_Redraw_Toolbar (unsigned char winID, unsigned char content, unsigned char firstControl);<br />
+            void Window_Redraw_Title (unsigned char winID);<br />
+            void Window_Redraw_Statusbar (unsigned char winID);<br />
+            char Clipboard_Put (unsigned char bank, unsigned char *addr, unsigned int len, unsigned char type);<br />
+            unsigned char Desktop_GetScreenMode (void);<br />
+            void Desktop_SetScreenMode (unsigned char mode);<br />
+            unsigned short Desktop_GetColor (unsigned char ix);<br />
+            void Desktop_SetColor (unsigned char ix, unsigned short value);<br />
+            char Desktop_Stop (unsigned int winID);<br />
+            void Desktop_Continue (void);</span><span class="Estilo27"><br />
+            <br />
+              </span><span class="Estilo30">SYSTEM (symbos_system.h)</span><span class="Estilo27"> <br />
+                </span><span class="Estilo22">MESSAGEBOX(string)<br />
+                Sys_FileDialog_MakePath(p,fn,ext);<br />
+                unsigned char Sys_Program_Run (unsigned char bank, char *path, unsigned char showError, SYS_PROGRAM_INFO *pInfo);<br />
+                void Sys_Program_End (unsigned char aID);<br />
+                void Sys_RunDialog (void);<br />
+                void Sys_ControlPanel (unsigned char subMod);<br />
+                void Sys_TaskManager (void);<br />
+                unsigned char Sys_MessageBox (unsigned char bank, MESSAGE_BOX *mb, unsigned char mode);<br />
+                char Sys_FileDialog (unsigned char bank, char *path, unsigned char filter);<br />
+                void Sys_GetComputerType (unsigned char *computerType);<br />
+                  </span><span class="Estilo27"><br />
+                    </span><span class="Estilo30">DEVICE (symbos_device.h) </span><span class="Estilo27"><br />
+                      </span><span class="Estilo22">unsigned char Device_KeyPut (unsigned char asciiCode);<br />
+                      unsigned int Device_KeyStatus (unsigned char scanCode);<br />
+                      unsigned char Device_KeyTest (unsigned char scanCode);<br />
+                      unsigned char Device_MouseKeyStatus (void);<br />
+                      unsigned long Device_MousePosition (void);<br />
+                      void Device_TimeSetEx (TIME *t);<br />
+                      void Device_TimeSet (unsigned char second, unsigned char minute, unsigned char hour, unsigned char day, unsigned char month, unsigned int year, unsigned char timeZone);<br />
+                      void Device_TimeGet (TIME *t);<br />
+                        </span><span class="Estilo27"><br />
+                          </span><span class="Estilo30">FILE (symbos_file.h) </span><span class="Estilo27"><br />
+                            </span><span class="Estilo22">int File_New (unsigned char bank, char *path, char attrib);<br />
+                            int File_Open (unsigned char bank, char *path);<br />
+                            int File_Close (int handle);<br />
+                            unsigned int File_Read (int handle, unsigned char bank, unsigned char *buffer, unsigned int bytes);<br />
+                            unsigned int File_Write (int handle, unsigned char bank, unsigned char *buffer, unsigned int bytes);<br />
+                            unsigned long File_Seek (int handle, unsigned long pos, unsigned char ref);<br />
+                            int File_GetLine (int handle, unsigned char bank, char *buffer);<br />
+                            unsigned long File_Size (int handle);<br />
+                              </span><span class="Estilo27"><br />
+                                </span><span class="Estilo30">KERNEL (symbos_kernel.h) </span><span class="Estilo27"><br />
+                                  </span><span class="Estilo22">void Multitasking_SoftInterrupt (void) ;<br />
+                                  unsigned short Message_Sleep_And_Receive (unsigned char recID, unsigned char sendID, unsigned char *msg);<br />
+                                  unsigned char Message_Send (unsigned char sendID, unsigned char recID, unsigned char *msg);<br />
+                                  unsigned short Message_Receive (unsigned char recID, unsigned char sendID, unsigned char *msg);<br />
+                                  unsigned char Multitasking_Add_Process (unsigned char bank, APP_INFO *info, unsigned char prio);<br />
+                                  void Multitasking_Delete_Process (unsigned char pID);<br />
+                                  unsigned char Multitasking_Add_Timer (unsigned char bank, APP_INFO *info);<br />
+        void Multitasking_Delete_Timer (unsigned char pID);<br />
+                                  unsigned long Multitasking_GetCounter (void); </span><span class="Estilo22"><br />
+        <br />
+        </span><span class="Estilo30">MEMORY (symbos_memory.h) </span><span class="Estilo27"><br />
+          </span><span class="Estilo22">MEMORY_GETBANK(m) <br />
+        MEMORY_GETLEN(m)<br />
+          MEMORY_GETADDR(m)</span><span class="Estilo22"><br />
+        void Banking_Copy (unsigned char bankSrc, unsigned int src, unsigned char bankDst, unsigned int dst, unsigned int len);<br />
+        unsigned short Banking_ReadWord (unsigned char bank, unsigned int addr);<br />
+        void Banking_WriteWord (unsigned char bank, unsigned int addr, unsigned short word);<br />
+        unsigned char Banking_ReadByte (unsigned char bank, unsigned int addr);<br />
+        void Banking_WriteByte (unsigned char bank, unsigned int addr, unsigned char byte);<br />
+        unsigned long Memory_Summary (void);<br />
+        MEMORY_PTR Memory_New (unsigned int len, unsigned char type);<br />
+        void Memory_Delete (MEMORY_PTR data);<br />
+        void Memory_Copy (MEMORY_PTR dst, MEMORY_PTR src, unsigned int len);<br />
+        </span><span class="Estilo27"><br />
+          </span><span class="Estilo30">SHELL (symbos_shell.h) </span><span class="Estilo27"><br />
+            </span><span class="Estilo22">int Shell_CharInput (unsigned char shellPID, unsigned char channel);<br />
+            void Shell_CharOutput (unsigned char shellPID, unsigned char channel, unsigned char byte);<br />
+            int Shell_StringInput (unsigned char shellPID, unsigned char channel, unsigned char bank, char *str);<br />
+            void Shell_StringOutput (unsigned char shellPID, unsigned char channel, unsigned char bank, unsigned char *str, int len);<br />
+            void Shell_Exit (unsigned char shellPID, int mode);<br />
+            char *Shell_StartParam (unsigned short startCodeAddr);<br />
+        char *Shell_NextParam (char *param, char *str);</span></p>
+      <p class="Estilo11">&nbsp;</p>
+      </blockquote>      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2">&nbsp;</td>
+  </tr>
+  
+</table>

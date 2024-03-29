@@ -1,0 +1,834 @@
+/*=============================================================================
+ CP\/M SymbOS CP/M Compatibility Layer
+ (C) Copyright 2024, Prevtenet & Prodatron
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the “Software”), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+=============================================================================*/
+
+// save fcb_buffer back to TPA at fcb
+void write_fcb(unsigned short fcb, unsigned char len) { Banking_Copy(bnk_vm, (unsigned short)&fcb_buffer, bnk_tpa, fcb, len); }
+
+// load fcb_buffer from TPA at fcb
+void read_fcb(unsigned short fcb) { Banking_Copy(bnk_tpa, fcb, bnk_vm, (unsigned short)&fcb_buffer, sizeof(fcb_buffer)); }
+
+// loads the base path for the specified drive into buffer[]
+void set_base_path(unsigned char drive) {
+    if (drive == 0 || drive == '?')
+        drive = default_drive;
+    else
+        --drive;
+    if (drive < 5) {
+        strcpy(buffer, &drive_paths[drive][0]);
+    } else {
+        buffer[0] = drive + 'A';
+        buffer[1] = ':';
+        buffer[2] = '\\';
+        buffer[3] = 0;
+    }
+    login_vector |= (1 << (drive - 1));
+}
+
+// Converts the filename and path from fcb to SymbOS format, storing in buffer[].
+void path_from_fcb(unsigned short fcb) {
+    read_fcb(fcb);
+    set_base_path(fcb_buffer.drive);
+    filename_to_symbos(buffer + strlen(buffer), (char*)&fcb_buffer + 1);
+}
+
+// errors if the current path in buffer[] (e.g., after path_from_fcb()) refers to a read-only disk.
+unsigned char write_err(void) {
+    char* msg;
+    if (drive_ro & (1 << (buffer[0] - 65))) {
+        msg = "BDOS Err on X: R/O\r\n";
+        msg[12] = buffer[0]; // set to correct drive letter
+        strout(msg);
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+// BDOS #0 - System Reset
+void system_reset(void) {
+    if (launch_ccp) {
+        // pop leftover calls since CCP->app->reset leaves 4 of them on the stack
+        __asm
+            pop de
+            pop de
+            pop de
+            pop de
+        __endasm;
+        close_all_files();
+        ccp();
+    } else {
+        symbos_exit();
+    }
+}
+
+// FIXME: phony dir entry here has problems:
+// -- system for finding extent, subsequent extents on wildcards - see RunCPM
+// -- fake allocation blocks
+unsigned char search_for_next(void) {
+    unsigned short file_len;
+
+    if (dir_buffer_on >= dir_buffer_count) {
+        // end of files
+        return 0xFF;
+    } else {
+        // construct mock directory entry from current
+        file_len = ((*((unsigned long*)dir_buffer_ptr)) + 127) >> 7; // +127 to ensure that last record isn't rounded away
+        dir_buffer_ptr += 9;
+        memset(&dir_entry, 0, sizeof(dir_entry)); // blank buffer; note that this sets user to 0 (single-user only)
+        dir_entry.user = user_number;
+        filename_to_cpm(dir_entry.filename, dir_buffer_ptr);
+        dir_entry.extent = 0;
+        dir_entry.record_count = (file_len > 128) ? 128 : file_len; // FIXME more complex system
+
+        // skip to next entry
+        while (*dir_buffer_ptr++);
+        ++dir_buffer_on;
+
+        // copy mock directory entry to DMA (lazy approach: always copy to first position in DMA)
+        Banking_Copy(bnk_vm, (unsigned short)&dir_entry, bnk_tpa, dma, 32);
+        return 0; // 0 = first DMA block
+    }
+}
+
+unsigned char search_for_first(unsigned short fcb) {
+    // extract filename from FCB
+    path_from_fcb(fcb);
+
+    // call DIRINP (automatically deals with wildcards)
+    dir_buffer_ptr = dir_buffer;
+    dir_buffer_on = 0;
+    if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, dir_buffer, sizeof(dir_buffer), 0, &dir_buffer_count))
+        return search_for_next();
+    else
+        return 0xFF;
+}
+
+// Seek file handle to byte position pos if necessary, setting the appropriate extent and current record in fcb_buffer.
+// (Does not by itself write changes to fcb_buffer back to TPA.)
+void seek_sequential(unsigned char handle, unsigned short pos) {
+    unsigned short remaining_records;
+    if (handles_pos[handle] != pos) {
+        handles_pos[handle] = pos;
+        File_Seek(handle, (unsigned long)pos * 128, 0);
+        fcb_buffer.current_record = pos & 0x7F;
+        fcb_buffer.extent = (pos >> 7) & 0x1F;
+        if (fcb_buffer.module & 0x80)
+            fcb_buffer.module = (pos >> 12) | 0x80;
+        else
+            fcb_buffer.module = (pos >> 12);
+        remaining_records = handles_len[handle] - handles_pos[handle];
+        if (remaining_records < 128)
+            fcb_buffer.record_count = remaining_records;
+        else
+            fcb_buffer.record_count = 128;
+    }
+}
+
+// returns the current byte position within the file referenced in fcb_buffer
+unsigned short current_pos(void) {
+    return ((unsigned short)(fcb_buffer.module & 0x7F) * 4096) + ((unsigned short)fcb_buffer.extent * 128) + fcb_buffer.current_record;
+}
+
+// update a newly-opened fcb with file/handle information and save it (also updates external handle information)
+void new_fcb(unsigned short fcb, unsigned char handle) {
+    handles_used[handle] = 1;
+    handles_pos[handle] = 0;
+    handles_fcb[handle] = fcb;
+    fcb_buffer.handle = handle + 1;
+    seek_sequential(handle, current_pos()); // deal with files opened with extent + record already at a specific location
+    fcb_buffer.record_count = handles_len[handle] > 255 ? 255 : handles_len[handle];
+    memset(&fcb_buffer.dirinfo, 0, 16);
+    write_fcb(fcb, 33);
+}
+
+// FIXME: advanced programs may try to match file extent as well as name, to open partway through; handle this better.
+// FIXME simulate allocation blocks?
+unsigned char open_file(unsigned short fcb) {
+    unsigned char handle;
+
+    // extract filename from FCB
+    path_from_fcb(fcb);
+
+    // force-close files if 1) this FCB already has a handle, or 2) this FCB address was previously used for another open file
+    // (handles the majority of common cases where files are left hanging without being closed)
+    handle = fcb_buffer.handle - 1;
+    if (handle) {
+        if (handles_used[handle]) {
+            File_Close(handle);
+            handles_used[handle] = 0;
+            handles_fcb[handle] = 0;
+        }
+    }
+    for (handle = 0; handle < 8; ++handle) {
+        if (handles_fcb[handle] == fcb && handles_used[handle]) {
+            File_Close(handle);
+            handles_used[handle] = 0;
+            handles_fcb[handle] = 0;
+        }
+    }
+
+    // if it has a wildcard, use DIRINP to get first filename
+    if (strchr(buffer, '?')) {
+        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, large_buffer, 23, 0, &dir_buffer_count_open)) {
+            if (dir_buffer_count_open) {
+                // found at least one matching file, create absolute path
+                set_base_path(fcb_buffer.drive);
+                strcat(buffer, large_buffer + 9);
+            } else {
+                return 0xFF;
+            }
+        } else {
+            return 0xFF;
+        }
+    }
+
+    // try opening file
+    handle = File_Open(bnk_vm, buffer);
+    if (handle <= 7) {
+        handles_len[handle] = (File_Seek(handle, 0, 2) + 127) >> 7; // get file length (in records); +127 ensure that incomplete records are not rounded away
+        File_Seek(handle, 0, 0); // seek back to start
+        fcb_buffer.module |= 0x80; // unmodified
+        new_fcb(fcb, handle);
+        return 0;
+    } else {
+        // error (FIXME more specific message)
+        return 0xFF;
+    }
+}
+
+unsigned char new_file(unsigned short fcb) {
+    unsigned char f;
+
+    // extract filename from FCB
+    path_from_fcb(fcb);
+
+    // try creating file
+    if (!write_err()) {
+        f = File_New(bnk_vm, buffer, 0);
+        if (f <= 7) {
+            handles_len[f] = 0;
+            handles_pos[f] = 0;
+            fcb_buffer.extent = 0;
+            fcb_buffer.current_record = 0;
+            fcb_buffer.module = 0; // starts already not "unmodified"
+            fcb_buffer.random_record = 0;
+            fcb_buffer.random_record_overflow = 0;
+            new_fcb(fcb, f);
+            return 0;
+        } else {
+            // error (FIXME more specific message)
+            return 0xFF;
+        }
+    } else {
+        return 0xFF;
+    }
+}
+
+// FIXME: check for File_Close error codes
+unsigned char close_file(unsigned short fcb) {
+    unsigned char handle;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+    if (handles_used[handle]) {
+        handles_used[handle] = 0;
+        handles_fcb[handle] = 0;
+        File_Close(handle);
+        return 0;
+    } else {
+        return 0xFF;
+    }
+}
+
+unsigned char delete_file(unsigned short fcb) {
+    path_from_fcb(fcb);
+    if (!write_err()) {
+        if (!Directory_DeleteFile(bnk_vm, buffer))
+            return 0;
+        else
+            return 0xFF;
+    } else {
+        return 0xFF;
+    }
+}
+
+unsigned char rename_file(unsigned short pseudo_fcb) {
+    path_from_fcb(pseudo_fcb);
+    filename_to_symbos(large_buffer, ((char*)&fcb_buffer) + 17);
+    if (!write_err()) {
+        if (!Directory_RenameFile(bnk_vm, buffer, large_buffer))
+            return 0;
+        else
+            return 0xFF;
+    } else {
+        return 0xFF;
+    }
+}
+
+void advance_record(unsigned short fcb) {
+    ++fcb_buffer.current_record;
+    if (fcb_buffer.current_record > 127) {
+        fcb_buffer.current_record = 0; // Note that RunCPM increments after 128 and sets current_record to 1 instead, contrary to Johnson-Laird.
+        ++fcb_buffer.extent;
+    }
+    if (fcb_buffer.extent > 31) {
+        fcb_buffer.extent = 0;
+        ++fcb_buffer.module;
+    }
+    write_fcb(fcb, 33);
+}
+
+// where read_bytes < 128, fill remaining part of record with 0x1A (EOF) - improves compatibility with FAT files that end mid-record
+void fill_eof(unsigned char read_bytes) {
+    memset(buffer, 0x1A, 128 - read_bytes);
+    Banking_Copy(bnk_vm, (unsigned short)buffer, bnk_tpa, dma + read_bytes, 128 - read_bytes);
+}
+
+unsigned char read_sequential(unsigned short fcb) {
+    unsigned char handle, read_bytes;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+    if (handle <= 7) {
+        seek_sequential(handle, current_pos()); // ensure all positional information is updated to match FCB
+        if (handles_pos[handle] < handles_len[handle]) {
+            // read to DMA
+            read_bytes = File_Read(handle, bnk_tpa, (unsigned char*)dma, 128);
+            if (read_bytes == 0)
+                return 1; // EOF (nothing was read, error or EOF)
+            if (read_bytes < 128)
+                fill_eof(read_bytes);
+
+            // advance current record
+            ++handles_pos[handle];
+            advance_record(fcb);
+
+            // return success
+            return 0; // OK
+        } else {
+            return 1; // EOF
+        }
+    } else {
+        return 9; // invalid FCB
+    }
+}
+
+unsigned char write_sequential(unsigned short fcb) {
+    unsigned char handle, wrote_bytes;
+    unsigned short pos;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+
+    if (handle <= 7) {
+        if (!write_err()) {
+            pos = current_pos();
+            seek_sequential(handle, pos); // ensure all positional information is updated to match FCB
+            wrote_bytes = File_Write(handle, bnk_tpa, (unsigned char*)dma, 128);
+            if (wrote_bytes < 128)
+                return 1; // directory full (something went wrong, unable to finish write)
+
+            // advance current record
+            ++handles_len[handle];
+            ++handles_pos[handle];
+            fcb_buffer.module &= 0x7F; // clear unmodified flag
+            advance_record(fcb);
+
+            // return success
+            return 0;
+        } else {
+            return 0xFF; // hardware error
+        }
+    } else {
+        return 9; // invalid FCB
+    }
+}
+
+void update_record_to_random(unsigned short fcb) {
+    fcb_buffer.current_record = (fcb_buffer.random_record & 0x7F);
+    fcb_buffer.extent = ((fcb_buffer.random_record >> 7) & 0x1F);
+    if (fcb_buffer.module & 0x80)
+        fcb_buffer.module = (fcb_buffer.random_record >> 12) | 0x80;
+    else
+        fcb_buffer.module = fcb_buffer.random_record >> 12;
+    write_fcb(fcb, 36);
+}
+
+unsigned char read_random(unsigned short fcb) {
+    unsigned char handle, read_bytes;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+    if (handle <= 7) {
+        if (fcb_buffer.random_record < handles_len[handle]) {
+            if (handles_pos[handle] != fcb_buffer.random_record) {
+                handles_pos[handle] = fcb_buffer.random_record;
+                File_Seek(handle, (unsigned long)fcb_buffer.random_record * 128, 0);
+            }
+            read_bytes = File_Read(handle, bnk_tpa, (unsigned char*)dma, 128);
+            ++handles_pos[handle];
+            if (read_bytes == 0)
+                return 1; // nothing was read (returned as "attempted to read unwritten record")
+            if (read_bytes < 128)
+                fill_eof(read_bytes);
+            update_record_to_random(fcb);
+
+            return 0;
+        } else {
+            return 1; // attempted to read unwritten record
+        }
+    } else {
+        return 9; // invalid FCB
+    }
+}
+
+unsigned char write_random(unsigned short fcb) {
+    unsigned char handle, wrote_bytes;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+
+    if (handle <= 7) {
+        if (!write_err()) {
+            if (handles_len[handle] < fcb_buffer.random_record) {
+                // too short, extend file
+                File_Seek(handle, 0, 2); // seek to end
+                memset(large_buffer, 0, 128); // create null bytes to write
+                while (handles_len[handle] < fcb_buffer.random_record) {
+                    File_Write(handle, bnk_vm, large_buffer, 128);
+                    ++handles_len[handle];
+                }
+                handles_pos[handle] = fcb_buffer.random_record; // already at end, so no seek needed after this; just update handles_pos
+            }
+            if (handles_pos[handle] != fcb_buffer.random_record) {
+                handles_pos[handle] = fcb_buffer.random_record;
+                File_Seek(handle, (unsigned long)fcb_buffer.random_record * 128, 0);
+            }
+            wrote_bytes = File_Write(handle, bnk_tpa, (unsigned char*)dma, 128);
+            ++handles_len[handle];
+            ++handles_pos[handle];
+            if (wrote_bytes < 128)
+                return 2;// directory full (unable to finish write)
+            fcb_buffer.module &= 0x7F; // clear unmodified flag
+            update_record_to_random(fcb);
+            return 0;
+        } else {
+            return 0xFF; // write-protected (hardware error)
+        }
+    } else {
+        return 9; // invalid FCB
+    }
+}
+
+void get_file_size(unsigned short fcb) {
+    unsigned char handle;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+    fcb_buffer.random_record = handles_len[handle];
+    if (handles_len[handle] == 65535)
+        fcb_buffer.random_record_overflow = 1;
+    else
+        fcb_buffer.random_record_overflow = 0;
+    write_fcb(fcb, 36);
+}
+
+void set_random_record(unsigned short fcb) {
+    unsigned char handle;
+    read_fcb(fcb);
+    handle = fcb_buffer.handle - 1;
+    fcb_buffer.random_record = handles_pos[handle];
+    if (handles_pos[handle] == 65535)
+        fcb_buffer.random_record_overflow = 1;
+    else
+        fcb_buffer.random_record_overflow = 0;
+    write_fcb(fcb, 36);
+}
+
+// terminal emulation for a single character - handles regular printable chars
+// and maintains a state machine for escape sequences, which will be outputted
+// all at once on completion of the sequence. Output goes at *out_ptr.
+void buffer_char(unsigned char ch) {
+    ch &= 0x7F; // strip high bit, since some software will send with high bit set
+    if (ch == 27) {
+        // escape code start
+        escape_chars_expected = 1;
+        escape_char_bracket = 0;
+        escape_char_position = 0;
+    } else if (escape_chars_expected) {
+        // escape code continuation
+        if (ch == '[') {
+            escape_char_bracket = 1;
+            ansi_parms[1] = 0;
+            ansi_parms[4] = 0;
+        } else if (ch == '=' || ch == 'Y') {
+            escape_char_position = 2;
+        } else if (escape_char_bracket) {
+            if (ch == ';') {
+                ansi_parms[escape_char_bracket] = 0;
+                escape_char_bracket = 4;
+            } else if (ch >= '0' && ch <= '9') {
+                ansi_parms[escape_char_bracket++] = ch;
+            } else {
+                ansi_parms[escape_char_bracket] = 0;
+                ansi_parm1 = atoi(&ansi_parms[1]);
+                ansi_parm2 = atoi(&ansi_parms[4]);
+                if (ch == 'A') {
+                    *out_ptr = 0x0E;
+                    *out_ptr++ = ansi_parm1 + 185;
+                } else if (ch == 'B') {
+                    *out_ptr = 0x0E;
+                    *out_ptr++ = ansi_parm1 + 160;
+                } else if (ch == 'C') {
+                    *out_ptr = 0x0E;
+                    *out_ptr++ = ansi_parm1;
+                } else if (ch == 'D') {
+                    *out_ptr = 0x0E;
+                    *out_ptr++ = ansi_parm1 + 80;
+                } else if (ch == 'H') {
+                    *out_ptr++ = 0x1F;
+                    *out_ptr++ = ansi_parm2 ? ansi_parm2 : 1;
+                    *out_ptr = ansi_parm1 ? ansi_parm1 : 1;
+                } else if (ch == 'K') {
+                    if (ansi_parms[1] == '2') {
+                        *out_ptr++ = 0x11;
+                        *out_ptr = 0x12;
+                    } else if (ansi_parms[1] == '1') {
+                        *out_ptr = 0x11;
+                    } else {
+                        *out_ptr = 0x12;
+                    }
+                } else if (ch == 'J') {
+                    *out_ptr = 0x0C; // only "clear full screen" version currently supported
+                } else if (ch == 'f') {
+                    *out_ptr = 0x1E;
+                }
+                out_ptr++;
+                escape_chars_expected = 0;
+            }
+        } else if (escape_char_position == 2) {
+            escape_char_y = ch;
+            --escape_char_position;
+        } else if (escape_char_position == 1) {
+            *out_ptr++ = 0x1F;
+            *out_ptr++ = ch - 31;
+            *out_ptr++ = escape_char_y - 31;
+            escape_chars_expected = 0;
+        } else {
+            gen_ptr = *(unsigned short**)(((unsigned short*)&escapes) + ch - '(');
+            strcpy(out_ptr, gen_ptr);
+            out_ptr += strlen(gen_ptr);
+            escape_chars_expected = 0;
+        }
+    } else if (ch < 32) {
+        // single-character control code, translate
+        *out_ptr++ = control_codes[ch];
+    } else {
+        // regular character, emit as-is
+        *out_ptr++ = ch;
+    }
+}
+
+void output_buffer(void) {
+    if (large_buffer[0]) {
+        *out_ptr = 0; // zero-terminate
+        strout(large_buffer);
+    }
+}
+
+// Prints the string in buffer addr to console, converting VT-52 escape sequences / ADM-3A codes to SymShell format.
+// Note: CP/M will convert character 9 inline to spaces, even when used as a control code; this can probably be ignored,
+// but it means that programs may send the binary number 9 (e.g., for addresses) with the high bit set (stripped above).
+void print_to_terminal(char* addr) {
+    large_buffer[0] = 0;
+    out_ptr = large_buffer;
+    while (*addr)
+        buffer_char(*addr++);
+    output_buffer();
+}
+
+void console_output(unsigned char ch) {
+    large_buffer[0] = 0;
+    out_ptr = large_buffer;
+    buffer_char(ch);
+    output_buffer();
+}
+
+void string_output(unsigned short addr) {
+    unsigned char scanning = 1;
+    buffer[256] = 0; // ensure string is zero-terminated
+
+    // output string at addr in 255-byte chunks
+    while (scanning) {
+        // get a chunk
+        Banking_Copy(bnk_tpa, addr, bnk_vm, (unsigned short)&buffer[0], 256);
+
+        // terminate at $, if found
+        gen_ptr = buffer;
+        while (*gen_ptr) {
+            if (*gen_ptr == '$') {
+                scanning = 0;
+                *gen_ptr = 0;
+                break;
+            }
+            ++gen_ptr;
+        }
+
+        // print what we found
+        print_to_terminal(buffer);
+        addr += 256;
+    }
+}
+
+unsigned char bios_console_input(void) {
+    chrout(3); // cursor on
+    reg_a = Shell_CharInput(termpid, 0) & 0x7F;
+    chrout(2); // cursor off - FIXME this is slow when inputting in windowed mode, how to improve?
+    return reg_a;
+}
+
+unsigned char console_input(void) {
+    chrout(3); // cursor on
+    reg_a = Shell_CharInput(termpid, 0) & 0x7F;
+    if (reg_a == 13)
+        reg_a = 10; // CP/M programs expect ENTER to be 10
+    buffer[0] = reg_a;
+    buffer[1] = 2; // cursor off
+    buffer[2] = 0;
+    strout(buffer);
+    return reg_a;
+}
+
+unsigned char direct_io(unsigned char e) {
+    reg_a = e;
+    if (e == 0xFF) {
+        reg_a = Shell_CharTest(termpid, 0, 1);
+    } else {
+        buffer[0] = e;
+        buffer[1] = 0;
+        print_to_terminal(buffer);
+    }
+    return reg_a;
+}
+
+unsigned char read_string(unsigned short addr) {
+    unsigned char max_chars = Banking_ReadByte(bnk_tpa, (char*)addr);
+    reg_a = Shell_StringInput(termpid, 0, bnk_vm, buffer + 1);
+    if (reg_a) { // Ctrl+C
+        __asm
+            pop de
+        __endasm; // pop call from this routine
+        system_reset();
+    }
+    buffer[0] = strlen(buffer + 1); // save read length to NC byte
+    Banking_Copy(bnk_vm, (unsigned short)&buffer[0], bnk_tpa, addr + 1, max_chars + 1); // copy to TPA, including NC byte
+    return buffer[0];
+}
+
+unsigned char console_status(void) {
+    if (Shell_CharTest(termpid, 0, 0))
+        return 0xFF;
+    else
+        return 0x00;
+}
+
+void flush_buffer(unsigned short de) {
+    Banking_Copy(bnk_tpa, de, bnk_vm, (unsigned short)buffer, 129);
+    print_to_terminal(buffer);
+}
+
+void reset_disk_system(void) {
+    dma = 0x0080;
+    login_vector = 0;
+    drive_ro = 0;
+    default_drive = 0;
+}
+
+// Main BDOS entry point: translates inter-bank calling convention (L, DE) to __sdcccall(1) convention (A, DE).
+// This is a lazy way of getting named register variables in bdos_calls(); putting this as its own routine
+// (which falls through to bdos_calls() because it is immediately before it and __naked) keeps the
+// relevant code from being optimized out of existence.
+void BDOS(void) __naked {
+    __asm
+        ld a, l
+    __endasm;
+} // FALL THROUGH
+
+// Main switchyard for BDOS calls
+void bdos_calls(unsigned char c, unsigned short de) __naked {
+    #ifdef TRACE
+    if (c != 255) {
+        buffer[0] = '[';
+        buffer[1] = 0;
+        __itoa(c, buffer + 1, 10);
+        strcat(buffer, "]");
+        strout(buffer);
+    }
+    #endif // TRACE
+
+    reg_hl = 0; // default return value
+    if (c == 255) {
+        __asm
+            rst #0x38             ;special function 255 -> interrupt occured, call scheduler
+            jp jmp_bnkret
+        __endasm;
+    } else if (c == 254) {
+        system_reset();
+    } else if (c == 253) {
+        flush_buffer(de);
+    } else if (c == 252) {
+        reg_hl = bios_console_input(); // unlike normal BDOS #1, does not echo result
+    } else {
+        switch (c) {
+        case 0: // System Reset
+            system_reset();
+            break;
+        case 1: // Console Input
+            reg_hl = console_input();
+            break;
+        case 2: // Console Output
+            console_output(de);
+            break;
+        case 3: // Reader Input
+            reg_hl = 0x1F;
+            break;
+        case 4: // Punch Output
+            // do nothing
+            break;
+        case 5: // List Output
+            // do nothing
+            break;
+        case 6: // Direct Console I/O
+            reg_hl = direct_io(de);
+            break;
+        case 7: // Get I/O Byte
+            reg_hl = Banking_ReadByte(bnk_tpa, (unsigned char*)0x03);
+            break;
+        case 8: // Set I/O Byte
+            Banking_WriteByte(bnk_tpa, (unsigned char*)0x03, de);
+            break;
+        case 9: // Print String
+            string_output(de);
+            break;
+        case 10: // Read Console Buffer
+            reg_hl = read_string(de);
+            break;
+        case 11: // Get Console Status
+            reg_hl = console_status();
+            break;
+        case 12: // Return Version Number
+            reg_hl = 0x0022;
+            break;
+        case 13: // Reset Disk System
+            reset_disk_system();
+            break;
+        case 14: // Select Disk
+            select_disk(de);
+            break;
+        case 15: // Open File
+            reg_hl = open_file(de);
+            break;
+        case 16: // Close File
+            reg_hl = close_file(de);
+            break;
+        case 17: // Search for First
+            reg_hl = search_for_first(de);
+            break;
+        case 18: // Search for Next
+            reg_hl = search_for_next();
+            break;
+        case 19: // Delete File
+            reg_hl = delete_file(de);
+            break;
+        case 20: // Read Sequential
+            reg_hl = read_sequential(de);
+            break;
+        case 21: // Write Sequential
+            reg_hl = write_sequential(de);
+            break;
+        case 22: // Make File
+            reg_hl = new_file(de);
+            break;
+        case 23: // Rename File
+            reg_hl = rename_file(de);
+            break;
+        case 24: // Return Log-in Vector
+            reg_hl = login_vector;
+            break;
+        case 25: // Return Current Disk
+            reg_hl = default_drive;
+            break;
+        case 26: // Set DMA Address
+            dma = de;
+            break;
+        case 27: // Get Allocation Vector
+            // "Digital Research considers the actual layout of the allocation vector to be proprietary information." - Johnson-Laird
+            reg_hl = 0x80; // Not actually faked right now (just pointed to a real address) since only DR system applications should care.
+            break;
+        case 28: // Write Protect Disk
+            drive_ro |= (1 << default_drive);
+            break;
+        case 29: // Get Read-Only Vector
+            reg_hl = drive_ro;
+            break;
+        case 30: // Set File Attributes
+            // do nothing
+            break;
+        case 31: // Get Disk Parameter Block
+            reg_hl = DPBADDR;
+            break;
+        case 32: // Set/Get User Code
+            if ((unsigned char)de == 0xFF)
+                reg_hl = user_number;
+            else
+                user_number = de;
+            break;
+        case 33: // Read Random
+            reg_hl = read_random(de);
+            break;
+        case 34: // Write Random
+            reg_hl = write_random(de);
+            break;
+        case 35: // Compute File Size
+            get_file_size(de);
+            break;
+        case 36: // Set Random Record
+            set_random_record(de);
+            break;
+        case 37: // Reset Drive
+            drive_ro &= (~de);
+            login_vector &= (~de); // Note that RunCPM does not do this, although my reading of Johnson-Laird is that it should.
+            reg_hl = 0;
+            break;
+        case 40: // Write Random w/Fill
+            reg_hl = write_random(de); // (no actual disk blocks, so just behaves like Write Random)
+            break;
+        }
+    }
+
+    #ifdef TRACE
+    buffer[0] = '=';
+    __itoa(reg_hl, buffer + 1, 16);
+    strout(buffer);
+    #endif // TRACE
+
+    // load return values into HL and return (will be copied to BA TPA-side)
+    __asm
+        ld hl, (_reg_hl)
+        jp jmp_bnkret
+    __endasm;
+}

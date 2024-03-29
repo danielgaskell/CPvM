@@ -1,0 +1,162 @@
+<style type="text/css">
+<!--
+body,td,th {
+	color: #FFFFFF;
+}
+body {
+	background-color: #000000;
+}
+.Estilo2 {font-family: "Konami 10pt", "Konami 12pt"}
+.Estilo9 {font-size: large}
+.Estilo11 {font-family: Georgia, "Times New Roman", Times, serif}
+.Estilo12 {
+	font-family: "Konami 10pt", "Konami 12pt";
+	font-size: large;
+	color: #FFFF00;
+}
+.Estilo17 {color: #CCCCCC}
+a:link {
+	color: #00FFCC;
+}
+a:visited {
+	color: #00CCFF;
+}
+.Estilo18 {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}
+.Estilo20 {color: #000000}
+.Estilo21 {color: #33FFFF}
+.Estilo22 {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #33FFFF; }
+.Estilo29 {font-family: Georgia, "Times New Roman", Times, serif; color: #FF0000; }
+.Estilo30 {color: #FF6633}
+.Estilo31 {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #FF6633; }
+.Estilo32 {color: #FFFFFF}
+-->
+</style><table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="232"><div align="center"><img src="images/msxlogo.jpg" width="128" height="41" /><br />
+        <a href="index.html"><img src="images/nlklogo.jpg" width="128" height="40" border="0" /></a></div></td>
+    <td width="568"><div align="center" class="Estilo2"><span class="Estilo9">Bienvenido a mi rincon MSX !</span> &iexcl;<span class="Estilo9"> <br />
+          <span class="Estilo17">Welcome to my MSX corner ! </span></span></div></td>
+  </tr>
+  <tr>
+    <td bgcolor="#000000">&nbsp;</td>
+    <td bgcolor="#000000">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2"><blockquote>
+      <p class="Estilo2"><span class="Estilo12">SymbOS 2.0, The Operating System </span><br />
+          <br />
+          <span class="Estilo11">SymbOS is an operating system based on CPC and MSX computers. This OS can be managed using a windows interface but there is a Shell Command interpreter too. You can find more information in looking for Internet or in the oficial site (<a href="http://www.symbos.de/" target="_blank">http://www.symbos.de/</a>)</span></p>
+      <p class="Estilo12"> SDCC Compiler</p>
+    </blockquote>      
+    <blockquote class="Estilo11">
+      <p>The Windows development kit is based on the SDCC freeware compiler. You can find it in the oficial site: (<a href="http://sdcc.sourceforge.net/" target="_blank">http://sdcc.sourceforge.net/</a>) </p>
+      <p class="Estilo12">SDK Files </p>
+      <p>To use the SDK is needed to have installed the compiler and tools of SDCC. The SDK Pack comes with an executable &quot;SymbosMake.exe&quot; that calls SDCC compiler and linker and generates an EXE/COM SymboOS compliant.</p>
+      <p class="Estilo12">My first SymbOS app</p>
+      <p>We are going to start with an easy sample, the typical &quot;Hello World!&quot;.  <br />
+      To make that &quot;SymbosMake.exe&quot; works correctly is needed that in the same folder we have a text file &quot;Make.ini&quot; with a format like this:</p>
+      <p class="Estilo18"><span class="Estilo20"><span class="Estilo21">MACROS = MSX_VERSION=MSX2<br />
+        SOURCE_PATH = .\<br />
+        RESOURCE_FILE = main.rc<br />
+        LIBRARY = symbos/symbos.lib<br />
+        ENGINE_SOURCES = <br />
+        MODULE_SOURCES =<br />
+        MAIN_SOURCE = main<br />
+        RELEASE_PATH = .\release<br />
+        C_MODULE_PATH = .\<br />
+        C_ENGINE_PATH = .\<br />
+        BIN_PATH = .\<br />
+        STACK_SIZE = 512<br />
+        APP_NAME = HELLO_WORLD <br />
+        SMALL_ICON = smallicon.sgx<br />
+        BIG_ICON = bigicon.sgx<br />
+        OUTPUT_NAME = hello.exe</span><br />
+        </span><br />
+        <span class="Estilo11">The file &quot;Main.rc&quot; will contain the needed resources for making our EXE. We will detail RC Files more later:</span></p>
+      <p class="Estilo22">ICON IDI_ICON &quot;smallicon.sgx&quot;</p>
+      <p class="Estilo22">CONTROL_GROUP_DATA_RECORD CGDR_Form1<br />
+        {<br />
+        &nbsp;&nbsp;CONTROL_DATA_RECORD { ID = 0, TYPE = 255, X = 0, Y = 0, W = 10000, H = 10000, PARAM = 0 }<br />
+        }</p>
+      <p class="Estilo22">WINDOW IDD_MAIN<br />
+        {<br />
+        &nbsp;&nbsp;STATUS_NORMAL,<br />
+        &nbsp;&nbsp;IS_SUPERWINDOW,<br />
+        &nbsp;&nbsp;X = 0,<br />
+        &nbsp;&nbsp;Y = 0,<br />
+        &nbsp;&nbsp;WIDTH = 10000,<br />
+        &nbsp;&nbsp;HEIGHT = 10000,<br />
+        &nbsp;&nbsp;OFF_X = 0,<br />
+        &nbsp;&nbsp;OFF_Y = 0,<br />
+        &nbsp;&nbsp;FULL_WIDTH = 10000,<br />
+        &nbsp;&nbsp;FULL_HEIGHT = 10000,<br />
+        &nbsp;&nbsp;MIN_WIDTH = 10000,<br />
+        &nbsp;&nbsp;MIN_HEIGHT = 10000,<br />
+        &nbsp;&nbsp;MAX_WIDTH = 10000,<br />
+        &nbsp;&nbsp;MAX_HEIGHT = 10000,<br />
+        &nbsp;&nbsp;ICON = IDI_ICON,<br />
+        &nbsp;&nbsp;TITLE_STRING = null,<br />
+        &nbsp;&nbsp;STATUS_STRING = null,<br />
+        &nbsp;&nbsp;MENU_DATA_RECORD = null,<br />
+        &nbsp;&nbsp;CONTROL_GROUP_DATA_RECORD = CGDR_Form1,<br />
+        &nbsp;&nbsp;CONTROL_GROUP_DATA_RECORD_TOOLBAR = null,<br />
+        &nbsp;&nbsp;TOOLBAR_HEIGHT = 0,<br />
+        }</p>
+      <p class="Estilo11">And finally the &quot;Main.c&quot; file:  <br />
+        <br />
+        <span class="Estilo22">#include &quot;symbos\symbos.h&quot;<br />
+        #include &quot;symbos\symbos_system.h&quot;<br />
+        #include &quot;symbos\symbos_desktop.h&quot;<br />
+        #include &quot;symbos\symbos_device.h&quot;<br />
+        #include &quot;symbos\symbos_kernel.h&quot;<br />
+        #include &quot;symbos\symbos_memory.h&quot;<br />
+        #include &quot;symbos\symbos_shell.h&quot;<br />
+        #include &quot;symbos\symbos_file.h&quot;<br />
+        #include &quot;string.h&quot;<br />
+        #include &quot;resource.h&quot; </span></p>
+      <p class="Estilo22">#include &quot;symbos\symbos_transfer_area_start.h&quot;<br />
+        #include &quot;symbos\symbos_transfer_area_end.h&quot;</p>
+      <p class="Estilo22">void main (void)<br />
+        {<br />
+        &nbsp;&nbsp;MESSAGEBOX (&quot;Hello World&quot;);<br />
+        &nbsp;&nbsp;Sys_Program_End (GET_APPLICATION_ID());<br />
+        &nbsp;&nbsp;while (1) Multitasking_SoftInterrupt();<br />
+        }</p>
+      <p class="Estilo11">Here you can download a RAR file with the previous sample. You will need to install Symbos SDK in the same directory  to compile it. Try to generate the &quot;Hello.exe&quot; and run it in Symbos 2.0. The next, we are going to explain better all the saw until now.<br />
+        <br />
+      <a href="symbos_sdk.rar">Download RAR with Symbos SDK<br />
+      </a><a href="sample_helloworld.rar">        Download RAR with the sample &quot;Hello World&quot;</a> </p>
+      <p class="Estilo11"><span class="Estilo12"><a href="symbos_sdk_inifile.html">Make.INI</a></span></p>
+      <p class="Estilo11"><span class="Estilo12"><a href="symbos_sdk_rcfile.html">The resource file (.RC) </a></span></p>
+      <p class="Estilo11"><span class="Estilo12">SymbOS Memory Model</span></p>
+      <p class="Estilo11">An app has 3 areas defined: CODE, DATA, TRANSFER<br />
+      When SDK compile and makes the Symbos APP take in account all this. All the code declared in C will be put in the CODE AREA, all the data vars, etc. declared will be put in DATA AREA and all the resources added will be put in TRANSFER AREA.<br />
+        If you want to add variables or data declared in C into TRANSFER AREA, you will need to put them inside of this #includes.</p>
+      <p class="Estilo11"><span class="Estilo22">#include &quot;symbos\symbos_transfer_area_start.h&quot;<br />
+#include &quot;symbos\symbos_transfer_area_end.h&quot;</span></p>
+      <p class="Estilo11">It's very important to declare this #includes at the end of all the data declared. We need that compiler generate the bigger address for our transfer area. Then we could have something like:</p>
+      <p class="Estilo11"><span class="Estilo22">unsigned char g_data;</span><br />
+        <span class="Estilo22">#include &quot;symbos\symbos_transfer_area_start.h&quot;<br />
+          unsigned char g_t_data; <br />
+  #include &quot;symbos\symbos_transfer_area_end.h&quot;</span></p>
+      <p class="Estilo11">But no! </p>
+      <p class="Estilo29"><span class="Estilo31">#include &quot;symbos\symbos_transfer_area_start.h&quot;<br />
+unsigned char g_t_data; <br />
+#include &quot;symbos\symbos_transfer_area_end.h&quot;</span><span class="Estilo30"><br />
+<span class="Estilo18">unsigned char g_data;</span></span><br />
+        <br />
+        <span class="Estilo12">API Symbos SDK v.0.0.1 <a href="symbos_sdk_api.html">&lt;DOC&gt;</a> <a href="symbos_sdk.rar">&lt;DOWNLOAD&gt; </a></span></p>
+      <p class="Estilo29"><span class="Estilo12">More Samples... </span><br />
+            <span class="Estilo32"><br />
+            It shows you how to create a Timer and play a PT3 file, furthermore you can know  how to open a file system dialog and capture window messages. </span><a href="sample_pt3.rar">&lt;DOWNLOAD&gt;</a><br />
+      </p>
+      </blockquote></td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2">&nbsp;</td>
+  </tr>
+  
+</table>

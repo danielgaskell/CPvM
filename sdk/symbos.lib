@@ -1,0 +1,2459 @@
+<SDCCLIB>
+
+<INDEX>
+      6341
+<MODULE>
+window_open 11
+_Window_Open
+_Window_Open_start
+_Window_Open_end
+</MODULE>
+
+<MODULE>
+window_close 1342
+_Window_Close_end
+_Window_Close
+_Window_Close_start
+</MODULE>
+
+<MODULE>
+window_redraw_menu 2061
+_Window_Redraw_Menu
+_Window_Redraw_Menu_start
+_Window_Redraw_Menu_end
+</MODULE>
+
+<MODULE>
+window_redraw 2810
+_Window_Redraw
+_Window_Redraw_start
+_Window_Redraw_end
+</MODULE>
+
+<MODULE>
+window_redraw_toolbar 3612
+_Window_Redraw_Toolbar
+_Window_Redraw_Toolbar_start
+_Window_Redraw_Toolbar_end
+</MODULE>
+
+<MODULE>
+window_redraw_statusbar 4454
+_Window_Redraw_Statusbar_start
+_Window_Redraw_Statusbar_end
+_Window_Redraw_Statusbar
+</MODULE>
+
+<MODULE>
+clipboard_put 5228
+_Clipboard_Put
+_Clipboard_Put_start
+_Clipboard_Put_end
+</MODULE>
+
+<MODULE>
+desktop_getscreenmode 5840
+_Desktop_GetScreenMode
+_Desktop_GetScreenMode_start
+_Desktop_GetScreenMode_end
+</MODULE>
+
+<MODULE>
+desktop_setscreenmode 7149
+_Desktop_SetScreenMode
+_Desktop_SetScreenMode_start
+_Desktop_SetScreenMode_end
+</MODULE>
+
+<MODULE>
+desktop_getcolor 7937
+_Desktop_GetColor_start
+_Desktop_GetColor_end
+_Desktop_GetColor
+</MODULE>
+
+<MODULE>
+desktop_setcolor 9296
+_Desktop_SetColor
+_Desktop_SetColor_start
+_Desktop_SetColor_end
+</MODULE>
+
+<MODULE>
+desktop_stop 10131
+_Desktop_Stop_start
+_Desktop_Stop_end
+_Desktop_Stop
+</MODULE>
+
+<MODULE>
+desktop_continue 11380
+_Desktop_Continue
+_Desktop_Continue_start
+_Desktop_Continue_end
+</MODULE>
+
+<MODULE>
+device_timeget 12574
+_Device_TimeGet_start
+_Device_TimeGet_end
+_Device_TimeGet
+</MODULE>
+
+<MODULE>
+device_timeset 13155
+_Device_TimeSetEx
+_Device_TimeSet
+_Device_TimeSetEx_start
+_Device_TimeSet_start
+_Device_TimeSetEx_end
+_Device_TimeSet_end
+</MODULE>
+
+<MODULE>
+device_mouseposition 14544
+_Device_MousePosition_end
+_Device_MousePosition
+_Device_MousePosition_start
+</MODULE>
+
+<MODULE>
+device_keytest 15001
+_Device_KeyTest
+_Device_KeyTest_start
+_Device_KeyTest_end
+</MODULE>
+
+<MODULE>
+device_keystatus 15498
+_Device_KeyStatus_start
+_Device_KeyStatus_end
+_Device_KeyStatus
+</MODULE>
+
+<MODULE>
+device_keyput 15999
+_Device_KeyPut_end
+_Device_KeyPut
+_Device_KeyPut_start
+</MODULE>
+
+<MODULE>
+message_sleep_and_receive 16509
+_Message_Sleep_And_Receive
+_Message_Sleep_And_Receive_start
+_Message_Sleep_And_Receive_end
+</MODULE>
+
+<MODULE>
+message_receive 17127
+_Message_Receive
+_Message_Receive_start
+_Message_Receive_end
+</MODULE>
+
+<MODULE>
+message_send 17695
+_Message_Send
+_Message_Send_start
+_Message_Send_end
+</MODULE>
+
+<MODULE>
+multitasking_add_process 18248
+_Multitasking_Add_Process
+_Multitasking_Add_Process_start
+_Multitasking_Add_Process_end
+</MODULE>
+
+<MODULE>
+multitasking_delete_process 19604
+_Multitasking_Delete_Process
+_Multitasking_Delete_Process_end
+_Multitasking_Delete_Process_sta
+</MODULE>
+
+<MODULE>
+multitasking_add_timer 20589
+_Multitasking_Add_Timer
+_Multitasking_Add_Timer_start
+_Multitasking_Add_Timer_end
+</MODULE>
+
+<MODULE>
+multitasking_delete_timer 21830
+_Multitasking_Delete_Timer_end
+_Multitasking_Delete_Timer
+_Multitasking_Delete_Timer_start
+</MODULE>
+
+<MODULE>
+file_call 22807
+_File_Call_start
+_File_Call_end
+_File_Call
+</MODULE>
+
+<MODULE>
+file_new 23807
+_File_New
+_File_New_start
+_File_New_end
+</MODULE>
+
+<MODULE>
+file_open 24695
+_File_Open
+_File_Open_start
+_File_Open_end
+</MODULE>
+
+<MODULE>
+file_read 25528
+_File_Read_start
+_File_Read_end
+_File_Read
+</MODULE>
+
+<MODULE>
+file_write 26598
+_File_Write
+_File_Write_start
+_File_Write_end
+</MODULE>
+
+<MODULE>
+file_close 27610
+_File_Close_start
+_File_Close_end
+_File_Close
+</MODULE>
+
+<MODULE>
+file_seek 28301
+_File_Seek
+_File_Seek_start
+_File_Seek_end
+</MODULE>
+
+<MODULE>
+file_getline 29314
+_File_GetLine
+_File_GetLine_start
+_File_GetLine_end
+</MODULE>
+
+<MODULE>
+file_size 30231
+_File_Size
+_File_Size_start
+_File_Size_end
+</MODULE>
+
+<MODULE>
+memory_summary 31244
+_Memory_Summary
+_Memory_Summary_start
+_Memory_Summary_end
+</MODULE>
+
+<MODULE>
+memory_new 31692
+_Memory_New
+_Memory_New_start
+_Memory_New_end
+</MODULE>
+
+<MODULE>
+memory_delete 33460
+_Memory_Delete
+_Memory_Delete_start
+_Memory_Delete_end
+</MODULE>
+
+<MODULE>
+memory_copy 34309
+_Banking_ReadByte
+_Banking_ReadWord
+_Memory_Copy
+_Banking_Copy
+_Banking_ReadByte_start
+_Banking_WriteByte
+_Banking_ReadWord_start
+_Banking_ReadByte_end
+_Memory_Copy_start
+_Banking_WriteWord
+_Banking_Copy_start
+_Banking_WriteByte_start
+_Banking_ReadWord_end
+_Memory_Copy_end
+_Banking_Copy_end
+_Banking_WriteWord_start
+_Banking_WriteByte_end
+_Banking_WriteWord_end
+</MODULE>
+
+<MODULE>
+sys_program_run 36399
+_Sys_Program_Run
+_Sys_Program_Run_start
+_Sys_Program_Run_end
+</MODULE>
+
+<MODULE>
+sys_program_end 37972
+_Sys_Program_End
+_Sys_Program_End_start
+_Sys_Program_End_end
+</MODULE>
+
+<MODULE>
+sys_rundialog 38706
+_Sys_RunDialog
+_Sys_RunDialog_start
+_Sys_RunDialog_end
+</MODULE>
+
+<MODULE>
+sys_controlpanel 39319
+_Sys_ControlPanel
+_Sys_ControlPanel_start
+_Sys_ControlPanel_end
+</MODULE>
+
+<MODULE>
+sys_taskmanager 40058
+_Sys_TaskManager
+_Sys_TaskManager_start
+_Sys_TaskManager_end
+</MODULE>
+
+<MODULE>
+sys_messagebox 40681
+_Sys_MessageBox_end
+_Sys_MessageBox
+_Sys_MessageBox_start
+</MODULE>
+
+<MODULE>
+sys_filedialog 42126
+_Sys_FileDialog
+_Sys_FileDialog_start
+_Sys_FileDialog_end
+</MODULE>
+
+<MODULE>
+sys_getcomputertype 44110
+_Sys_GetComputerType
+_Sys_GetComputerType_start
+_Sys_GetComputerType_end
+</MODULE>
+
+<MODULE>
+shell_charinput 44692
+_Shell_CharInput
+_Shell_CharInput_start
+_Shell_CharInput_end
+</MODULE>
+
+<MODULE>
+shell_charoutput 45887
+_Shell_CharOutput
+_Shell_CharOutput_start
+_Shell_CharOutput_end
+</MODULE>
+
+<MODULE>
+shell_stringinput 47036
+_Shell_StringInput_start
+_Shell_StringInput_end
+_Shell_StringInput
+</MODULE>
+
+<MODULE>
+shell_stringoutput 48367
+_Shell_StringOutput_start
+_Shell_StringOutput_end
+_Shell_StringOutput
+</MODULE>
+
+<MODULE>
+shell_exit 49848
+_Shell_Exit
+_Shell_Exit_start
+_Shell_Exit_end
+</MODULE>
+
+<MODULE>
+shell_startparam 50560
+_Shell_StartParam_start
+_Shell_NextParam
+_Shell_StartParam_end
+_Shell_NextParam_start
+_Shell_NextParam_end
+_Shell_StartParam
+</MODULE>
+
+</INDEX>
+
+<FILES>
+
+<FILE>
+window_open
+<REL>
+XL
+H 7 areas 6 global symbols
+M window_open
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 99 flags 0
+S _Window_Open Def0000
+S _Window_Open_start Def0000
+S _Window_Open_end Def0099
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FD FF 39 F9 DD
+R 00 00 00 00
+T 0E 00 4E 05 DD 46 06 03 03 03 11 0E 00 1A DD 77
+R 00 00 00 00 02 0B 00 00
+T 1C 00 FF DD 7E FF 02 3E 20 32 0F 00 01 0F 00 79
+R 00 00 00 00 02 0A 00 00 02 0D 00 00
+T 2A 00 C6 01 57 78 CE 00 5F 6A 63 DD 7E 04 77 03
+R 00 00 00 00
+T 38 00 03 DD 5E 05 DD 56 06 69 60 73 23 72 01
+R 00 00 00 00
+T 45 00 0F 00 C5 3E 02 F5 33 DD 7E FF F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 52 00 00 00 F1 F1 21 0F 00 DD 75 FD DD 74 FE 11
+R 00 00 00 00 02 02 01 00 02 07 00 00
+T 60 00 0F 00 01 0E 00 0A 4F D5 3E 02 F5 33 79 F5
+R 00 00 00 00 02 02 00 00 02 05 00 00
+T 6E 00 33 CD 00 00 F1 F1 DD 6E FD DD 66 FE 4E 79
+R 00 00 00 00 02 04 02 00
+T 7C 00 D6 A1 28 02 18 09 11 12 00 13 1A 47 68 18
+R 00 00 00 00 02 09 00 00
+T 8A 00 09 79 D6 A0 28 02 18 CD 2E 00 DD F9 DD E1
+R 00 00 00 00
+T 98 00 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+window_close
+<REL>
+XL
+H 7 areas 5 global symbols
+M window_close
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2C flags 0
+S _Window_Close_end Def002C
+S _Window_Close Def0000
+S _Window_Close_start Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 2E 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 3E 02 F5 33 7B F5 33 CD 00 00 F1 F1 DD
+R 00 00 00 00 02 0B 01 00
+T 2A 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+window_redraw_menu
+<REL>
+XL
+H 7 areas 5 global symbols
+M window_redraw_menu
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2C flags 0
+S _Window_Redraw_Menu Def0000
+S _Window_Redraw_Menu_start Def0000
+S _Window_Redraw_Menu_end Def002C
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 21 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 3E 02 F5 33 7B F5 33 CD 00 00 F1 F1 DD
+R 00 00 00 00 02 0B 01 00
+T 2A 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+window_redraw
+<REL>
+XL
+H 7 areas 5 global symbols
+M window_redraw
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 3E flags 0
+S _Window_Redraw Def0000
+S _Window_Redraw_start Def0000
+S _Window_Redraw_end Def003E
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 3E 22 32 0F 00 01
+R 00 00 00 00 02 0D 00 00
+T 0E 00 0F 00 59 50 13 DD 7E 04 12 59 50 13 13 DD
+R 00 00 00 00 02 02 00 00
+T 1C 00 7E 05 12 03 03 03 DD 7E 06 02 01 0F 00 11
+R 00 00 00 00 02 0D 00 00
+T 2A 00 0E 00 1A 5F C5 3E 02 F5 33 7B F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 37 00 00 00 F1 F1 DD E1 C9
+R 00 00 00 00 02 02 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+window_redraw_toolbar
+<REL>
+XL
+H 7 areas 5 global symbols
+M window_redraw_toolbar
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 3E flags 0
+S _Window_Redraw_Toolbar Def0000
+S _Window_Redraw_Toolbar_start Def0000
+S _Window_Redraw_Toolbar_end Def003E
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 3E 23 32 0F 00 01
+R 00 00 00 00 02 0D 00 00
+T 0E 00 0F 00 59 50 13 DD 7E 04 12 59 50 13 13 DD
+R 00 00 00 00 02 02 00 00
+T 1C 00 7E 05 12 03 03 03 DD 7E 06 02 01 0F 00 11
+R 00 00 00 00 02 0D 00 00
+T 2A 00 0E 00 1A 5F C5 3E 02 F5 33 7B F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 37 00 00 00 F1 F1 DD E1 C9
+R 00 00 00 00 02 02 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+window_redraw_statusbar
+<REL>
+XL
+H 7 areas 5 global symbols
+M window_redraw_statusbar
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2C flags 0
+S _Window_Redraw_Statusbar_start Def0000
+S _Window_Redraw_Statusbar_end Def002C
+S _Window_Redraw_Statusbar Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 25 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 3E 02 F5 33 7B F5 33 CD 00 00 F1 F1 DD
+R 00 00 00 00 02 0B 01 00
+T 2A 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+clipboard_put
+<REL>
+XL
+H 7 areas 3 global symbols
+M clipboard_put
+O -mz80
+A _CODE size 2B flags 0
+S _Clipboard_Put Def0000
+S _Clipboard_Put_start Def0000
+S _Clipboard_Put_end Def002B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 7E 06 DD 4E 07
+R 00 00 00 00
+T 0E 00 DD 46 08 DD 56 09 DD 6E 04 DD 66 05 E5 DD
+R 00 00 00 00
+T 1C 00 E1 E7 4E 81 38 04 2E 00 18 02 2E 01 DD E1
+R 00 00 00 00
+T 2A 00 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_getscreenmode
+<REL>
+XL
+H 7 areas 6 global symbols
+M desktop_getscreenmode
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 8D flags 0
+S _Desktop_GetScreenMode Def0000
+S _Desktop_GetScreenMode_start Def0000
+S _Desktop_GetScreenMode_end Def008D
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FA FF 39 F9 01
+R 00 00 00 00
+T 0E 00 0F 00 3E 30 02 3E 01 32 10 00 01 0F 00 11
+R 00 00 00 00 02 02 00 00 02 0A 00 00 02 0D 00 00
+T 1C 00 0E 00 1A 5F C5 3E 02 F5 33 7B F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 29 00 00 00 F1 F1 21 0F 00 DD 75 FA DD 74 FB DD
+R 00 00 00 00 02 02 01 00 02 07 00 00
+T 37 00 75 FC DD 74 FD DD 7E FC C6 01 DD 77 FE DD
+R 00 00 00 00
+T 45 00 7E FD CE 00 DD 77 FF 11 0F 00 01 0E 00 0A
+R 00 00 00 00 02 0A 00 00 02 0D 00 00
+T 53 00 4F D5 3E 02 F5 33 79 F5 33 CD 00 00 F1 F1
+R 00 00 00 00 02 0C 02 00
+T 61 00 DD 6E FA DD 66 FB 4E 79 D6 A3 28 02 18 DD
+R 00 00 00 00
+T 6F 00 DD 6E FE DD 66 FF 4E 79 D6 01 28 02 18 CF
+R 00 00 00 00
+T 7D 00 DD 4E FC DD 46 FD 03 03 0A 4F 69 DD F9 DD
+R 00 00 00 00
+T 8B 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_setscreenmode
+<REL>
+XL
+H 7 areas 5 global symbols
+M desktop_setscreenmode
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 34 flags 0
+S _Desktop_SetScreenMode Def0000
+S _Desktop_SetScreenMode_start Def0000
+S _Desktop_SetScreenMode_end Def0034
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 3E 30 32 0F 00 01
+R 00 00 00 00 02 0D 00 00
+T 0E 00 0F 00 59 50 13 3E 02 12 03 03 DD 7E 04 02
+R 00 00 00 00 02 02 00 00
+T 1C 00 01 0F 00 11 0E 00 1A 5F C5 3E 02 F5 33 7B
+R 00 00 00 00 02 03 00 00 02 06 00 00
+T 2A 00 F5 33 CD 00 00 F1 F1 DD E1 C9
+R 00 00 00 00 02 05 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_getcolor
+<REL>
+XL
+H 7 areas 6 global symbols
+M desktop_getcolor
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 9E flags 0
+S _Desktop_GetColor_start Def0000
+S _Desktop_GetColor_end Def009E
+S _Desktop_GetColor Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FA FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 30 32 0F 00 01 0F 00 59 50 13 3E 03 12 03
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 03 DD 7E 04 02 01 0F 00 11 0E 00 1A 5F C5
+R 00 00 00 00 02 08 00 00 02 0B 00 00
+T 2A 00 3E 02 F5 33 7B F5 33 CD 00 00 F1 F1 21
+R 00 00 00 00 02 0A 01 00
+T 37 00 0F 00 DD 75 FA DD 74 FB DD 75 FC DD 74 FD
+R 00 00 00 00 02 02 00 00
+T 45 00 DD 7E FC C6 01 DD 77 FE DD 7E FD CE 00 DD
+R 00 00 00 00
+T 53 00 77 FF 11 0F 00 01 0E 00 0A 4F D5 3E 02 F5
+R 00 00 00 00 02 05 00 00 02 08 00 00
+T 61 00 33 79 F5 33 CD 00 00 F1 F1 DD 6E FA DD 66
+R 00 00 00 00 02 07 02 00
+T 6F 00 FB 4E 79 D6 A3 28 02 18 DD DD 6E FE DD 66
+R 00 00 00 00
+T 7D 00 FF 4E 79 D6 03 28 02 18 CF DD 7E FC C6 03
+R 00 00 00 00
+T 8B 00 4F DD 7E FD CE 00 47 69 60 4E 23 46 69 60
+R 00 00 00 00
+T 99 00 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_setcolor
+<REL>
+XL
+H 7 areas 5 global symbols
+M desktop_setcolor
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 44 flags 0
+S _Desktop_SetColor Def0000
+S _Desktop_SetColor_start Def0000
+S _Desktop_SetColor_end Def0044
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 3E 30 32 0F 00 01
+R 00 00 00 00 02 0D 00 00
+T 0E 00 0F 00 59 50 13 3E 04 12 59 50 13 13 DD 7E
+R 00 00 00 00 02 02 00 00
+T 1C 00 04 12 03 03 03 69 60 DD 7E 05 77 23 DD 7E
+R 00 00 00 00
+T 2A 00 06 77 01 0F 00 11 0E 00 1A 5F C5 3E 02 F5
+R 00 00 00 00 02 05 00 00 02 08 00 00
+T 38 00 33 7B F5 33 CD 00 00 F1 F1 DD E1 C9
+R 00 00 00 00 02 07 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_stop
+<REL>
+XL
+H 7 areas 6 global symbols
+M desktop_stop
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 8C flags 0
+S _Desktop_Stop_start Def0000
+S _Desktop_Stop_end Def008C
+S _Desktop_Stop Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FC FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 30 32 0F 00 01 0F 00 59 50 13 3E 05 12 59
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 50 13 13 DD 7E 04 12 03 03 03 3E FF 02 01
+R 00 00 00 00
+T 2A 00 0F 00 11 0E 00 1A 5F C5 3E 02 F5 33 7B F5
+R 00 00 00 00 02 02 00 00 02 05 00 00
+T 38 00 33 CD 00 00 F1 F1 21 0F 00 DD 75 FC DD 74
+R 00 00 00 00 02 04 01 00 02 09 00 00
+T 46 00 FD 11 0F 00 7B C6 01 DD 77 FE 7A CE 00 DD
+R 00 00 00 00 02 04 00 00
+T 54 00 77 FF 11 0F 00 01 0E 00 0A 4F D5 3E 02 F5
+R 00 00 00 00 02 05 00 00 02 08 00 00
+T 62 00 33 79 F5 33 CD 00 00 F1 F1 DD 6E FC DD 66
+R 00 00 00 00 02 07 02 00
+T 70 00 FD 4E 79 D6 A3 28 02 18 DD DD 6E FE DD 66
+R 00 00 00 00
+T 7E 00 FF 4E 79 D6 05 28 02 18 CF DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+desktop_continue
+<REL>
+XL
+H 7 areas 6 global symbols
+M desktop_continue
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 7B flags 0
+S _Desktop_Continue Def0000
+S _Desktop_Continue_start Def0000
+S _Desktop_Continue_end Def007B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FC FF 39 F9 01
+R 00 00 00 00
+T 0E 00 0F 00 3E 30 02 3E 06 32 10 00 01 0F 00 11
+R 00 00 00 00 02 02 00 00 02 0A 00 00 02 0D 00 00
+T 1C 00 0E 00 1A 5F C5 3E 02 F5 33 7B F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 29 00 00 00 F1 F1 21 0F 00 DD 75 FC DD 74 FD 11
+R 00 00 00 00 02 02 01 00 02 07 00 00
+T 37 00 0F 00 7B C6 01 DD 77 FE 7A CE 00 DD 77 FF
+R 00 00 00 00 02 02 00 00
+T 45 00 11 0F 00 01 0E 00 0A 4F D5 3E 02 F5 33 79
+R 00 00 00 00 02 03 00 00 02 06 00 00
+T 53 00 F5 33 CD 00 00 F1 F1 DD 6E FC DD 66 FD 4E
+R 00 00 00 00 02 05 02 00
+T 61 00 79 D6 A3 28 02 18 DD DD 6E FE DD 66 FF 4E
+R 00 00 00 00
+T 6F 00 79 D6 06 28 02 18 CF DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_timeget
+<REL>
+XL
+H 7 areas 3 global symbols
+M device_timeget
+O -mz80
+A _CODE size 27 flags 0
+S _Device_TimeGet_start Def0000
+S _Device_TimeGet_end Def0027
+S _Device_TimeGet Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 E7 0C 81 E5 DD 6E
+R 00 00 00 00
+T 0E 00 04 DD 66 05 77 23 70 23 71 23 72 23 73 DD
+R 00 00 00 00
+T 1C 00 E5 C1 71 23 C1 71 23 70 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_timeset
+<REL>
+XL
+H 7 areas 6 global symbols
+M device_timeset
+O -mz80
+A _CODE size B8 flags 0
+S _Device_TimeSetEx Def002B
+S _Device_TimeSet Def0000
+S _Device_TimeSetEx_start Def002B
+S _Device_TimeSet_start Def0000
+S _Device_TimeSetEx_end Def00B8
+S _Device_TimeSet_end Def002B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 7E 04 DD 46 05
+R 00 00 00 00
+T 0E 00 DD 4E 06 DD 56 07 DD 5E 08 DD 6E 09 DD 66
+R 00 00 00 00
+T 1C 00 0A E5 DD 6E 0B E5 DD E1 E1 E7 0F 81 DD E1
+R 00 00 00 00
+T 2A 00 C9 DD E5 DD 21 00 00 DD 39 21 FA FF 39 F9
+R 00 00 00 00
+T 38 00 DD 4E 04 DD 46 05 79 C6 05 5F 78 CE 00 57
+R 00 00 00 00
+T 46 00 1A DD 77 FF 79 C6 06 57 78 CE 00 5F 6A 63
+R 00 00 00 00
+T 54 00 7E DD 77 FD 23 7E DD 77 FE 79 C6 04 5F 78
+R 00 00 00 00
+T 62 00 CE 00 57 1A DD 77 FC 79 C6 03 57 78 CE 00
+R 00 00 00 00
+T 70 00 5F 6A 63 7E DD 77 FB 59 50 13 13 1A DD 77
+R 00 00 00 00
+T 7E 00 FA 79 C6 01 57 78 CE 00 5F 6A 63 56 0A 4F
+R 00 00 00 00
+T 8C 00 DD 7E FF F5 33 DD 6E FD DD 66 FE E5 DD 7E
+R 00 00 00 00
+T 9A 00 FC F5 33 DD 7E FB F5 33 DD 7E FA F5 33 D5
+R 00 00 00 00
+T A8 00 33 79 F5 33 CD 00 00 F1 F1 F1 F1 DD F9 DD
+R 00 00 00 00 00 07 00 00
+T B6 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_mouseposition
+<REL>
+XL
+H 7 areas 3 global symbols
+M device_mouseposition
+O -mz80
+A _CODE size 4 flags 0
+S _Device_MousePosition_end Def0004
+S _Device_MousePosition Def0000
+S _Device_MousePosition_start Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 E7 3C 81 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_keytest
+<REL>
+XL
+H 7 areas 3 global symbols
+M device_keytest
+O -mz80
+A _CODE size 13 flags 0
+S _Device_KeyTest Def0000
+S _Device_KeyTest_start Def0000
+S _Device_KeyTest_end Def0013
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 5E 04 21 45 81
+R 00 00 00 00
+T 0E 00 EF 6B DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_keystatus
+<REL>
+XL
+H 7 areas 3 global symbols
+M device_keystatus
+O -mz80
+A _CODE size 11 flags 0
+S _Device_KeyStatus_start Def0000
+S _Device_KeyStatus_end Def0011
+S _Device_KeyStatus Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 48 81 EF 6B 62
+R 00 00 00 00
+T 0E 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+device_keyput
+<REL>
+XL
+H 7 areas 3 global symbols
+M device_keyput
+O -mz80
+A _CODE size 19 flags 0
+S _Device_KeyPut_end Def0019
+S _Device_KeyPut Def0000
+S _Device_KeyPut_start Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 7E 04 E7 4B 81
+R 00 00 00 00
+T 0E 00 30 04 2E 00 18 02 2E 01 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+message_sleep_and_receive
+<REL>
+XL
+H 7 areas 3 global symbols
+M message_sleep_and_receive
+O -mz80
+A _CODE size 21 flags 0
+S _Message_Sleep_And_Receive Def0000
+S _Message_Sleep_And_Receive_start Def0000
+S _Message_Sleep_And_Receive_end Def0021
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 6E 06 DD 66 07
+R 00 00 00 00
+T 0E 00 E5 FD E1 DD 6E 04 DD 66 05 E5 DD E1 CF DD
+R 00 00 00 00
+T 1C 00 E5 E1 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+message_receive
+<REL>
+XL
+H 7 areas 3 global symbols
+M message_receive
+O -mz80
+A _CODE size 21 flags 0
+S _Message_Receive Def0000
+S _Message_Receive_start Def0000
+S _Message_Receive_end Def0021
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 6E 06 DD 66 07
+R 00 00 00 00
+T 0E 00 E5 FD E1 DD 6E 04 DD 66 05 E5 DD E1 DF DD
+R 00 00 00 00
+T 1C 00 E5 E1 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+message_send
+<REL>
+XL
+H 7 areas 3 global symbols
+M message_send
+O -mz80
+A _CODE size 21 flags 0
+S _Message_Send Def0000
+S _Message_Send_start Def0000
+S _Message_Send_end Def0021
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 6E 06 DD 66 07
+R 00 00 00 00
+T 0E 00 E5 FD E1 DD 6E 04 DD 66 05 E5 DD E1 D7 DD
+R 00 00 00 00
+T 1C 00 E5 E1 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+multitasking_add_process
+<REL>
+XL
+H 7 areas 6 global symbols
+M multitasking_add_process
+O -mz80
+S _Message_Receive Ref0000
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 97 flags 0
+S _Multitasking_Add_Process Def0000
+S _Multitasking_Add_Process_start Def0000
+S _Multitasking_Add_Process_end Def0097
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 01 32 0F 00 01 0F 00 79 C6 01 DD 77 FE 78
+R 00 00 00 00 02 04 01 00 02 07 01 00
+T 1C 00 CE 00 DD 77 FF DD 5E 05 DD 56 06 DD 6E FE
+R 00 00 00 00
+T 2A 00 DD 66 FF 73 23 72 79 C6 03 5F 78 CE 00 57
+R 00 00 00 00
+T 38 00 DD 7E 07 12 03 03 03 03 DD 7E 04 02 01
+R 00 00 00 00
+T 45 00 0F 00 11 0E 00 1A 5F C5 3E 01 F5 33 7B F5
+R 00 00 00 00 02 02 01 00 02 05 01 00
+T 53 00 33 CD 00 00 F1 F1 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 04 02 00 02 09 01 00 02 0C 01 00
+T 61 00 C5 3E 01 F5 33 7B F5 33 CD 00 00 44 4D F1
+R 00 00 00 00 02 0B 00 00
+T 6F 00 F1 79 B7 28 E5 01 0F 00 0A 4F D6 81 28 02
+R 00 00 00 00 02 08 01 00
+T 7D 00 18 11 01 0F 00 59 50 13 1A B7 20 07 03 03
+R 00 00 00 00 02 05 01 00
+T 8B 00 0A 4F 69 18 02 2E 00 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+multitasking_delete_process
+<REL>
+XL
+H 7 areas 6 global symbols
+M multitasking_delete_process
+O -mz80
+S _Message_Receive Ref0000
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 47 flags 0
+S _Multitasking_Delete_Process Def0000
+S _Multitasking_Delete_Process_end Def0047
+S _Multitasking_Delete_Process_sta Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 02 02
+R 00 00 00 00 02 0B 01 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 01 00 02 09 01 00 02 0C 01 00
+T 1C 00 C5 3E 01 F5 33 7B F5 33 CD 00 00 F1 F1 01
+R 00 00 00 00 02 0B 02 00
+T 2A 00 0F 00 11 0E 00 1A 5F C5 3E 01 F5 33 7B F5
+R 00 00 00 00 02 02 01 00 02 05 01 00
+T 38 00 33 CD 00 00 44 4D F1 F1 79 B7 28 E5 DD E1
+R 00 00 00 00 02 04 00 00
+T 46 00 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+multitasking_add_timer
+<REL>
+XL
+H 7 areas 6 global symbols
+M multitasking_add_timer
+O -mz80
+S _Message_Receive Ref0000
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 80 flags 0
+S _Multitasking_Add_Timer Def0000
+S _Multitasking_Add_Timer_start Def0000
+S _Multitasking_Add_Timer_end Def0080
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 03 32 0F 00 01 0F 00 79 C6 01 DD 77 FE 78
+R 00 00 00 00 02 04 01 00 02 07 01 00
+T 1C 00 CE 00 DD 77 FF DD 5E 05 DD 56 06 DD 6E FE
+R 00 00 00 00
+T 2A 00 DD 66 FF 73 23 72 03 03 03 03 DD 7E 04 02
+R 00 00 00 00
+T 38 00 01 0F 00 11 0E 00 1A 5F C5 3E 01 F5 33 7B
+R 00 00 00 00 02 03 01 00 02 06 01 00
+T 46 00 F5 33 CD 00 00 F1 F1 01 0F 00 11 0E 00 1A
+R 00 00 00 00 02 05 02 00 02 0A 01 00 02 0D 01 00
+T 54 00 5F C5 3E 01 F5 33 7B F5 33 CD 00 00 44 4D
+R 00 00 00 00 02 0C 00 00
+T 62 00 F1 F1 79 B7 28 E5 01 0F 00 59 50 13 1A B7
+R 00 00 00 00 02 09 01 00
+T 70 00 20 07 03 03 0A 4F 69 18 02 2E 00 DD F9 DD
+R 00 00 00 00
+T 7E 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+multitasking_delete_timer
+<REL>
+XL
+H 7 areas 6 global symbols
+M multitasking_delete_timer
+O -mz80
+S _Message_Receive Ref0000
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 47 flags 0
+S _Multitasking_Delete_Timer_end Def0047
+S _Multitasking_Delete_Timer Def0000
+S _Multitasking_Delete_Timer_start Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 04 02
+R 00 00 00 00 02 0B 01 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 01 00 02 09 01 00 02 0C 01 00
+T 1C 00 C5 3E 01 F5 33 7B F5 33 CD 00 00 F1 F1 01
+R 00 00 00 00 02 0B 02 00
+T 2A 00 0F 00 11 0E 00 1A 5F C5 3E 01 F5 33 7B F5
+R 00 00 00 00 02 02 01 00 02 05 01 00
+T 38 00 33 CD 00 00 44 4D F1 F1 79 B7 28 E5 DD E1
+R 00 00 00 00 02 04 00 00
+T 46 00 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_call
+<REL>
+XL
+H 7 areas 6 global symbols
+M file_call
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 5E flags 0
+S _File_Call_start Def0000
+S _File_Call_end Def005E
+S _File_Call Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 1A 32 0F 00 01 0F 00 11 0E 00 1A 5F C5 3E
+R 00 00 00 00 02 04 00 00 02 07 00 00 02 0A 00 00
+T 1C 00 03 F5 33 7B F5 33 CD 00 00 F1 F1 21 0F 00
+R 00 00 00 00 02 09 01 00 02 0E 00 00
+T 2A 00 DD 75 FE DD 74 FF 11 0F 00 01 0E 00 0A 4F
+R 00 00 00 00 02 09 00 00 02 0C 00 00
+T 38 00 D5 3E 03 F5 33 79 F5 33 CD 00 00 44 4D F1
+R 00 00 00 00 02 0B 02 00
+T 46 00 F1 79 B7 28 E5 DD 6E FE DD 66 FF 4E 79 D6
+R 00 00 00 00
+T 54 00 9A 28 02 18 D7 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_new
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_new
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 5C flags 0
+S _File_New Def0000
+S _File_New_start Def0000
+S _File_New_end Def005C
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 11 12 79 C6 03 5F 78 CE 00 57 DD 7E 07
+R 00 00 00 00
+T 1C 00 12 79 C6 0B 5F 78 CE 00 57 DD 7E 04 12 79
+R 00 00 00 00
+T 2A 00 C6 08 4F 78 CE 00 47 DD 5E 05 DD 56 06 69
+R 00 00 00 00
+T 38 00 60 73 23 72 CD 00 00 01 0F 00 59 50 13 13
+R 00 00 00 00 02 07 01 00 02 0A 00 00
+T 46 00 1A 5F E6 01 28 05 21 FF FF 18 08 03 03 03
+R 00 00 00 00
+T 54 00 0A 4F 69 26 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_open
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_open
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 50 flags 0
+S _File_Open Def0000
+S _File_Open_start Def0000
+S _File_Open_end Def0050
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 12 12 79 C6 0B 5F 78 CE 00 57 DD 7E 04
+R 00 00 00 00
+T 1C 00 12 79 C6 08 4F 78 CE 00 47 DD 5E 05 DD 56
+R 00 00 00 00
+T 2A 00 06 69 60 73 23 72 CD 00 00 01 0F 00 59 50
+R 00 00 00 00 02 09 01 00 02 0C 00 00
+T 38 00 13 13 1A 5F E6 01 28 05 21 FF FF 18 08 03
+R 00 00 00 00
+T 46 00 03 03 0A 4F 69 26 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_read
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_read
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 7F flags 0
+S _File_Read_start Def0000
+S _File_Read_end Def007F
+S _File_Read Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 14 12 79 C6 03 5F 78 CE 00 57 DD 7E 04
+R 00 00 00 00
+T 1C 00 12 79 C6 04 5F 78 CE 00 57 6B 62 DD 7E 09
+R 00 00 00 00
+T 2A 00 77 23 DD 7E 0A 77 79 C6 06 5F 78 CE 00 57
+R 00 00 00 00
+T 38 00 DD 7E 06 12 79 C6 08 4F 78 CE 00 47 DD 5E
+R 00 00 00 00
+T 46 00 07 DD 56 08 69 60 73 23 72 CD 00 00 01
+R 00 00 00 00 02 0C 01 00
+T 53 00 0F 00 59 50 13 13 1A 5F E6 01 28 05 21
+R 00 00 00 00 02 02 00 00
+T 60 00 FF FF 18 18 7B E6 40 28 08 DD 6E 09 DD 66
+R 00 00 00 00
+T 6E 00 0A 18 0B 03 03 03 03 69 60 4E 23 46 69 60
+R 00 00 00 00
+T 7C 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_write
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_write
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 72 flags 0
+S _File_Write Def0000
+S _File_Write_start Def0000
+S _File_Write_end Def0072
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 15 12 79 C6 03 5F 78 CE 00 57 DD 7E 04
+R 00 00 00 00
+T 1C 00 12 79 C6 06 5F 78 CE 00 57 DD 7E 06 12 79
+R 00 00 00 00
+T 2A 00 C6 04 5F 78 CE 00 57 6B 62 DD 7E 09 77 23
+R 00 00 00 00
+T 38 00 DD 7E 0A 77 79 C6 08 4F 78 CE 00 47 DD 5E
+R 00 00 00 00
+T 46 00 07 DD 56 08 69 60 73 23 72 CD 00 00 01
+R 00 00 00 00 02 0C 01 00
+T 53 00 0F 00 59 50 13 13 1A 5F E6 01 28 05 21
+R 00 00 00 00 02 02 00 00
+T 60 00 FF FF 18 0B 03 03 03 03 69 60 4E 23 46 69
+R 00 00 00 00
+T 6E 00 60 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_close
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_close
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 2F flags 0
+S _File_Close_start Def0000
+S _File_Close_end Def002F
+S _File_Close Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 13 12 03 03 03 DD 7E 04 02 CD 00 00 01
+R 00 00 00 00 02 0D 01 00
+T 1C 00 11 00 0A 4F E6 01 28 05 21 FF FF 18 03 21
+R 00 00 00 00 02 02 00 00
+T 2A 00 00 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_seek
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_seek
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 74 flags 0
+S _File_Seek Def0000
+S _File_Seek_start Def0000
+S _File_Seek_end Def0074
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 16 12 79 C6 03 5F 78 CE 00 57 DD 7E 04
+R 00 00 00 00
+T 1C 00 12 79 C6 04 5F 78 CE 00 57 DD 7E 0A 12 79
+R 00 00 00 00
+T 2A 00 C6 0A 4F 78 CE 00 47 69 60 DD 7E 06 77 23
+R 00 00 00 00
+T 38 00 DD 7E 07 77 23 DD 7E 08 77 23 DD 7E 09 77
+R 00 00 00 00
+T 46 00 CD 00 00 01 0F 00 59 50 13 13 1A 5F E6 01
+R 00 00 00 00 02 03 01 00 02 06 00 00
+T 54 00 28 08 21 FF FF 11 FF FF 18 13 79 C6 0A 4F
+R 00 00 00 00
+T 62 00 78 CE 00 47 69 60 4E 23 46 23 5E 23 56 69
+R 00 00 00 00
+T 70 00 60 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_getline
+<REL>
+XL
+H 7 areas 5 global symbols
+M file_getline
+O -mz80
+S _symbos_info Ref0000
+S _File_Call Ref0000
+A _CODE size 5F flags 0
+S _File_GetLine Def0000
+S _File_GetLine_start Def0000
+S _File_GetLine_end Def005F
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 59 50 13
+R 00 00 00 00 02 0B 00 00
+T 0E 00 3E 16 12 79 C6 03 5F 78 CE 00 57 DD 7E 04
+R 00 00 00 00
+T 1C 00 12 79 C6 06 5F 78 CE 00 57 DD 7E 06 12 79
+R 00 00 00 00
+T 2A 00 C6 08 4F 78 CE 00 47 DD 5E 07 DD 56 08 69
+R 00 00 00 00
+T 38 00 60 73 23 72 CD 00 00 01 0F 00 59 50 13 13
+R 00 00 00 00 02 07 01 00 02 0A 00 00
+T 46 00 1A 5F E6 01 28 05 21 FF FF 18 0B 03 03 03
+R 00 00 00 00
+T 54 00 03 69 60 4E 23 46 69 60 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+file_size
+<REL>
+XL
+H 7 areas 4 global symbols
+M file_size
+O -mz80
+S _File_Seek Ref0000
+A _CODE size 7C flags 0
+S _File_Size Def0000
+S _File_Size_start Def0000
+S _File_Size_end Def007C
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FC FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 01 F5 33 21 00 00 E5 21 00 00 E5 DD 6E 04
+R 00 00 00 00
+T 1C 00 DD 66 05 E5 CD 00 00 44 4D F1 F1 F1 33 DD
+R 00 00 00 00 02 07 00 00
+T 2A 00 71 FC DD 70 FD DD 73 FE DD 72 FF 3E 02 F5
+R 00 00 00 00
+T 38 00 33 21 00 00 E5 21 00 00 E5 DD 6E 04 DD 66
+R 00 00 00 00
+T 46 00 05 E5 CD 00 00 44 4D F1 F1 F1 33 C5 D5 3E
+R 00 00 00 00 02 05 00 00
+T 54 00 00 F5 33 DD 6E FE DD 66 FF E5 DD 6E FC DD
+R 00 00 00 00
+T 62 00 66 FD E5 DD 6E 04 DD 66 05 E5 CD 00 00 F1
+R 00 00 00 00 02 0D 00 00
+T 70 00 F1 F1 33 D1 C1 69 60 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+memory_summary
+<REL>
+XL
+H 7 areas 3 global symbols
+M memory_summary
+O -mz80
+A _CODE size B flags 0
+S _Memory_Summary Def0000
+S _Memory_Summary_start Def0000
+S _Memory_Summary_end Def000B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 11 00 00 21 00 81 EF DD E5 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+memory_new
+<REL>
+XL
+H 7 areas 4 global symbols
+M memory_new
+O -mz80
+S __rrulong_rrx_s Ref0000
+A _CODE size 114 flags 0
+S _Memory_New Def0026
+S _Memory_New_start Def0026
+S _Memory_New_end Def0114
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 3E 00 DD 5E 04 DD
+R 00 00 00 00
+T 0E 00 4E 05 DD 46 06 E7 18 81 38 05 16 00 5F 18
+R 00 00 00 00
+T 1C 00 06 21 00 00 11 00 00 DD E1 C9 DD E5 DD 21
+R 00 00 00 00
+T 2A 00 00 00 DD 39 21 F7 FF 39 F9 DD 7E 06 3C 28
+R 00 00 00 00
+T 38 00 02 18 50 DD 7E 04 C6 03 DD 77 F7 DD 7E 05
+R 00 00 00 00
+T 46 00 CE 00 DD 77 F8 DD 36 FF 00 DD 7E FF D6 03
+R 00 00 00 00
+T 54 00 D2 B0 00 DD 6E F7 DD 66 F8 E5 DD 7E FF F5
+R 00 00 00 00 00 03 00 00
+T 62 00 33 CD 00 00 42 4B 5C 55 F1 33 DD 72 FB DD
+R 00 00 00 00 00 04 00 00
+T 70 00 73 FC DD 71 FD DD 70 FE DD 7E FB DD B6 FC
+R 00 00 00 00
+T 7E 00 DD B6 FD DD B6 FE 20 2A DD 34 FF 18 C4 DD
+R 00 00 00 00
+T 8C 00 7E 04 C6 03 4F DD 7E 05 CE 00 47 C5 DD 7E
+R 00 00 00 00
+T 9A 00 06 F5 33 CD 00 00 44 4D F1 33 DD 71 FB DD
+R 00 00 00 00 00 06 00 00
+T A8 00 70 FC DD 73 FD DD 72 FE DD 7E FB DD B6 FC
+R 00 00 00 00
+T B6 00 DD B6 FD DD B6 FE CA 0C 01 DD 7E FB DD 77
+R 00 00 00 00 00 09 00 00
+T C4 00 F9 DD 7E FC DD 77 FA DD 5E F9 DD 56 FA 13
+R 00 00 00 00
+T D2 00 6B 62 DD 7E 04 77 23 DD 7E 05 77 11 00 00
+R 00 00 00 00
+T E0 00 DD 4E FD 06 00 3E 10 F5 33 69 60 E5 6B 62
+R 00 00 00 00
+T EE 00 E5 CD 00 00 44 4D F1 F1 33 79 DD 6E F9 DD
+R 00 00 00 00 02 04 00 00
+T FC 00 66 FA 77 DD 4E F9 DD 46 FA 03 03 03 69 60
+R 00 00 00 00
+T 0A 01 18 03 21 00 00 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+memory_delete
+<REL>
+XL
+H 7 areas 3 global symbols
+M memory_delete
+O -mz80
+A _CODE size 5E flags 0
+S _Memory_Delete Def001D
+S _Memory_Delete_start Def001D
+S _Memory_Delete_end Def005E
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 7E 04 DD 6E 05
+R 00 00 00 00
+T 0E 00 DD 66 06 DD 4E 07 DD 46 08 E7 1B 81 DD E1
+R 00 00 00 00
+T 1C 00 C9 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9
+R 00 00 00 00
+T 2A 00 DD 4E 04 DD 46 05 79 C6 FD 4F 78 CE FF 47
+R 00 00 00 00
+T 38 00 59 50 13 6B 62 5E 23 56 DD 71 FE DD 70 FF
+R 00 00 00 00
+T 46 00 0A 4F D5 DD 6E FE DD 66 FF E5 79 F5 33 CD
+R 00 00 00 00
+T 54 00 00 00 F1 F1 33 DD F9 DD E1 C9
+R 00 00 00 00 00 02 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+memory_copy
+<REL>
+XL
+H 7 areas 12 global symbols
+M memory_copy
+O -mz80
+A _CODE size FF flags 0
+S _Banking_ReadByte Def00CD
+S _Banking_ReadWord Def0097
+S _Memory_Copy Def002D
+S _Banking_Copy Def0000
+S _Banking_ReadByte_start Def00CD
+S _Banking_WriteByte Def00E5
+S _Banking_ReadWord_start Def0097
+S _Banking_ReadByte_end Def00E5
+S _Memory_Copy_start Def002D
+S _Banking_WriteWord Def00B0
+S _Banking_Copy_start Def0000
+S _Banking_WriteByte_start Def00E5
+S _Banking_ReadWord_end Def00B0
+S _Memory_Copy_end Def0097
+S _Banking_Copy_end Def002D
+S _Banking_WriteWord_start Def00B0
+S _Banking_WriteByte_end Def00FF
+S _Banking_WriteWord_end Def00CD
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 7E 07 DD 6E 04
+R 00 00 00 00
+T 0E 00 07 07 07 07 E6 F0 B5 DD 6E 05 DD 66 06 DD
+R 00 00 00 00
+T 1C 00 5E 08 DD 56 09 DD 4E 0A DD 46 0B E7 30 81
+R 00 00 00 00
+T 2A 00 DD E1 C9 DD E5 DD 21 00 00 DD 39 21 FB FF
+R 00 00 00 00
+T 38 00 39 F9 DD 4E 06 DD 46 07 79 C6 FD 4F 78 CE
+R 00 00 00 00
+T 46 00 FF 47 DD 5E 04 DD 56 05 7B C6 FD 5F 7A CE
+R 00 00 00 00
+T 54 00 FF 57 DD 73 FE DD 72 FF DD 5E FE DD 56 FF
+R 00 00 00 00
+T 62 00 DD 6E FE DD 66 FF 7E DD 77 FD DD 71 FB DD
+R 00 00 00 00
+T 70 00 70 FC 0A 4F DD 6E 08 DD 66 09 E5 D5 DD 7E
+R 00 00 00 00
+T 7E 00 FD F5 33 DD 6E FB DD 66 FC E5 79 F5 33 CD
+R 00 00 00 00
+T 8C 00 00 00 F1 F1 F1 F1 DD F9 DD E1 C9 DD E5 DD
+R 00 00 00 00 00 02 00 00
+T 9A 00 21 00 00 DD 39 DD 7E 04 DD 6E 05 DD 66 06
+R 00 00 00 00
+T A8 00 E7 24 81 69 60 DD E1 C9 DD E5 DD 21 00 00
+R 00 00 00 00
+T B6 00 DD 39 DD 7E 04 DD 6E 05 DD 66 06 DD 4E 07
+R 00 00 00 00
+T C4 00 DD 46 08 E7 27 81 DD E1 C9 DD E5 DD 21
+R 00 00 00 00
+T D1 00 00 00 DD 39 DD 7E 04 DD 6E 05 DD 66 06 E7
+R 00 00 00 00
+T DF 00 2A 81 68 DD E1 C9 DD E5 DD 21 00 00 DD 39
+R 00 00 00 00
+T ED 00 DD 7E 04 DD 6E 05 DD 66 06 DD 46 07 E7
+R 00 00 00 00
+T FA 00 2D 81 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_program_run
+<REL>
+XL
+H 7 areas 6 global symbols
+M sys_program_run
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size CB flags 0
+S _Sys_Program_Run Def0000
+S _Sys_Program_Run_start Def0000
+S _Sys_Program_Run_end Def00CB
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 10 32 0F 00 01 0F 00 79 C6 01 DD 77 FE 78
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 CE 00 DD 77 FF DD 5E 05 DD 56 06 DD 6E FE
+R 00 00 00 00
+T 2A 00 DD 66 FF 73 23 72 03 03 03 DD 7E 04 02 AF
+R 00 00 00 00
+T 38 00 DD B6 07 20 05 0A 5F F6 80 02 01 0F 00 11
+R 00 00 00 00 02 0D 00 00
+T 46 00 0E 00 1A 5F C5 3E 03 F5 33 7B F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 53 00 00 00 F1 F1 21 0F 00 DD 75 FE DD 74 FF 11
+R 00 00 00 00 02 02 01 00 02 07 00 00
+T 61 00 0F 00 01 0E 00 0A 4F D5 3E 03 F5 33 79 F5
+R 00 00 00 00 02 02 00 00 02 05 00 00
+T 6F 00 33 CD 00 00 44 4D F1 F1 79 B0 28 E5 DD 6E
+R 00 00 00 00 02 04 02 00
+T 7D 00 FE DD 66 FF 4E 79 D6 90 28 02 18 D7 DD 7E
+R 00 00 00 00
+T 8B 00 08 DD 77 FE DD 7E 09 DD 77 FF 11 0F 00 7B
+R 00 00 00 00 02 0D 00 00
+T 99 00 C6 09 4F 7A CE 00 47 0A DD 6E FE DD 66 FF
+R 00 00 00 00
+T A7 00 77 DD 34 FE 20 03 DD 34 FF 7B C6 08 4F 7A
+R 00 00 00 00
+T B5 00 CE 00 47 0A DD 6E FE DD 66 FF 77 4B 42 03
+R 00 00 00 00
+T C3 00 0A 4F 69 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_program_end
+<REL>
+XL
+H 7 areas 5 global symbols
+M sys_program_end
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2C flags 0
+S _Sys_Program_End Def0000
+S _Sys_Program_End_start Def0000
+S _Sys_Program_End_end Def002C
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 11 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 3E 03 F5 33 7B F5 33 CD 00 00 F1 F1 DD
+R 00 00 00 00 02 0B 01 00
+T 2A 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_rundialog
+<REL>
+XL
+H 7 areas 5 global symbols
+M sys_rundialog
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 1B flags 0
+S _Sys_RunDialog Def0000
+S _Sys_RunDialog_start Def0000
+S _Sys_RunDialog_end Def001B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 3E 14 32 0F 00 01 0F 00 11 0E 00 1A 5F C5
+R 00 00 00 00 02 05 00 00 02 08 00 00 02 0B 00 00
+T 0E 00 3E 03 F5 33 7B F5 33 CD 00 00 F1 F1 C9
+R 00 00 00 00 02 0A 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_controlpanel
+<REL>
+XL
+H 7 areas 5 global symbols
+M sys_controlpanel
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2C flags 0
+S _Sys_ControlPanel Def0000
+S _Sys_ControlPanel_start Def0000
+S _Sys_ControlPanel_end Def002C
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 18 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 04 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 3E 03 F5 33 7B F5 33 CD 00 00 F1 F1 DD
+R 00 00 00 00 02 0B 01 00
+T 2A 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_taskmanager
+<REL>
+XL
+H 7 areas 5 global symbols
+M sys_taskmanager
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 1B flags 0
+S _Sys_TaskManager Def0000
+S _Sys_TaskManager_start Def0000
+S _Sys_TaskManager_end Def001B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 3E 19 32 0F 00 01 0F 00 11 0E 00 1A 5F C5
+R 00 00 00 00 02 05 00 00 02 08 00 00 02 0B 00 00
+T 0E 00 3E 03 F5 33 7B F5 33 CD 00 00 F1 F1 C9
+R 00 00 00 00 02 0A 01 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_messagebox
+<REL>
+XL
+H 7 areas 6 global symbols
+M sys_messagebox
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size B2 flags 0
+S _Sys_MessageBox_end Def00B2
+S _Sys_MessageBox Def0000
+S _Sys_MessageBox_start Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 1D 32 0F 00 01 0F 00 79 C6 01 DD 77 FE 78
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 CE 00 DD 77 FF DD 5E 05 DD 56 06 DD 6E FE
+R 00 00 00 00
+T 2A 00 DD 66 FF 73 23 72 79 C6 03 5F 78 CE 00 57
+R 00 00 00 00
+T 38 00 DD 7E 04 12 03 03 03 03 DD 7E 07 02 DD 5E
+R 00 00 00 00
+T 46 00 05 DD 56 06 7B C6 0C 5F 7A CE 00 57 6B 62
+R 00 00 00 00
+T 54 00 5E 23 56 7B B2 28 05 0A 5F F6 80 02 01
+R 00 00 00 00
+T 61 00 0F 00 11 0E 00 1A 5F C5 3E 03 F5 33 7B F5
+R 00 00 00 00 02 02 00 00 02 05 00 00
+T 6F 00 33 CD 00 00 F1 F1 21 0F 00 DD 75 FE DD 74
+R 00 00 00 00 02 04 01 00 02 09 00 00
+T 7D 00 FF 11 0F 00 01 0E 00 0A 4F D5 3E 03 F5 33
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 8B 00 79 F5 33 CD 00 00 44 4D F1 F1 79 B0 28 E5
+R 00 00 00 00 02 06 02 00
+T 99 00 DD 6E FE DD 66 FF 4E 79 D6 9D 28 02 18 D7
+R 00 00 00 00
+T A7 00 01 10 00 0A 4F 69 DD F9 DD E1 C9
+R 00 00 00 00 02 03 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_filedialog
+<REL>
+XL
+H 7 areas 7 global symbols
+M sys_filedialog
+O -mz80
+S _strcpy Ref0000
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 10B flags 0
+S _Sys_FileDialog Def0000
+S _Sys_FileDialog_start Def0000
+S _Sys_FileDialog_end Def010B
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FC FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 1F 32 0F 00 01 0F 00 79 C6 06 5F 78 CE 00
+R 00 00 00 00 02 04 01 00 02 07 01 00
+T 1C 00 57 DD 7E 04 12 79 C6 07 5F 78 CE 00 57 DD
+R 00 00 00 00
+T 2A 00 7E 07 12 79 C6 08 DD 77 FE 78 CE 00 DD 77
+R 00 00 00 00
+T 38 00 FF DD 5E 05 DD 56 06 DD 6E FE DD 66 FF 73
+R 00 00 00 00
+T 46 00 23 72 79 C6 0A 5F 78 CE 00 57 6B 62 36 C8
+R 00 00 00 00
+T 54 00 23 36 00 79 C6 0C 4F 78 CE 00 47 69 60 36
+R 00 00 00 00
+T 62 00 10 23 36 27 01 0F 00 11 0E 00 1A 5F C5 3E
+R 00 00 00 00 02 07 01 00 02 0A 01 00
+T 70 00 03 F5 33 7B F5 33 CD 00 00 F1 F1 21 0F 00
+R 00 00 00 00 02 09 02 00 02 0E 01 00
+T 7E 00 DD 75 FC DD 74 FD 11 0F 00 7B C6 01 DD 77
+R 00 00 00 00 02 09 01 00
+T 8C 00 FE 7A CE 00 DD 77 FF 11 0F 00 01 0E 00 0A
+R 00 00 00 00 02 0A 01 00 02 0D 01 00
+T 9A 00 4F D5 3E 03 F5 33 79 F5 33 CD 00 00 44 4D
+R 00 00 00 00 02 0C 03 00
+T A8 00 F1 F1 79 B0 28 E5 DD 6E FC DD 66 FD 4E 79
+R 00 00 00 00
+T B6 00 D6 9F 28 02 18 D7 DD 6E FE DD 66 FF 4E 3E
+R 00 00 00 00
+T C4 00 04 91 38 CB D5 59 16 00 21 D4 00 19 19 19
+R 00 00 00 00 00 0B 00 00
+T D2 00 D1 E9 C3 E3 00 C3 00 01 C3 04 01 C3
+R 00 00 00 00 00 05 00 00 00 08 00 00 00 0B 00 00
+T DE 00 04 01 C3 04 01 DD 7E 05 C6 04 4F DD 7E 06
+R 00 00 00 00 00 02 00 00 00 05 00 00
+T EC 00 CE 00 47 C5 DD 6E 05 DD 66 06 E5 CD 00 00
+R 00 00 00 00 02 0E 00 00
+T FA 00 F1 F1 2E 01 18 06 2E 00 18 02 2E 00 DD F9
+R 00 00 00 00
+T 08 01 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+sys_getcomputertype
+<REL>
+XL
+H 7 areas 3 global symbols
+M sys_getcomputertype
+O -mz80
+A _CODE size 1F flags 0
+S _Sys_GetComputerType Def0000
+S _Sys_GetComputerType_start Def0000
+S _Sys_GetComputerType_end Def001F
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 6E 04 DD 66 05
+R 00 00 00 00
+T 0E 00 E5 DD E1 21 03 81 11 05 01 FD 21 52 00 EF
+R 00 00 00 00
+T 1C 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_charinput
+<REL>
+XL
+H 7 areas 6 global symbols
+M shell_charinput
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 7D flags 0
+S _Shell_CharInput Def0000
+S _Shell_CharInput_start Def0000
+S _Shell_CharInput_end Def007D
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 01
+R 00 00 00 00
+T 0E 00 0F 00 3E 40 02 DD 7E 05 32 10 00 01 0F 00
+R 00 00 00 00 02 02 00 00 02 0B 00 00 02 0E 00 00
+T 1C 00 11 0E 00 1A 5F C5 DD 7E 04 F5 33 7B F5 33
+R 00 00 00 00 02 03 00 00
+T 2A 00 CD 00 00 F1 F1 21 0F 00 DD 75 FE DD 74 FF
+R 00 00 00 00 02 03 01 00 02 08 00 00
+T 38 00 11 0F 00 01 0E 00 0A 4F D5 DD 7E 04 F5 33
+R 00 00 00 00 02 03 00 00 02 06 00 00
+T 46 00 79 F5 33 CD 00 00 44 4D F1 F1 79 B0 28 E4
+R 00 00 00 00 02 06 02 00
+T 54 00 DD 6E FE DD 66 FF 4E 79 D6 C0 28 02 18 D6
+R 00 00 00 00
+T 62 00 01 0F 00 59 50 13 1A B7 20 09 03 03 0A 4F
+R 00 00 00 00 02 03 00 00
+T 70 00 69 26 00 18 03 21 FF FF DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_charoutput
+<REL>
+XL
+H 7 areas 6 global symbols
+M shell_charoutput
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 70 flags 0
+S _Shell_CharOutput Def0000
+S _Shell_CharOutput_start Def0000
+S _Shell_CharOutput_end Def0070
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 42 32 0F 00 01 0F 00 59 50 13 DD 7E 05 12
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 03 03 DD 7E 06 02 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 09 00 00 02 0C 00 00
+T 2A 00 C5 DD 7E 04 F5 33 7B F5 33 CD 00 00 F1 F1
+R 00 00 00 00 02 0C 01 00
+T 38 00 21 0F 00 DD 75 FE DD 74 FF 11 0F 00 01
+R 00 00 00 00 02 03 00 00 02 0C 00 00
+T 45 00 0E 00 0A 4F D5 DD 7E 04 F5 33 79 F5 33 CD
+R 00 00 00 00 02 02 00 00
+T 53 00 00 00 44 4D F1 F1 79 B0 28 E4 DD 6E FE DD
+R 00 00 00 00 02 02 02 00
+T 61 00 66 FF 4E 79 D6 C2 28 02 18 D6 DD F9 DD E1
+R 00 00 00 00
+T 6F 00 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_stringinput
+<REL>
+XL
+H 7 areas 6 global symbols
+M shell_stringinput
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+A _CODE size 97 flags 0
+S _Shell_StringInput_start Def0000
+S _Shell_StringInput_end Def0097
+S _Shell_StringInput Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 41 32 0F 00 01 0F 00 59 50 13 DD 7E 05 12
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 59 50 13 13 DD 7E 06 12 03 03 03 DD 5E 07
+R 00 00 00 00
+T 2A 00 DD 56 08 69 60 73 23 72 01 0F 00 11 0E 00
+R 00 00 00 00 02 0B 00 00 02 0E 00 00
+T 38 00 1A 5F C5 DD 7E 04 F5 33 7B F5 33 CD 00 00
+R 00 00 00 00 02 0E 01 00
+T 46 00 F1 F1 21 0F 00 DD 75 FE DD 74 FF 11 0F 00
+R 00 00 00 00 02 05 00 00 02 0E 00 00
+T 54 00 01 0E 00 0A 4F D5 DD 7E 04 F5 33 79 F5 33
+R 00 00 00 00 02 03 00 00
+T 62 00 CD 00 00 44 4D F1 F1 79 B0 28 E4 DD 6E FE
+R 00 00 00 00 02 03 02 00
+T 70 00 DD 66 FF 4E 79 D6 C1 28 02 18 D6 01 0F 00
+R 00 00 00 00 02 0E 00 00
+T 7E 00 59 50 13 1A B7 20 0A 03 03 03 0A 4F 69 26
+R 00 00 00 00
+T 8C 00 00 18 03 21 FF FF DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_stringoutput
+<REL>
+XL
+H 7 areas 7 global symbols
+M shell_stringoutput
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+S _Message_Sleep_And_Receive Ref0000
+S _strlen Ref0000
+A _CODE size A9 flags 0
+S _Shell_StringOutput_start Def0000
+S _Shell_StringOutput_end Def00A9
+S _Shell_StringOutput Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 21 FE FF 39 F9 3E
+R 00 00 00 00
+T 0E 00 43 32 0F 00 01 0F 00 59 50 13 DD 7E 05 12
+R 00 00 00 00 02 04 00 00 02 07 00 00
+T 1C 00 59 50 13 13 DD 7E 06 12 03 03 03 DD 5E 07
+R 00 00 00 00
+T 2A 00 DD 56 08 69 60 73 23 72 3E 00 DD 96 09 3E
+R 00 00 00 00
+T 38 00 00 DD 9E 0A FA 52 00 DD 4E 07 DD 46 08 C5
+R 00 00 00 00 00 07 00 00
+T 46 00 CD 00 00 44 4D F1 DD 71 09 DD 70 0A 01
+R 00 00 00 00 02 03 03 00
+T 53 00 12 00 03 03 DD 7E 09 02 01 0F 00 11 0E 00
+R 00 00 00 00 02 02 00 00 02 0B 00 00 02 0E 00 00
+T 61 00 1A 5F C5 DD 7E 04 F5 33 7B F5 33 CD 00 00
+R 00 00 00 00 02 0E 01 00
+T 6F 00 F1 F1 21 0F 00 DD 75 FE DD 74 FF 11 0F 00
+R 00 00 00 00 02 05 00 00 02 0E 00 00
+T 7D 00 01 0E 00 0A 4F D5 DD 7E 04 F5 33 79 F5 33
+R 00 00 00 00 02 03 00 00
+T 8B 00 CD 00 00 44 4D F1 F1 79 B0 28 E4 DD 6E FE
+R 00 00 00 00 02 03 02 00
+T 99 00 DD 66 FF 4E 79 D6 C3 28 02 18 D6 DD F9 DD
+R 00 00 00 00
+T A7 00 E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_exit
+<REL>
+XL
+H 7 areas 5 global symbols
+M shell_exit
+O -mz80
+S _symbos_info Ref0000
+S _Message_Send Ref0000
+A _CODE size 2D flags 0
+S _Shell_Exit Def0000
+S _Shell_Exit_start Def0000
+S _Shell_Exit_end Def002D
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 01 0F 00 3E 44 02
+R 00 00 00 00 02 0B 00 00
+T 0E 00 DD 7E 05 32 10 00 01 0F 00 11 0E 00 1A 5F
+R 00 00 00 00 02 06 00 00 02 09 00 00 02 0C 00 00
+T 1C 00 C5 DD 7E 04 F5 33 7B F5 33 CD 00 00 F1 F1
+R 00 00 00 00 02 0C 01 00
+T 2A 00 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+<FILE>
+shell_startparam
+<REL>
+XL
+H 7 areas 6 global symbols
+M shell_startparam
+O -mz80
+A _CODE size 7B flags 0
+S _Shell_StartParam_start Def0000
+S _Shell_NextParam Def002E
+S _Shell_StartParam_end Def002E
+S _Shell_NextParam_start Def002E
+S _Shell_NextParam_end Def007B
+S _Shell_StartParam Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _CABS size 0 flags 0
+T 00 00 DD E5 DD 21 00 00 DD 39 DD 4E 04 DD 46 05
+R 00 00 00 00
+T 0E 00 69 60 4E 23 46 78 C6 FF 47 DD 7E 04 81 DD
+R 00 00 00 00
+T 1C 00 77 04 DD 7E 05 88 DD 77 05 DD 6E 04 DD 66
+R 00 00 00 00
+T 2A 00 05 DD E1 C9 DD E5 DD 21 00 00 DD 39 21
+R 00 00 00 00
+T 37 00 FF FF 39 F9 DD 4E 04 DD 46 05 0A 5F D6 20
+R 00 00 00 00
+T 45 00 28 02 18 03 03 18 F5 DD 5E 06 DD 56 07 0A
+R 00 00 00 00
+T 53 00 DD 77 FF B7 28 0F DD 7E FF D6 20 28 08 DD
+R 00 00 00 00
+T 61 00 7E FF 03 12 13 18 EA 3E 00 12 0A B7 20 05
+R 00 00 00 00
+T 6F 00 21 00 00 18 02 69 60 DD F9 DD E1 C9
+R 00 00 00 00
+</REL>
+<ADB>
+</ADB>
+</FILE>
+
+</FILES>
+
+</SDCCLIB>

@@ -1,0 +1,170 @@
+<style type="text/css">
+<!--
+body,td,th {
+	color: #FFFFFF;
+}
+body {
+	background-color: #000000;
+}
+.Estilo2 {font-family: "Konami 10pt", "Konami 12pt"}
+.Estilo9 {font-size: large}
+.Estilo11 {font-family: Georgia, "Times New Roman", Times, serif}
+.Estilo12 {
+	font-family: "Konami 10pt", "Konami 12pt";
+	font-size: large;
+	color: #FFFF00;
+}
+.Estilo17 {color: #CCCCCC}
+a:link {
+	color: #00FFCC;
+}
+a:visited {
+	color: #00CCFF;
+}
+.Estilo18 {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}
+.Estilo20 {color: #000000}
+.Estilo21 {color: #33FFFF}
+.Estilo22 {font-family: "Courier New", Courier, monospace; font-size: 12px; color: #33FFFF; }
+.Estilo24 {font-family: Georgia, "Times New Roman", Times, serif; color: #FFFFFF; }
+.Estilo25 {color: #00FFFF}
+-->
+</style><table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="232"><div align="center"><img src="images/msxlogo.jpg" width="128" height="41" /><br />
+        <a href="index.html"><img src="images/nlklogo.jpg" width="128" height="40" border="0" /></a></div></td>
+    <td width="568"><div align="center" class="Estilo2"><span class="Estilo9">Bienvenido a mi rincon MSX !</span> &iexcl;<span class="Estilo9"> <br />
+          <span class="Estilo17">Welcome to my MSX corner ! </span></span></div></td>
+  </tr>
+  <tr>
+    <td bgcolor="#000000">&nbsp;</td>
+    <td bgcolor="#000000">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2"><blockquote>
+      <p class="Estilo2"><span class="Estilo12">The resource file (.RC) </span></p>
+      </blockquote>      
+    <blockquote class="Estilo11">
+      <p class="Estilo11">With this file we can add resources to our application (windows, controls, graphics, strings, etc.)  When &quot;SymbosMake&quot; compile a RC archive, it generates a &quot;resources.h&quot; file. We can use this C include file for using during compilation time.<br />
+        The way to include objects is: </p>
+      <p class="Estilo22">&lt;OBJECT_TYPE&gt; &lt;NAME&gt; &lt;VALUE&gt;<br />
+        &lt;OBJECT_TYPE&gt; &lt;NAME&gt; { &lt;VALUES&gt; }</p>
+      <p>We can find all this kind of objects: </p>
+      <p class="Estilo21">ICON &lt;Identifier&gt; &lt;String&gt; <br />
+      BITMAP &lt;Identifier&gt; &lt;String&gt;<br />
+      <br />
+      <span class="Estilo24">      Add a graphic file with Symbos format (.SGX) </span></p>
+      <p class="Estilo21">DEFINE &lt;Identifier&gt; &lt;Integer&gt; </p>
+      <p class="Estilo21"><span class="Estilo24">Add a precompiler label in the file &quot;Resources.h&quot;</span></p>
+      <p class="Estilo21">STRING &lt;Identifier&gt; &lt;String&gt; <br />
+        <br />
+        <span class="Estilo24">Add an ASCII string. &lt;String&gt; is a set of chars separated between &quot; &quot;<br />
+        <span class="Estilo25">For example: STRING IDS_CADENA1 &quot;This is a string&quot;</span></span></p>
+      <p class="Estilo21">DATA &lt;Identifier&gt; <br />
+        { <br />
+&nbsp;&nbsp;        BYTE = &lt;Integer&gt; | WORD = &lt;Integer&gt; | LONG = &lt;Integer&gt; | POINTER = &lt;Identifier&gt; <br />
+&nbsp;&nbsp;&nbsp;[, BYTE = &lt;Integer&gt; | WORD = &lt;Integer&gt; | LONG = &lt;Integer&gt; | POINTER = &lt;Identifier&gt; [, ...] ]<br />
+        } <br />
+        <span class="Estilo24"><br />
+        Add an array of data. This let you to add integer numbers of 1 bytes, 2 bytes (WORD, POINTER) and 4 bytes (LONG)</span><span class="Estilo24"><br />
+        <span class="Estilo25"></span></span><br />
+        WINDOW &lt;Identifier&gt;<br />
+        {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[STATUS_CLOSED, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[STATUS_NORMAL, ]<br />
+&nbsp;&nbsp;&nbsp; [STATUS_MAXIMIZED, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[STATUS_MINIMIZED, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_CENTERED, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_ICON, ] <br />
+&nbsp;&nbsp;&nbsp; [IS_RESIZEABLE, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_CLOSE, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_TOOLBAR, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_TITLE, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SHOW_MENU, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[IS_X_ADJUSTED, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[IS_Y_ADJUSTED, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[NOT_SHOW_IN_TASKBAR, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[NOT_MOVEABLE, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[IS_SUPERWINDOW, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[X = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[Y = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[WIDTH = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[HEIGHT = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[OFF_X = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[OFF_Y = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[FULL_WIDTH = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[FULL_HEIGHT = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[MIN_WIDTH = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[MIN_HEIGHT = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[MAX_WIDTH = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[MAX_HEIGHT = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[ICON = &lt;Pointer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[TITLE_STRING = &lt;Identifier&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[STATUS_STRING = &lt;Identifier&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[MENU_DATA_RECORD = &lt;Identifier&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[CONTROL_GROUP_DATA_RECORD = &lt;Identifier&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[CONTROL_GROUP_DATA_RECORD_TOOLBAR = &lt;Identifier&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[TOOLBAR_HEIGHT = &lt;Integer&gt;, ] <br />
+&nbsp;&nbsp;&nbsp;&nbsp;[SUPERWINDOW_ID = &lt;Integer&gt;, ] <br />
+} </p>
+      <p class="Estilo21">        CONTROL_GROUP_DATA_RECORD &lt;Identifier&gt; <br />
+      {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[CONTROL_DATA_RECORD | AREA | TEXT | FRAME | FRAME_WITH_TITLE |<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRESS | TEXT_WITH_FONT | TEXT_WITH_CODES | GRAPHIC | <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GRAPHIC_WITH_TEXT | GRAPHIC_EX | BUTTON | CHECK_BUTTON | RADIO_BUTTON |<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HIDDEN_BUTTON | TAB | SLIDER | COLLECTION | TEXTLINE | TEXTBOX | <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIST_TITLE | LIST_CONTENT | LIST_DROPDOWN | LIST  &lt;Identifier&gt; <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ID = &lt;Integer&gt;,]<br />    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[TYPE = &lt;Integer&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[BANK = &lt;Integer&gt;,]<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[PARAM = &lt;Integer&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[PARAM_EX = &lt;Identifier&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [X = &lt;Integer&gt;,]<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[Y = &lt;Integer&gt;,]<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[W = &lt;Integer&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[H = &lt;Integer&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[CALCULATION_RULE_DATA_RECORD = &lt;Identifier&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[OBJ_RETURN = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[OBJ_ESCAPE = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[OBJ_FOCUS = &lt;Integer&gt;, ] <br />
+        }</p>
+      <p class="Estilo21">        CALCULATION_RULE_DATA_RECORD &lt;Identifier&gt; <br />
+      {<br />
+        &nbsp;&nbsp;&nbsp;[X = &lt;Integer&gt;, ]<br />
+          &nbsp;&nbsp;&nbsp;[X_MUL = &lt;Integer&gt;, ]<br />
+          &nbsp;&nbsp;&nbsp;[X_DIV = &lt;Integer&gt;, ]<br />
+          &nbsp;&nbsp;&nbsp;[Y = &lt;Integer&gt;, ]<br />
+  &nbsp;&nbsp;&nbsp;[Y_MUL = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[Y_DIV = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[W = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[W_MUL = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[W_DIV = &lt;Integer&gt;, ]<br />
+        &nbsp;&nbsp;&nbsp;[H = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[H_MUL = &lt;Integer&gt;, ]<br />
+&nbsp;&nbsp;&nbsp;[H_DIV = &lt;Integer&gt;, ]<br />
+}</p>
+      <p><span class="Estilo21">        MENU_DATA_RECORD &lt;Identifier&gt; <br />
+      {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[ITEM &lt;Identifier&gt; <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[SUBMENU = &lt;Identifier&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ID = &lt;Identifier&gt;,]<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[TEXT = &lt;Identifier&gt;,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[IS_ACTIVED,]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[IS_CHECKED,]<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[IS_SEPARATOR,]</span><span class="Estilo21"><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]<br />
+        }</span><br />
+        <br />
+      </p>
+      </blockquote></td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#0000E7" class="Estilo2">&nbsp;</td>
+  </tr>
+  
+</table>
