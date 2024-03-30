@@ -665,6 +665,20 @@ void reset_disk_system(void) {
 void BDOS(void) __naked {
     __asm
         ld a, l
+        di              ;restore VM-side shadow registers
+    __endasm;
+    __asm__ ("ex af,af'"); // because the __asm parser doesn't like apostrophes (derp)
+    __asm
+vmshda::ld a,#0
+    __endasm;
+    __asm__ ("ex af,af'");
+    __asm
+		exx
+vmshdb::ld bc,#0
+vmshdd::ld de,#0
+vmshdh::ld hl,#0
+		exx
+		ei
     __endasm;
 } // FALL THROUGH
 
@@ -829,6 +843,19 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     // load return values into HL and return (will be copied to BA TPA-side)
     __asm
         ld hl, (_reg_hl)
+		di              ;save VM-side shadow registers
+    __endasm;
+    __asm__ ("ex af,af'"); // because the __asm parser doesn't like apostrophes (derp)
+    __asm
+        ld (vmshda+1),a
+    __endasm;
+    __asm__ ("ex af,af'");
+    __asm
+		exx
+		ld (vmshdb+1),bc
+		ld (vmshdd+1),de
+		ld (vmshdh+1),hl
+		exx
         jp jmp_bnkret
     __endasm;
 }

@@ -172,6 +172,19 @@ __asm
     ld b,a
     ld ix,#jmp_tpaapp
     ld iy,#tpa_end
+    di              ;save VM-side shadow registers
+__endasm;
+__asm__ ("ex af,af'"); // because the __asm parser doesn't like apostrophes (derp)
+__asm
+    ld (vmshda+1),a
+__endasm;
+__asm__ ("ex af,af'");
+__asm
+    exx
+    ld (vmshdb+1),bc
+    ld (vmshdd+1),de
+    ld (vmshdh+1),hl
+    exx
     jp jmp_bnkcll
 __endasm;
 }

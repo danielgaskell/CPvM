@@ -101,9 +101,28 @@ tpabds1 ld a,(vm_bnk)
         ld b,a
         ld ix,(vm_adr)
         ld iy,(vm_stk)
+		di              ;save TPA-side shadow registers
+		ex af,af'
+		push af
+		ex af,af'
+		exx
+		ld (tpashdb+1),bc
+		ld (tpashdd+1),de
+		ld (tpashdh+1),hl
+		exx
         call jmp_bnkcll
         ld a,l          ;copy result in HL to BA
         ld b,h
+        di              ;restore TPA-side shadow registers
+		ex af,af'
+        pop af
+		ex af,af'
+		exx
+tpashdb ld bc,0
+tpashdd ld de,0
+tpashdh ld hl,0
+		exx
+		ei
         ret
 
 C_WRITE_buf
