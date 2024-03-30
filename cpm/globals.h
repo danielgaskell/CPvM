@@ -77,6 +77,7 @@ unsigned char bnk_tpa;
 unsigned char bnk_tpa2vm; // tpa to cpmvm (low=tpa, high=cpmvm)
 unsigned char bnk_vm2tpa; // cpmvm to tpa (low=cpmvm, high=tpa)
 unsigned char tpa_error;
+unsigned char keyconv[4];
 
 // BDOS status
 unsigned short drive_ro;

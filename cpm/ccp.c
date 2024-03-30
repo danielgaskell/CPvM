@@ -177,9 +177,8 @@ void ccp(void) {
     while (1) {
         buffer[0] = default_drive + 'A';
         buffer[1] = 0;
-        if (user_number) {
+        if (user_number)
             __itoa(user_number, buffer + 1, 10);
-        }
         strcat(buffer, ">");
         strout(buffer);
         Shell_StringInput(termpid, 0, bnk_vm, buffer);

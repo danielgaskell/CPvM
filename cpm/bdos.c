@@ -594,18 +594,26 @@ void string_output(unsigned short addr) {
     }
 }
 
+// get a character from the console, remapping control chars as specified in keyconv[]
+unsigned char convert_key(unsigned char ch) {
+    if (ch >= 136 && ch <= 139)
+        ch = keyconv[ch - 136];
+    ch &= 0x7F;
+    return ch;
+}
+
 unsigned char bios_console_input(void) {
     chrout(3); // cursor on
-    reg_a = Shell_CharInput(termpid, 0) & 0x7F;
+    reg_a = convert_key(Shell_CharInput(termpid, 0));
     chrout(2); // cursor off - FIXME this is slow when inputting in windowed mode, how to improve?
     return reg_a;
 }
 
 unsigned char console_input(void) {
     chrout(3); // cursor on
-    reg_a = Shell_CharInput(termpid, 0) & 0x7F;
+    reg_a = convert_key(Shell_CharInput(termpid, 0));
     if (reg_a == 13)
-        reg_a = 10; // CP/M programs expect ENTER to be 10
+        reg_a = 10; // CP/M programs expect ENTER to be 10 for this input type only
     buffer[0] = reg_a;
     buffer[1] = 2; // cursor off
     buffer[2] = 0;
@@ -616,7 +624,7 @@ unsigned char console_input(void) {
 unsigned char direct_io(unsigned char e) {
     reg_a = e;
     if (e == 0xFF) {
-        reg_a = Shell_CharTest(termpid, 0, 1);
+        reg_a = convert_key(Shell_CharTest(termpid, 0, 1));
     } else {
         buffer[0] = e;
         buffer[1] = 0;
