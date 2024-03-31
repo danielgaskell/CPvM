@@ -463,47 +463,55 @@ void set_random_record(unsigned short fcb) {
 // and maintains a state machine for escape sequences, which will be outputted
 // all at once on completion of the sequence. Output goes at *out_ptr.
 void buffer_char(unsigned char ch) {
-    ch &= 0x7F; // strip high bit, since some software will send with high bit set
-    if (ch == 27) {
+    reg_a = ch & 0x7F; // strip high bit, since some software will send with high bit set
+    if (reg_a == 27) {
         // escape code start
         escape_chars_expected = 1;
         escape_char_bracket = 0;
         escape_char_position = 0;
     } else if (escape_chars_expected) {
         // escape code continuation
-        if (ch == '[') {
+        if (reg_a == '[') {
             escape_char_bracket = 1;
             ansi_parms[1] = 0;
             ansi_parms[4] = 0;
-        } else if (ch == '=' || ch == 'Y') {
+        } else if (reg_a == '=' || reg_a == 'Y') {
             escape_char_position = 2;
+        } else if (reg_a == '(') {
+            inverse = 0;
+        } else if (reg_a == ')') {
+            inverse = 1;
+        } else if (reg_a == 'p') {
+            inverse = 1;
+        } else if (reg_a == 'q') {
+            inverse = 0;
         } else if (escape_char_bracket) {
-            if (ch == ';') {
+            if (reg_a == ';') {
                 ansi_parms[escape_char_bracket] = 0;
                 escape_char_bracket = 4;
-            } else if (ch >= '0' && ch <= '9') {
-                ansi_parms[escape_char_bracket++] = ch;
+            } else if (reg_a >= '0' && reg_a <= '9') {
+                ansi_parms[escape_char_bracket++] = reg_a;
             } else {
                 ansi_parms[escape_char_bracket] = 0;
                 ansi_parm1 = atoi(&ansi_parms[1]);
                 ansi_parm2 = atoi(&ansi_parms[4]);
-                if (ch == 'A') {
+                if (reg_a == 'A') {
                     *out_ptr = 0x0E;
                     *out_ptr++ = ansi_parm1 + 185;
-                } else if (ch == 'B') {
+                } else if (reg_a == 'B') {
                     *out_ptr = 0x0E;
                     *out_ptr++ = ansi_parm1 + 160;
-                } else if (ch == 'C') {
+                } else if (reg_a == 'C') {
                     *out_ptr = 0x0E;
                     *out_ptr++ = ansi_parm1;
-                } else if (ch == 'D') {
+                } else if (reg_a == 'D') {
                     *out_ptr = 0x0E;
                     *out_ptr++ = ansi_parm1 + 80;
-                } else if (ch == 'H') {
+                } else if (reg_a == 'H') {
                     *out_ptr++ = 0x1F;
                     *out_ptr++ = ansi_parm2 ? ansi_parm2 : 1;
                     *out_ptr = ansi_parm1 ? ansi_parm1 : 1;
-                } else if (ch == 'K') {
+                } else if (reg_a == 'K') {
                     if (ansi_parms[1] == '2') {
                         *out_ptr++ = 0x11;
                         *out_ptr = 0x12;
@@ -512,34 +520,39 @@ void buffer_char(unsigned char ch) {
                     } else {
                         *out_ptr = 0x12;
                     }
-                } else if (ch == 'J') {
+                } else if (reg_a == 'J') {
                     *out_ptr = 0x0C; // only "clear full screen" version currently supported
-                } else if (ch == 'f') {
+                } else if (reg_a == 'f') {
                     *out_ptr = 0x1E;
+                } else if (reg_a == 'm') {
+                    inverse = ansi_parm1;
                 }
                 out_ptr++;
                 escape_chars_expected = 0;
             }
         } else if (escape_char_position == 2) {
-            escape_char_y = ch;
+            escape_char_y = reg_a;
             --escape_char_position;
         } else if (escape_char_position == 1) {
             *out_ptr++ = 0x1F;
-            *out_ptr++ = ch - 31;
+            *out_ptr++ = reg_a - 31;
             *out_ptr++ = escape_char_y - 31;
             escape_chars_expected = 0;
         } else {
-            gen_ptr = *(unsigned short**)(((unsigned short*)&escapes) + ch - '(');
+            gen_ptr = *(unsigned short**)(((unsigned short*)&escapes) + reg_a - '(');
             strcpy(out_ptr, gen_ptr);
             out_ptr += strlen(gen_ptr);
             escape_chars_expected = 0;
         }
-    } else if (ch < 32) {
+    } else if (reg_a < 32) {
         // single-character control code, translate
-        *out_ptr++ = control_codes[ch];
+        *out_ptr++ = control_codes[reg_a];
     } else {
         // regular character, emit as-is
-        *out_ptr++ = ch;
+        if (inverse && reg_a == ' ')
+            *out_ptr++ = 0xB1;
+        else
+            *out_ptr++ = reg_a;
     }
 }
 

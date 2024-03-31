@@ -27,7 +27,6 @@ void asm_constants(void) __naked {
 __asm
     tpa_end     .equ #0xfd00         ;stack = end of TPA+1 = start of wrapper code (must be >#c000)
     wrap_len    .equ #0x0200
-    bios_siz    .equ 51              ;size of BIOS jump table (0-16 calls * 3)
 
     jmp_memget  .equ #0x8118 ;MEMGET
     jmp_memfre  .equ #0x811B ;MEMFRE

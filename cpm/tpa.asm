@@ -71,6 +71,8 @@ tpairq  db 0
         di
         xor a
         ld (tpairq),a
+		ld hl,CONST+1
+		inc (hl)		; increment "IRQs since last refresh"
         pop iy
         pop ix
         pop hl
@@ -88,10 +90,7 @@ tpabds  ld a,c
         cp C_WRITE
         jr z,C_WRITE_buf
         cp C_RAWIO
-        jr nz,tpabds2
-        ld a,e
-        inc a
-        jr nz,C_WRITE_buf
+        jr z,C_RAWIO_tpa
 tpabds2 ld a,(cwblen)
         or a
         call nz,cwbsnd
@@ -154,6 +153,21 @@ cwbsnd  push bc         ;print and empty buffer
         pop bc
         ret
 
+C_RAWIO_tpa
+		ld a,e
+        inc a
+		jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
+CONST	ld a,0
+		cp #16
+		ld a,#0
+		jr nc,tparawc     ;>=16 IRQs since last call = normal BDOS call
+		ld b,#0           ;...else respond with "no char waiting"
+		ld hl,#0
+		ret
+tparawc ld (CONST+1),a    ;reset IRQ count
+        jr tpabds2
+		
+
 ;==============================================================================
 ;### BIOS CALLS ###############################################################
 ;==============================================================================
@@ -184,7 +198,7 @@ jp tpabio_16    ;SECTRAN
 ;calls
 tpabio_00
 tpabio_01   ld c,0:               jp tpabds         ;BOOT/WBOOT
-tpabio_02   ld c,C_STAT:          jp tpabds         ;CONST
+tpabio_02   ld c,C_STAT:          jp CONST          ;CONST
 tpabio_03   ld c,B_READ:          jp tpabds         ;CONIN
 tpabio_04   ld e,c:               jp C_WRITE_buf    ;CONOUT                 (direct c_write_buf)
 tpabio_05   ld e,c:ld c,L_WRITE:  jp tpabds         ;LIST

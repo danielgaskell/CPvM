@@ -23,6 +23,7 @@
 
 // NOTE: make sure this stays set to a blank 16-byte part of the TPA, including buffers
 #define DPBADDR 0xFEF0
+#define TPA_END 0xFD00
 
 typedef struct {
     unsigned char drive;
@@ -78,6 +79,7 @@ unsigned char bnk_tpa2vm; // tpa to cpmvm (low=tpa, high=cpmvm)
 unsigned char bnk_vm2tpa; // cpmvm to tpa (low=cpmvm, high=tpa)
 unsigned char tpa_error;
 unsigned char keyconv[4];
+unsigned char inverse;
 
 // BDOS status
 unsigned short drive_ro;
