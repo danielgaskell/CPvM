@@ -91,6 +91,8 @@ tpabds  ld a,c
         jr z,C_WRITE_buf
         cp C_RAWIO
         jr z,C_RAWIO_tpa
+		cp C_STAT
+		jr z,CONST
 tpabds2 ld a,(cwblen)
         or a
         call nz,cwbsnd
@@ -158,14 +160,17 @@ C_RAWIO_tpa
         inc a
 		jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
 CONST	ld a,0
-		cp #16
+		cp #4
 		ld a,#0
-		jr nc,tparawc     ;>=16 IRQs since last call = normal BDOS call
+		jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
 		ld b,#0           ;...else respond with "no char waiting"
 		ld hl,#0
 		ret
 tparawc ld (CONST+1),a    ;reset IRQ count
         jr tpabds2
+;Technically, C_STAT should repeat the last status rather than "no char", but
+;but since apps almost always use this for single-step decision-making it would
+;be surprising if this causes problems.
 		
 
 ;==============================================================================

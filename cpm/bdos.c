@@ -75,6 +75,7 @@ void system_reset(void) {
             pop de
         __endasm;
         close_all_files();
+        wait_for_async();
         ccp();
     } else {
         symbos_exit();
@@ -189,11 +190,11 @@ unsigned char open_file(unsigned short fcb) {
 
     // if it has a wildcard, use DIRINP to get first filename
     if (strchr(buffer, '?')) {
-        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, large_buffer, 23, 0, &dir_buffer_count_open)) {
+        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open)) {
             if (dir_buffer_count_open) {
                 // found at least one matching file, create absolute path
                 set_base_path(fcb_buffer.drive);
-                strcat(buffer, large_buffer + 9);
+                strcat(buffer, buffer2 + 9);
             } else {
                 return 0xFF;
             }
@@ -273,9 +274,9 @@ unsigned char delete_file(unsigned short fcb) {
 
 unsigned char rename_file(unsigned short pseudo_fcb) {
     path_from_fcb(pseudo_fcb);
-    filename_to_symbos(large_buffer, ((char*)&fcb_buffer) + 17);
+    filename_to_symbos(buffer2, ((char*)&fcb_buffer) + 17);
     if (!write_err()) {
-        if (!Directory_RenameFile(bnk_vm, buffer, large_buffer))
+        if (!Directory_RenameFile(bnk_vm, buffer, buffer2))
             return 0;
         else
             return 0xFF;
@@ -408,9 +409,9 @@ unsigned char write_random(unsigned short fcb) {
             if (handles_len[handle] < fcb_buffer.random_record) {
                 // too short, extend file
                 File_Seek(handle, 0, 2); // seek to end
-                memset(large_buffer, 0, 128); // create null bytes to write
+                memset(buffer, 0, 128); // create null bytes to write
                 while (handles_len[handle] < fcb_buffer.random_record) {
-                    File_Write(handle, bnk_vm, large_buffer, 128);
+                    File_Write(handle, bnk_vm, buffer, 128);
                     ++handles_len[handle];
                 }
                 handles_pos[handle] = fcb_buffer.random_record; // already at end, so no seek needed after this; just update handles_pos
@@ -557,9 +558,18 @@ void buffer_char(unsigned char ch) {
 }
 
 void output_buffer(void) {
-    if (large_buffer[0]) {
+    if (out_buffer[0]) {
         *out_ptr = 0; // zero-terminate
-        strout(large_buffer);
+        strout(out_buffer);
+    }
+}
+
+void refresh_out_buffer(void) {
+    out_ptr = out_buffer;
+    *out_ptr = 0;
+    if (cursor_on) {
+        *out_ptr++ = 2; // turn cursor off
+        cursor_on = 0;
     }
 }
 
@@ -567,28 +577,26 @@ void output_buffer(void) {
 // Note: CP/M will convert character 9 inline to spaces, even when used as a control code; this can probably be ignored,
 // but it means that programs may send the binary number 9 (e.g., for addresses) with the high bit set (stripped above).
 void print_to_terminal(char* addr) {
-    large_buffer[0] = 0;
-    out_ptr = large_buffer;
+    refresh_out_buffer();
     while (*addr)
         buffer_char(*addr++);
     output_buffer();
 }
 
 void console_output(unsigned char ch) {
-    large_buffer[0] = 0;
-    out_ptr = large_buffer;
+    refresh_out_buffer();
     buffer_char(ch);
     output_buffer();
 }
 
 void string_output(unsigned short addr) {
     unsigned char scanning = 1;
-    buffer[256] = 0; // ensure string is zero-terminated
+    buffer[192] = 0; // ensure string is zero-terminated
 
     // output string at addr in 255-byte chunks
     while (scanning) {
         // get a chunk
-        Banking_Copy(bnk_tpa, addr, bnk_vm, (unsigned short)&buffer[0], 256);
+        Banking_Copy(bnk_tpa, addr, bnk_vm, (unsigned short)&buffer[0], 192);
 
         // terminate at $, if found
         gen_ptr = buffer;
@@ -603,7 +611,7 @@ void string_output(unsigned short addr) {
 
         // print what we found
         print_to_terminal(buffer);
-        addr += 256;
+        addr += 192;
     }
 }
 
@@ -616,27 +624,36 @@ unsigned char convert_key(unsigned char ch) {
 }
 
 unsigned char bios_console_input(void) {
-    chrout(3); // cursor on
+    if (!cursor_on) {
+        chrout(3); // cursor on
+        cursor_on = 1;
+    }
+    wait_for_async();
     reg_a = convert_key(Shell_CharInput(termpid, 0));
-    chrout(2); // cursor off - FIXME this is slow when inputting in windowed mode, how to improve?
     return reg_a;
 }
 
 unsigned char console_input(void) {
-    chrout(3); // cursor on
+    if (!cursor_on) {
+        chrout(3); // cursor on
+        cursor_on = 1;
+    }
+    wait_for_async();
     reg_a = convert_key(Shell_CharInput(termpid, 0));
     if (reg_a == 13)
         reg_a = 10; // CP/M programs expect ENTER to be 10 for this input type only
-    buffer[0] = reg_a;
-    buffer[1] = 2; // cursor off
-    buffer[2] = 0;
-    strout(buffer);
+    chrout(reg_a);
     return reg_a;
 }
 
 unsigned char direct_io(unsigned char e) {
     reg_a = e;
     if (e == 0xFF) {
+        if (!cursor_on) {
+            chrout(3); // cursor on
+            cursor_on = 1;
+        }
+        wait_for_async();
         reg_a = convert_key(Shell_CharTest(termpid, 0, 1));
     } else {
         buffer[0] = e;
@@ -648,7 +665,9 @@ unsigned char direct_io(unsigned char e) {
 
 unsigned char read_string(unsigned short addr) {
     unsigned char max_chars = Banking_ReadByte(bnk_tpa, (char*)addr);
+    wait_for_async();
     reg_a = Shell_StringInput(termpid, 0, bnk_vm, buffer + 1);
+    cursor_on = 0; // because Shell_StringInput resets it
     if (reg_a) { // Ctrl+C
         __asm
             pop de
@@ -661,6 +680,7 @@ unsigned char read_string(unsigned short addr) {
 }
 
 unsigned char console_status(void) {
+    wait_for_async();
     if (Shell_CharTest(termpid, 0, 0))
         return 0xFF;
     else
@@ -707,11 +727,11 @@ vmshdh::ld hl,#0
 void bdos_calls(unsigned char c, unsigned short de) __naked {
     #ifdef TRACE
     if (c != 255) {
-        buffer[0] = '[';
-        buffer[1] = 0;
-        __itoa(c, buffer + 1, 10);
-        strcat(buffer, "]");
-        strout(buffer);
+        out_buffer[0] = '[';
+        out_buffer[1] = 0;
+        __itoa(c, out_buffer + 1, 10);
+        strcat(out_buffer, "]");
+        strout(out_buffer);
     }
     #endif // TRACE
 
@@ -856,9 +876,9 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     }
 
     #ifdef TRACE
-    buffer[0] = '=';
-    __itoa(reg_hl, buffer + 1, 16);
-    strout(buffer);
+    out_buffer[0] = '=';
+    __itoa(reg_hl, out_buffer + 1, 16);
+    out_buffer(buffer);
     #endif // TRACE
 
     // load return values into HL and return (will be copied to BA TPA-side)

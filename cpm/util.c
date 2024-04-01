@@ -21,9 +21,44 @@
  THE SOFTWARE.
 =============================================================================*/
 
-// Convenience functions (also saves a few bytes by reducing stack pushes for each use)
-void chrout(unsigned char ch) { Shell_CharOutput(termpid, 0, ch); }
-void strout(char* str) { Shell_StringOutput(termpid, 0, bnk_vm, str, strlen(str)); }
+// wait until last asynchronous command finishes, if any
+void wait_for_async(void) {
+    if (termresp) {
+        msg_buf[0] = 0;
+        while (msg_buf[0] != termresp)
+            Message_Sleep_And_Receive(proc_id, termpid, msg_buf);
+        termresp = 0;
+    }
+}
+
+// send a single character to shell (asynchronously)
+void chrout(unsigned char ch) {
+    wait_for_async();
+    msg_buf[0] = MSC_SHL_CHROUT;
+    msg_buf[1] = 0;
+    msg_buf[2] = ch;
+    termresp = MSR_SHL_CHROUT;
+    Message_Send(proc_id, termpid, msg_buf);
+}
+
+// send a string to shell (asynchronously)
+void strout(char* str) {
+    wait_for_async();
+    msg_buf[0] = MSC_SHL_STROUT;
+    msg_buf[1] = 0;
+    msg_buf[2] = bnk_vm;
+    *(unsigned short*)(msg_buf + 3) = (unsigned short)str;
+    msg_buf[5] = strlen(str);
+    termresp = MSR_SHL_STROUT;
+    Message_Send(proc_id, termpid, msg_buf);
+
+    if (str == out_buffer) {
+        if (out_buffer == buffer3)
+            out_buffer = buffer4;
+        else
+            out_buffer = buffer3;
+    }
+}
 
 // Close all open files
 void close_all_files(void) {
@@ -114,7 +149,7 @@ void filename_to_symbos(char* dest, char* src) {
     *dest = 0;
 }
 
-// Parses command tail (either from SymShell or CCP), storing FCB + tail data in large_buffer[].
+// Parses command tail (either from SymShell or CCP), storing FCB + tail data in buffer2[].
 // If ccp_mode = 0, also initializes termpid and leaves full .COM path in dir_buffer[].
 void parse_command_tail(char* command, unsigned char ccp_mode) {
     unsigned char i;
@@ -125,10 +160,10 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
 	in_quotes = 0;
 	file_on = ccp_mode;
 	tail_chars = 0;
-	tail = large_buffer + 37;
-	memset(large_buffer, 0, 164);
-	memset(large_buffer + 1, ' ', 11);
-	memset(large_buffer + 17, ' ', 11);
+	tail = buffer2 + 37;
+	memset(buffer2, 0, 164);
+	memset(buffer2 + 1, ' ', 11);
+	memset(buffer2 + 17, ' ', 11);
     memset(file_start, 0, 3);
 	for (i = 0; command[i]; i++) {
         if (file_on > 1) {
@@ -153,7 +188,7 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
             }
 	    }
 	}
-    large_buffer[36] = tail_chars;
+    buffer2[36] = tail_chars;
 
 	// handle errors
 	if (termpid == 0)
@@ -171,20 +206,20 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
             if (ccp_mode) {
                 if (command[file_start[i]] >= 'A' && command[file_start[i]] <= 'P' && command[file_start[i] + 1] == ':') {
                     // drive specified, use it
-                    large_buffer[fcb_start] = command[file_start[i]] - 'A' + 1;
-                    filename_to_cpm(large_buffer + fcb_start + 1, command + file_start[i] + 2);
+                    buffer2[fcb_start] = command[file_start[i]] - 'A' + 1;
+                    filename_to_cpm(buffer2 + fcb_start + 1, command + file_start[i] + 2);
                 } else {
                     // drive not specified, use default
-                    large_buffer[fcb_start] = 0;
-                    filename_to_cpm(large_buffer + fcb_start + 1, command + file_start[i]);
+                    buffer2[fcb_start] = 0;
+                    filename_to_cpm(buffer2 + fcb_start + 1, command + file_start[i]);
                 }
             } else {
                 Shell_PathAdd(termpid, bnk_vm, 0, command + file_start[1], buffer);
                 if (buffer[0] == dir_buffer[0]) // on same drive as .COM, treat as in default drive
-                    large_buffer[fcb_start] = 0;
+                    buffer2[fcb_start] = 0;
                 else // on different drive, specify drive explicitly
-                    large_buffer[fcb_start] = buffer[0] - 64;
-                filename_to_cpm(large_buffer + fcb_start + 1, tail_after_backslash(buffer));
+                    buffer2[fcb_start] = buffer[0] - 64;
+                filename_to_cpm(buffer2 + fcb_start + 1, tail_after_backslash(buffer));
             }
         }
     } else {

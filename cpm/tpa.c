@@ -128,14 +128,14 @@ __asm
 __endasm;
 }
 
-// Assumes filename (as full path) will be stored in large_buffer.
+// Assumes filename (as full path) will be stored in buffer2.
 #pragma save
 #pragma disable_warning 85
 unsigned char app_load(unsigned short addr) __naked {
 __asm
         ld (apploda),hl ; passed as HL
         ld ix,(_bnk_vm-1)
-        ld hl,#_large_buffer
+        ld hl,#_buffer2
         call SyFile_FILOPN
         jr c,applod2
         push af

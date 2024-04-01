@@ -52,7 +52,9 @@ typedef struct {
 
 // general buffers
 char buffer[257];
-char large_buffer[512]; // used variously, e.g., unpacked terminal output, DIRINP for "open file" (which needs to be kept separate from the "search next" DIRINP buffer)
+char buffer2[256];
+char buffer3[256];
+char buffer4[256];
 char dir_buffer[64*22];
 char drive_paths[4][64];
 
@@ -80,6 +82,10 @@ unsigned char bnk_vm2tpa; // cpmvm to tpa (low=cpmvm, high=tpa)
 unsigned char tpa_error;
 unsigned char keyconv[4];
 unsigned char inverse;
+unsigned char cursor_on;
+unsigned char termresp;
+char* out_ptr;
+char* out_buffer;
 
 // BDOS status
 unsigned short drive_ro;
@@ -113,7 +119,6 @@ unsigned char escape_char_y;
 char ansi_parms[8];
 unsigned char ansi_parm1;
 unsigned char ansi_parm2;
-char* out_ptr;
 void escapes(void) __naked {
 __asm
     .dw esc_null 	; ESC ( [normal video]
