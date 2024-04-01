@@ -82,6 +82,8 @@ unsigned char bnk_vm2tpa; // cpmvm to tpa (low=cpmvm, high=tpa)
 unsigned char tpa_error;
 unsigned char keyconv[4];
 unsigned char inverse;
+unsigned char adm_attribs[2];
+unsigned char adm_foreground;
 unsigned char cursor_on;
 unsigned char termresp;
 char* out_ptr;
@@ -116,6 +118,7 @@ unsigned char escape_chars_expected;
 unsigned char escape_char_bracket;
 unsigned char escape_char_position;
 unsigned char escape_char_y;
+unsigned char escape_attrib_mode;
 char ansi_parms[8];
 unsigned char ansi_parm1;
 unsigned char ansi_parm2;

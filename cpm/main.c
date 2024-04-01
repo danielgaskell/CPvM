@@ -57,6 +57,7 @@ void main(void) {
     memset(handles_used, 0, 8);
     launch_ccp = 0;
     cursor_on = 0;
+    adm_foreground = 0;
     inverse = 0;
 
     // parse command-line, loading console in the process (FIXME check for >=2.3!)
@@ -115,6 +116,6 @@ void main(void) {
 // whenever it starts generating a too-large file that doesn't run.
 void padding(void) __naked {
     __asm
-    .bndry 4
+    .bndry 1
     __endasm;
 }

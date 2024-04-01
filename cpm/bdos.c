@@ -470,22 +470,42 @@ void buffer_char(unsigned char ch) {
         escape_chars_expected = 1;
         escape_char_bracket = 0;
         escape_char_position = 0;
+        escape_attrib_mode = 0;
     } else if (escape_chars_expected) {
         // escape code continuation
-        if (reg_a == '[') {
+        if (escape_attrib_mode) {
+            adm_attribs[adm_foreground] = ((reg_a - '0') & 4); // "reverse" bit of ADM-3A attribute
+        } else if (escape_char_position == 2) {
+            escape_char_y = reg_a;
+            --escape_char_position;
+        } else if (escape_char_position == 1) {
+            *out_ptr++ = 0x1F;
+            *out_ptr++ = reg_a - 31;
+            *out_ptr++ = escape_char_y - 31;
+            escape_chars_expected = 0;
+        } else if (reg_a == '[') {
             escape_char_bracket = 1;
             ansi_parms[1] = 0;
             ansi_parms[4] = 0;
         } else if (reg_a == '=' || reg_a == 'Y') {
             escape_char_position = 2;
         } else if (reg_a == '(') {
-            inverse = 0;
+            inverse = adm_attribs[0];
+            adm_foreground = 1;
+            escape_chars_expected = 0;
         } else if (reg_a == ')') {
-            inverse = 1;
+            inverse = adm_attribs[1];
+            adm_foreground = 0;
+            escape_chars_expected = 0;
+        } else if (reg_a == 'G') {
+            escape_attrib_mode = 1;
+            escape_chars_expected = 1;
         } else if (reg_a == 'p') {
             inverse = 1;
+            escape_chars_expected = 0;
         } else if (reg_a == 'q') {
             inverse = 0;
+            escape_chars_expected = 0;
         } else if (escape_char_bracket) {
             if (reg_a == ';') {
                 ansi_parms[escape_char_bracket] = 0;
@@ -531,14 +551,6 @@ void buffer_char(unsigned char ch) {
                 out_ptr++;
                 escape_chars_expected = 0;
             }
-        } else if (escape_char_position == 2) {
-            escape_char_y = reg_a;
-            --escape_char_position;
-        } else if (escape_char_position == 1) {
-            *out_ptr++ = 0x1F;
-            *out_ptr++ = reg_a - 31;
-            *out_ptr++ = escape_char_y - 31;
-            escape_chars_expected = 0;
         } else {
             gen_ptr = *(unsigned short**)(((unsigned short*)&escapes) + reg_a - '(');
             strcpy(out_ptr, gen_ptr);
