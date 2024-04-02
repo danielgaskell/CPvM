@@ -124,8 +124,8 @@ unsigned char ansi_parm1;
 unsigned char ansi_parm2;
 void escapes(void) __naked {
 __asm
-    .dw esc_null 	; ESC ( [normal video]
-    .dw esc_null 	; ESC ) [reverse video]
+    .dw esc_null 	; ESC (, handled separately
+    .dw esc_null 	; ESC ), handled separately
     .dw esc_apos 	; ESC *
     .dw esc_null
     .dw esc_null
@@ -196,8 +196,8 @@ __asm
     .dw esc_null
     .dw esc_null
     .dw esc_o
-    .dw esc_null	; ESC p [reverse video]
-    .dw esc_null	; ESC q [normal video]
+    .dw esc_null	; ESC p, handled separately
+    .dw esc_null	; ESC q, handled separately
     .dw esc_null
     .dw esc_null
     .dw esc_null
@@ -236,8 +236,10 @@ __asm
     esc_L::		.db 0x0A
                 .db 0x0D
                 .db 0
-    esc_M::		.db 0x11
+    esc_M::		.db 0x0D
                 .db 0x12
+                .db 0x1D
+                .db 0x01
                 .db 0
     esc_Q::		.db 0x20
                 .db 0

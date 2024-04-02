@@ -477,11 +477,15 @@ void buffer_char(unsigned char ch) {
             adm_attribs[adm_foreground] = ((reg_a - '0') & 4); // "reverse" bit of ADM-3A attribute
         } else if (escape_char_position == 2) {
             escape_char_y = reg_a;
-            --escape_char_position;
+            escape_char_position = 1;
         } else if (escape_char_position == 1) {
-            *out_ptr++ = 0x1F;
-            *out_ptr++ = reg_a - 31;
-            *out_ptr++ = escape_char_y - 31;
+            if (reg_a == 0x20 && escape_char_y == 0x20) { // behavior of 1F 20 20 is inconsistent (?), so send equivalent 1E instead
+                *out_ptr++ = 0x1E;
+            } else {
+                *out_ptr++ = 0x1F;
+                *out_ptr++ = reg_a - 31;
+                *out_ptr++ = escape_char_y - 31;
+            }
             escape_chars_expected = 0;
         } else if (reg_a == '[') {
             escape_char_bracket = 1;
