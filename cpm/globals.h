@@ -243,8 +243,10 @@ __asm
                 .db 0
     esc_Q::		.db 0x20
                 .db 0
-    esc_R::		.db 0x11
+    esc_R::		.db 0x0D
                 .db 0x12
+                .db 0x1D
+                .db 0x01
                 .db 0
     esc_T::		.db 0x12
                 .db 0
