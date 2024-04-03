@@ -440,8 +440,18 @@ void get_file_size(unsigned short fcb) {
     unsigned char handle;
     read_fcb(fcb);
     handle = fcb_buffer.handle - 1;
-    fcb_buffer.random_record = handles_len[handle];
-    if (handles_len[handle] == 65535)
+    if (fcb_buffer.handle && handles_used[handle]) {
+        // file is already open, get size from existing record
+        fcb_buffer.random_record = handles_len[handle];
+    } else {
+        // file is not already open, get size from directory info
+        path_from_fcb(fcb);
+        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open))
+            fcb_buffer.random_record = ((*(unsigned long*)buffer2) + 127) >> 7;
+        else
+            fcb_buffer.random_record = 0;
+    }
+    if (fcb_buffer.random_record == 65535) // FIXME: technically this should be 65536 - how to track that?
         fcb_buffer.random_record_overflow = 1;
     else
         fcb_buffer.random_record_overflow = 0;
