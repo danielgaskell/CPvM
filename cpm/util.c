@@ -229,8 +229,9 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
 }
 
 // Select disk e (where 0 = A) as new default
-void select_disk(unsigned char e) {
+unsigned char select_disk(unsigned char e) {
     default_drive = e;
     login_vector |= (1 << e);
     Banking_WriteByte(bnk_tpa, (char*)0x04, e); // set current-drive byte
+    return 0; // FIXME error on nonexistent disk?
 }

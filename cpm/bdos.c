@@ -436,7 +436,7 @@ unsigned char write_random(unsigned short fcb) {
     }
 }
 
-void get_file_size(unsigned short fcb) {
+unsigned char get_file_size(unsigned short fcb) {
     unsigned char handle;
     read_fcb(fcb);
     handle = fcb_buffer.handle - 1;
@@ -446,16 +446,18 @@ void get_file_size(unsigned short fcb) {
     } else {
         // file is not already open, get size from directory info
         path_from_fcb(fcb);
-        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open))
+        if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open)) {
             fcb_buffer.random_record = ((*(unsigned long*)buffer2) + 127) >> 7;
-        else
-            fcb_buffer.random_record = 0;
+        } else {
+            return 0xFF;
+        }
     }
     if (fcb_buffer.random_record == 65535) // FIXME: technically this should be 65536 - how to track that?
         fcb_buffer.random_record_overflow = 1;
     else
         fcb_buffer.random_record_overflow = 0;
     write_fcb(fcb, 36);
+    return 0;
 }
 
 void set_random_record(unsigned short fcb) {
@@ -718,11 +720,12 @@ void flush_buffer(unsigned short de) {
     print_to_terminal(buffer);
 }
 
-void reset_disk_system(void) {
+unsigned char reset_disk_system(void) {
     dma = 0x0080;
     login_vector = 0;
     drive_ro = 0;
     default_drive = 0;
+    return 0;
 }
 
 // Main BDOS entry point: translates inter-bank calling convention (L, DE) to __sdcccall(1) convention (A, DE).
@@ -815,10 +818,10 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
             reg_hl = 0x0022;
             break;
         case 13: // Reset Disk System
-            reset_disk_system();
+            reg_hl = reset_disk_system();
             break;
         case 14: // Select Disk
-            select_disk(de);
+            reg_hl = select_disk(de);
             break;
         case 15: // Open File
             reg_hl = open_file(de);
@@ -885,7 +888,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
             reg_hl = write_random(de);
             break;
         case 35: // Compute File Size
-            get_file_size(de);
+            reg_hl = get_file_size(de);
             break;
         case 36: // Set Random Record
             set_random_record(de);
@@ -893,7 +896,6 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
         case 37: // Reset Drive
             drive_ro &= (~de);
             login_vector &= (~de); // Note that RunCPM does not do this, although my reading of Johnson-Laird is that it should.
-            reg_hl = 0;
             break;
         case 40: // Write Random w/Fill
             reg_hl = write_random(de); // (no actual disk blocks, so just behaves like Write Random)
