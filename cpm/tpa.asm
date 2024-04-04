@@ -7,8 +7,8 @@
 ;@                                                                            @
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-tpa_end     equ #fd00       ;stack = end of TPA+1 = start of wrapper code (must be >#c000)
-wrap_len    equ #0200
+tpa_end     equ #fc00       ;stack = end of TPA+1 = start of wrapper code (must be >#c000)
+wrap_len    equ #0300
 jmp_bnkcll  equ #ff03
 C_READ      equ 01
 C_WRITE     equ 02
@@ -54,9 +54,9 @@ tparet  ld c,254
         jr tpabds
 
 ;### TPAIRQ -> IRQ occured, do a hard interrupt to keep the multitasking running
-        ds 32       ;temp stack, IRQ uses only 2 bytes of app stack
+		ds 32
 tpairq  db 0
-        ld (tpairq1+1),sp
+        ld (tpairq1+1),sp	; temp stack for IRQ calls
         ld sp,tpairq
         push af
         push bc
@@ -66,8 +66,8 @@ tpairq  db 0
         push iy
         db #3e:ret
         ld (tpairq),a
-        ld c,255
-        call tpabds0
+        ld l,255
+        call tpabds4
         di
         xor a
         ld (tpairq),a
@@ -86,45 +86,53 @@ tpairq1 ld sp,0
 ;### TPABDS -> BDOS function call
 ;### Input      C=function, DE=parameter
 ;### Output     AB,HL=return parameters
-tpabds  ld a,c
+tpabds  ld (tpabds1+1),sp	;normal entry point - sets up/destroys temp stack
+        ld sp,tpastk
+		call tpabds2
+tpabds1 ld sp,0
+        ret
+
+;handle buffered commands
+tpabds2 ld a,c
         cp C_WRITE
         jr z,C_WRITE_buf
         cp C_RAWIO
         jr z,C_RAWIO_tpa
 		cp C_STAT
 		jr z,CONST
-tpabds2 ld a,(cwblen)
+tpabds3 ld a,(cwblen)
         or a
         call nz,cwbsnd
 
-tpabds0 ld l,c          ;C,DE -> L,DE=bdos call registers
-tpabds1 ld a,(vm_bnk)
+;direct-call entry point (assumes temp stack has already been set up)
+		ld l,c          ;C,DE -> L,DE=bdos call registers
+tpabds4 ld a,(vm_bnk)
         ld b,a
         ld ix,(vm_adr)
         ld iy,(vm_stk)
 		di              ;save TPA-side shadow registers
+		exx
 		ex af,af'
+		push bc
+		push de
+		push hl
 		push af
 		ex af,af'
-		exx
-		ld (tpashdb+1),bc
-		ld (tpashdd+1),de
-		ld (tpashdh+1),hl
 		exx
         call jmp_bnkcll
         ld a,l          ;copy result in HL to BA
         ld b,h
         di              ;restore TPA-side shadow registers
+		exx
 		ex af,af'
         pop af
+		pop hl
+		pop de
+		pop bc
 		ex af,af'
 		exx
-tpashdb ld bc,0
-tpashdd ld de,0
-tpashdh ld hl,0
-		exx
 		ei
-        ret
+		ret
 
 C_WRITE_buf
         ld hl,cwblen
@@ -149,10 +157,10 @@ cwbsnd  push bc         ;print and empty buffer
         ld (hl),b
         ld l,253
         ld de,cwbbuf
-        call tpabds1
-        pop hl
-        pop de
-        pop bc
+        call tpabds4
+		pop hl
+		pop de
+		pop bc
         ret
 
 C_RAWIO_tpa
@@ -165,13 +173,16 @@ CONST	ld a,0
 		jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
 		ld b,#0           ;...else respond with "no char waiting"
 		ld hl,#0
-		ret
+		jr tpabds1
 tparawc ld (CONST+1),a    ;reset IRQ count
-        jr tpabds2
+        jr tpabds3
 ;Technically, C_STAT should repeat the last status rather than "no char", but
-;but since apps almost always use this for single-step decision-making it would
-;be surprising if this causes problems.
+;since apps almost always use this for single-step decision-making it would be
+;surprising if this causes problems.
 		
+;temp stack for BDOS calls (separate from IRQ since that may interrupt BDOS)
+		ds 32
+tpastk
 
 ;==============================================================================
 ;### BIOS CALLS ###############################################################
@@ -181,7 +192,6 @@ tparawc ld (CONST+1),a    ;reset IRQ count
 align 256,0
 
 ;vector table
-;modify bios_siz when changing the number of calls
 jp tpabio_00    ;BOOT
 jp tpabio_01    ;WBOOT
 jp tpabio_02    ;CONST
@@ -224,7 +234,7 @@ cwblen  db 0
 cwbbuf  ds 128+1
 
 list
-wrplen  equ $-tpa_end   ;#200 max!
+wrplen  equ $-tpa_end   ;#300 max!
 nolist
 
 ds wrap_len-wrplen

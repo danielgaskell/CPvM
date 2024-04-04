@@ -25,8 +25,8 @@
 
 void asm_constants(void) __naked {
 __asm
-    tpa_end     .equ #0xfd00         ;stack = end of TPA+1 = start of wrapper code (must be >#c000)
-    wrap_len    .equ #0x0200
+    tpa_end     .equ #0xfc00         ;stack = end of TPA+1 = start of wrapper code (must be >#c000)
+    wrap_len    .equ #0x0300
 
     jmp_memget  .equ #0x8118 ;MEMGET
     jmp_memfre  .equ #0x811B ;MEMFRE
@@ -38,7 +38,7 @@ __asm
     jmp_tparet  .equ tpa_end+02    ;return from app
     jmp_tpairq  .equ tpa_end+04    ;irq
     jmp_tpaapp  .equ tpa_end+06    ;start app
-    jmp_tpabot  .equ tpa_end+256+3 ;warm boot/bios call start
+    jmp_tpabot  .equ tpa_end+512+3 ;warm boot/bios call start
 __endasm;
 }
 
