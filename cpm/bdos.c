@@ -208,7 +208,7 @@ unsigned char open_file(unsigned short fcb) {
     if (handle <= 7) {
         handles_len[handle] = (File_Seek(handle, 0, 2) + 127) >> 7; // get file length (in records); +127 ensure that incomplete records are not rounded away
         File_Seek(handle, 0, 0); // seek back to start
-        fcb_buffer.module |= 0x80; // unmodified
+        fcb_buffer.module = 0x80; // unmodified, module 0 (this prevents seeking directly to a module, but not all apps are good about zeroing this byte before load!)
         new_fcb(fcb, handle);
         return 0;
     } else {

@@ -108,15 +108,15 @@ tpabds3 ld a,(cwblen)
 		ld l,c          ;C,DE -> L,DE=bdos call registers
 tpabds4 ld a,(vm_bnk)
         ld b,a
-        ld ix,(vm_adr)
+		ld ix,(vm_adr)
         ld iy,(vm_stk)
 		di              ;save TPA-side shadow registers
 		exx
 		ex af,af'
+		push af
 		push bc
 		push de
 		push hl
-		push af
 		ex af,af'
 		exx
         call jmp_bnkcll
@@ -125,10 +125,10 @@ tpabds4 ld a,(vm_bnk)
         di              ;restore TPA-side shadow registers
 		exx
 		ex af,af'
-        pop af
 		pop hl
 		pop de
 		pop bc
+        pop af
 		ex af,af'
 		exx
 		ei
@@ -173,7 +173,7 @@ CONST	ld a,0
 		jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
 		ld b,#0           ;...else respond with "no char waiting"
 		ld hl,#0
-		jr tpabds1
+		jp tpabds1
 tparawc ld (CONST+1),a    ;reset IRQ count
         jr tpabds3
 ;Technically, C_STAT should repeat the last status rather than "no char", but
@@ -183,6 +183,7 @@ tparawc ld (CONST+1),a    ;reset IRQ count
 ;temp stack for BDOS calls (separate from IRQ since that may interrupt BDOS)
 		ds 32
 tpastk
+
 
 ;==============================================================================
 ;### BIOS CALLS ###############################################################
