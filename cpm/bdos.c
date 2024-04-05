@@ -150,14 +150,81 @@ unsigned short current_pos(void) {
     return ((unsigned short)(fcb_buffer.module & 0x7F) * 4096) + ((unsigned short)fcb_buffer.extent * 128) + fcb_buffer.current_record;
 }
 
-// update a newly-opened fcb with file/handle information and save it (also updates external handle information)
+// finds a (read-only) file handle that can be marked as reclaimed; returns 1 on success
+unsigned char reclaim_handle(void) {
+    unsigned char i, t;
+    for (i = 0; i < 8; ++i) {
+        if (handles_used[i]) {
+            t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 14) & 0x80;
+            if (t) { // reclaim unmodified FCBs only (since only read-only FCBs should be truly abandoned)
+                t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 13) - 1;
+                if (t == i) // sanity check: only mark this as reclaimed if it still points to the handle (probably not overwritten)
+                    Banking_WriteByte(bnk_tpa, (char*)handles_fcb[i] + 13, 0xFF);
+                File_Close(i);
+                handles_used[i] = 0;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+// checks to see if the FCB in fcb_buffer has had its handle reclaimed, and if so, re-opens/re-syncs it
+void reopen_reclaimed(unsigned short fcb) {
+    unsigned char handle;
+    if (fcb_buffer.handle == 0xFF) {
+        path_from_fcb(fcb);
+        reopen_reclaimed_try:
+        handle = File_Open(bnk_vm, buffer);
+        if (handle <= 7) {
+            // store new handle and seek file to existing FCB location
+            fcb_buffer.handle = handle + 1;
+            Banking_WriteByte(bnk_tpa, (char*)fcb + 13, handle + 1);
+            handles_used[handle] = 1;
+            handles_fcb[handle] = fcb;
+            handles_pos[handle] = 0;
+            handles_len[handle] = (File_Seek(handle, 0, 2) + 127) >> 7; // get file length (in records); +127 ensure that incomplete records are not rounded away
+            File_Seek(handle, 0, 0); // seek back to start
+            seek_sequential(handle, current_pos());
+        } else {
+            if (reclaim_handle())
+                goto reopen_reclaimed_try;
+        }
+    }
+}
+
+// close file at FCB, if any (matching either by handle or known FCB address); returns 0 on success, 0xFF on failure
+unsigned char close_fcb(unsigned short fcb) {
+    unsigned char handle;
+    if (fcb_buffer.handle >= 1 && fcb_buffer.handle <= 8) {
+        handle = fcb_buffer.handle - 1;
+        if (handles_used[handle]) {
+            File_Close(handle);
+            handles_used[handle] = 0;
+            handles_fcb[handle] = 0;
+            Banking_WriteByte(bnk_tpa, (char*)fcb + 13, 0);
+            return 0;
+        }
+    }
+    for (handle = 0; handle < 8; ++handle) {
+        if (handles_fcb[handle] == fcb && handles_used[handle]) {
+            File_Close(handle);
+            handles_used[handle] = 0;
+            handles_fcb[handle] = 0;
+            return 0;
+        }
+    }
+    return 0xFF;
+}
+
+// update a newly-opened FCB with file/handle information and save it (also updates external handle information)
 void new_fcb(unsigned short fcb, unsigned char handle) {
     handles_used[handle] = 1;
     handles_pos[handle] = 0;
     handles_fcb[handle] = fcb;
     fcb_buffer.handle = handle + 1;
     seek_sequential(handle, current_pos()); // deal with files opened with extent + record already at a specific location
-    fcb_buffer.record_count = handles_len[handle] > 255 ? 255 : handles_len[handle];
+    fcb_buffer.record_count = handles_len[handle] > 128 ? 128 : handles_len[handle];
     memset(&fcb_buffer.dirinfo, 0, 16);
     write_fcb(fcb, 33);
 }
@@ -170,23 +237,8 @@ unsigned char open_file(unsigned short fcb) {
     // extract filename from FCB
     path_from_fcb(fcb);
 
-    // force-close files if 1) this FCB already has a handle, or 2) this FCB address was previously used for another open file
-    // (handles the majority of common cases where files are left hanging without being closed)
-    handle = fcb_buffer.handle - 1;
-    if (handle) {
-        if (handles_used[handle]) {
-            File_Close(handle);
-            handles_used[handle] = 0;
-            handles_fcb[handle] = 0;
-        }
-    }
-    for (handle = 0; handle < 8; ++handle) {
-        if (handles_fcb[handle] == fcb && handles_used[handle]) {
-            File_Close(handle);
-            handles_used[handle] = 0;
-            handles_fcb[handle] = 0;
-        }
-    }
+    // close prior usage of this FCB
+    close_fcb(fcb);
 
     // if it has a wildcard, use DIRINP to get first filename
     if (strchr(buffer, '?')) {
@@ -204,6 +256,7 @@ unsigned char open_file(unsigned short fcb) {
     }
 
     // try opening file
+    open_file_try:
     handle = File_Open(bnk_vm, buffer);
     if (handle <= 7) {
         handles_len[handle] = (File_Seek(handle, 0, 2) + 127) >> 7; // get file length (in records); +127 ensure that incomplete records are not rounded away
@@ -212,8 +265,10 @@ unsigned char open_file(unsigned short fcb) {
         new_fcb(fcb, handle);
         return 0;
     } else {
-        // error (FIXME more specific message)
-        return 0xFF;
+        if (reclaim_handle())
+            goto open_file_try;
+        else // error (FIXME more specific message)
+            return 0xFF;
     }
 }
 
@@ -223,8 +278,12 @@ unsigned char new_file(unsigned short fcb) {
     // extract filename from FCB
     path_from_fcb(fcb);
 
+    // close prior usage of this FCB
+    close_fcb(fcb);
+
     // try creating file
     if (!write_err()) {
+        new_file_try:
         f = File_New(bnk_vm, buffer, 0);
         if (f <= 7) {
             handles_len[f] = 0;
@@ -237,8 +296,10 @@ unsigned char new_file(unsigned short fcb) {
             new_fcb(fcb, f);
             return 0;
         } else {
-            // error (FIXME more specific message)
-            return 0xFF;
+            if (reclaim_handle())
+                goto new_file_try;
+            else // error (FIXME more specific message)
+                return 0xFF;
         }
     } else {
         return 0xFF;
@@ -247,21 +308,13 @@ unsigned char new_file(unsigned short fcb) {
 
 // FIXME: check for File_Close error codes
 unsigned char close_file(unsigned short fcb) {
-    unsigned char handle;
     read_fcb(fcb);
-    handle = fcb_buffer.handle - 1;
-    if (handles_used[handle]) {
-        handles_used[handle] = 0;
-        handles_fcb[handle] = 0;
-        File_Close(handle);
-        return 0;
-    } else {
-        return 0xFF;
-    }
+    return close_fcb(fcb);
 }
 
 unsigned char delete_file(unsigned short fcb) {
     path_from_fcb(fcb);
+    close_fcb(fcb);
     if (!write_err()) {
         if (!Directory_DeleteFile(bnk_vm, buffer))
             return 0;
@@ -275,6 +328,7 @@ unsigned char delete_file(unsigned short fcb) {
 unsigned char rename_file(unsigned short pseudo_fcb) {
     path_from_fcb(pseudo_fcb);
     filename_to_symbos(buffer2, ((char*)&fcb_buffer) + 17);
+    close_fcb(pseudo_fcb);
     if (!write_err()) {
         if (!Directory_RenameFile(bnk_vm, buffer, buffer2))
             return 0;
@@ -307,7 +361,9 @@ void fill_eof(unsigned char read_bytes) {
 unsigned char read_sequential(unsigned short fcb) {
     unsigned char handle, read_bytes;
     read_fcb(fcb);
+    reopen_reclaimed(fcb);
     handle = fcb_buffer.handle - 1;
+
     if (handle <= 7) {
         seek_sequential(handle, current_pos()); // ensure all positional information is updated to match FCB
         if (handles_pos[handle] < handles_len[handle]) {
@@ -336,6 +392,7 @@ unsigned char write_sequential(unsigned short fcb) {
     unsigned char handle, wrote_bytes;
     unsigned short pos;
     read_fcb(fcb);
+    reopen_reclaimed(fcb);
     handle = fcb_buffer.handle - 1;
 
     if (handle <= 7) {
@@ -350,6 +407,7 @@ unsigned char write_sequential(unsigned short fcb) {
             ++handles_len[handle];
             ++handles_pos[handle];
             fcb_buffer.module &= 0x7F; // clear unmodified flag
+            ++fcb_buffer.record_count;
             advance_record(fcb);
 
             // return success
@@ -375,8 +433,11 @@ void update_record_to_random(unsigned short fcb) {
 unsigned char read_random(unsigned short fcb) {
     unsigned char handle, read_bytes;
     read_fcb(fcb);
+    reopen_reclaimed(fcb);
     handle = fcb_buffer.handle - 1;
+
     if (handle <= 7) {
+        update_record_to_random(fcb);
         if (fcb_buffer.random_record < handles_len[handle]) {
             if (handles_pos[handle] != fcb_buffer.random_record) {
                 handles_pos[handle] = fcb_buffer.random_record;
@@ -388,8 +449,6 @@ unsigned char read_random(unsigned short fcb) {
                 return 1; // nothing was read (returned as "attempted to read unwritten record")
             if (read_bytes < 128)
                 fill_eof(read_bytes);
-            update_record_to_random(fcb);
-
             return 0;
         } else {
             return 1; // attempted to read unwritten record
@@ -402,6 +461,7 @@ unsigned char read_random(unsigned short fcb) {
 unsigned char write_random(unsigned short fcb) {
     unsigned char handle, wrote_bytes;
     read_fcb(fcb);
+    reopen_reclaimed(fcb);
     handle = fcb_buffer.handle - 1;
 
     if (handle <= 7) {
@@ -421,10 +481,10 @@ unsigned char write_random(unsigned short fcb) {
                 File_Seek(handle, (unsigned long)fcb_buffer.random_record * 128, 0);
             }
             wrote_bytes = File_Write(handle, bnk_tpa, (unsigned char*)dma, 128);
-            ++handles_len[handle];
-            ++handles_pos[handle];
             if (wrote_bytes < 128)
                 return 2;// directory full (unable to finish write)
+            ++handles_len[handle];
+            ++handles_pos[handle];
             fcb_buffer.module &= 0x7F; // clear unmodified flag
             update_record_to_random(fcb);
             return 0;
@@ -440,7 +500,8 @@ unsigned char get_file_size(unsigned short fcb) {
     unsigned char handle;
     read_fcb(fcb);
     handle = fcb_buffer.handle - 1;
-    if (fcb_buffer.handle && handles_used[handle]) {
+
+    if (handle <= 7 && handles_used[handle]) {
         // file is already open, get size from existing record
         fcb_buffer.random_record = handles_len[handle];
     } else {
@@ -463,6 +524,7 @@ unsigned char get_file_size(unsigned short fcb) {
 void set_random_record(unsigned short fcb) {
     unsigned char handle;
     read_fcb(fcb);
+    reopen_reclaimed(fcb);
     handle = fcb_buffer.handle - 1;
     fcb_buffer.random_record = handles_pos[handle];
     if (handles_pos[handle] == 65535)

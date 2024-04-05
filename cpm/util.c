@@ -160,11 +160,12 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
 	in_quotes = 0;
 	file_on = ccp_mode;
 	tail_chars = 0;
-	tail = buffer2 + 37;
+	tail = buffer2 + 38;
 	memset(buffer2, 0, 164);
 	memset(buffer2 + 1, ' ', 11);
 	memset(buffer2 + 17, ' ', 11);
     memset(file_start, 0, 3);
+	buffer2[37] = ' '; // command tail DOES include leading space, explicitly contrary to Johnson-Laird (HiTech C requires this)
 	for (i = 0; command[i]; i++) {
         if (file_on > 1) {
             if (tail_chars < 127) {
@@ -188,7 +189,7 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
             }
 	    }
 	}
-    buffer2[36] = tail_chars;
+    buffer2[36] = tail_chars ? (tail_chars + 1) : 0;
 
 	// handle errors
 	if (termpid == 0)
