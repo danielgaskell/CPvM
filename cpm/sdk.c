@@ -134,7 +134,7 @@ unsigned char Directory_Input(unsigned char path_bank, char* path_addr, unsigned
         ld (_reg_hl), hl
     __endasm;
     *(unsigned short*)reg_gen = reg_hl;
-    return msg_buf[3]; // carry bit = error
+    return msg_buf[2] & 0x01; // carry bit = error
 }
 
 // SymShell Directory_DeleteFile call (not provided by SDK)
@@ -148,7 +148,7 @@ unsigned char Directory_DeleteFile(unsigned char path_bank, char* path_addr) {
         .db 26
         .db 39
     __endasm;
-    return msg_buf[3]; // carry bit = error
+    return msg_buf[2] & 0x01; // carry bit = error
 }
 
 // SymShell Directory_Rename call (not provided by SDK)
@@ -164,7 +164,7 @@ unsigned char Directory_RenameFile(unsigned char path_bank, char* path_addr, cha
         .db 26
         .db 36
     __endasm;
-    return msg_buf[3]; // carry bit = error
+    return msg_buf[2] & 0x01; // carry bit = error
 }
 
 // SymShell Shell_StringInput call (broken in SDK, so we redefine it here)

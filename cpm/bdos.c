@@ -840,6 +840,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
         __itoa(c, out_buffer + 1, 10);
         strcat(out_buffer, "]");
         strout(out_buffer);
+        wait_for_async();
     }
     #endif // TRACE
 
@@ -994,6 +995,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     out_buffer[0] = '=';
     __itoa(reg_hl, out_buffer + 1, 16);
     strout(out_buffer);
+    wait_for_async();
     #endif // TRACE
 
     // load return values into HL and return (will be copied to BA TPA-side)

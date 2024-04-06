@@ -95,7 +95,7 @@ void ccp_era(void) {
     ccp_path(ccp_parameters);
     reg_a = Directory_DeleteFile(bnk_vm, buffer2);
     if (reg_a)
-        strout("No file\r\n"); // FIXME not working correctly, how to easily find out if delete succeeded?
+        strout("No file\r\n");
 }
 
 void ccp_type(void) {
