@@ -54,9 +54,9 @@ tparet  ld c,254
         jr tpabds
 
 ;### TPAIRQ -> IRQ occured, do a hard interrupt to keep the multitasking running
-		ds 32
+        ds 32
 tpairq  db 0
-        ld (tpairq1+1),sp	; temp stack for IRQ calls
+        ld (tpairq1+1),sp   ; temp stack for IRQ calls
         ld sp,tpairq
         push af
         push bc
@@ -71,8 +71,8 @@ tpairq  db 0
         di
         xor a
         ld (tpairq),a
-		ld hl,CONST+1
-		inc (hl)		; increment "IRQs since last refresh"
+        ld hl,CONST+1
+        inc (hl)        ; increment "IRQs since last refresh"
         pop iy
         pop ix
         pop hl
@@ -86,9 +86,9 @@ tpairq1 ld sp,0
 ;### TPABDS -> BDOS function call
 ;### Input      C=function, DE=parameter
 ;### Output     AB,HL=return parameters
-tpabds  ld (tpabds1+1),sp	;normal entry point - sets up/destroys temp stack
+tpabds  ld (tpabds1+1),sp   ;normal entry point - sets up/destroys temp stack
         ld sp,tpastk
-		call tpabds2
+        call tpabds2
 tpabds1 ld sp,0
         ret
 
@@ -98,41 +98,41 @@ tpabds2 ld a,c
         jr z,C_WRITE_buf
         cp C_RAWIO
         jr z,C_RAWIO_tpa
-		cp C_STAT
-		jr z,CONST
+        cp C_STAT
+        jr z,CONST
 tpabds3 ld a,(cwblen)
         or a
         call nz,cwbsnd
 
 ;direct-call entry point (assumes temp stack has already been set up)
-		ld l,c          ;C,DE -> L,DE=bdos call registers
+        ld l,c          ;C,DE -> L,DE=bdos call registers
 tpabds4 ld a,(vm_bnk)
         ld b,a
-		ld ix,(vm_adr)
+        ld ix,(vm_adr)
         ld iy,(vm_stk)
-		di              ;save TPA-side shadow registers
-		exx
-		ex af,af'
-		push af
-		push bc
-		push de
-		push hl
-		ex af,af'
-		exx
+        di              ;save TPA-side shadow registers
+        exx
+        ex af,af'
+        push af
+        push bc
+        push de
+        push hl
+        ex af,af'
+        exx
         call jmp_bnkcll
         ld a,l          ;copy result in HL to BA
         ld b,h
         di              ;restore TPA-side shadow registers
-		exx
-		ex af,af'
-		pop hl
-		pop de
-		pop bc
+        exx
+        ex af,af'
+        pop hl
+        pop de
+        pop bc
         pop af
-		ex af,af'
-		exx
-		ei
-		ret
+        ex af,af'
+        exx
+        ei
+        ret
 
 C_WRITE_buf
         ld hl,cwblen
@@ -158,30 +158,30 @@ cwbsnd  push bc         ;print and empty buffer
         ld l,253
         ld de,cwbbuf
         call tpabds4
-		pop hl
-		pop de
-		pop bc
+        pop hl
+        pop de
+        pop bc
         ret
 
 C_RAWIO_tpa
-		ld a,e
+        ld a,e
         inc a
-		jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
-CONST	ld a,0
-		cp #4
-		ld a,#0
-		jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
-		ld b,#0           ;...else respond with "no char waiting"
-		ld hl,#0
-		jp tpabds1
+        jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
+CONST   ld a,0
+        cp #4
+        ld a,#0
+        jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
+        ld b,#0           ;...else respond with "no char waiting"
+        ld hl,#0
+        jp tpabds1
 tparawc ld (CONST+1),a    ;reset IRQ count
         jr tpabds3
 ;Technically, C_STAT should repeat the last status rather than "no char", but
 ;since apps almost always use this for single-step decision-making it would be
 ;surprising if this causes problems.
-		
+        
 ;temp stack for BDOS calls (separate from IRQ since that may interrupt BDOS)
-		ds 32
+        ds 32
 tpastk
 
 
@@ -214,9 +214,9 @@ jp tpabio_16    ;SECTRAN
 ;calls
 tpabio_00
 tpabio_01   ld c,0:               jp tpabds         ;BOOT/WBOOT
-tpabio_02   ld c,C_STAT:          jp CONST          ;CONST
+tpabio_02   ld c,C_STAT:          jp tpabds         ;CONST
 tpabio_03   ld c,B_READ:          jp tpabds         ;CONIN
-tpabio_04   ld e,c:               jp C_WRITE_buf    ;CONOUT                 (direct c_write_buf)
+tpabio_04   ld e,c:ld c,C_WRITE:  jp tpabds         ;CONOUT
 tpabio_05   ld e,c:ld c,L_WRITE:  jp tpabds         ;LIST
 tpabio_06   ld e,c:ld c,A_WRITE:  jp tpabds         ;PUNCH
 tpabio_07          ld c,A_READ:   jp tpabds         ;READER

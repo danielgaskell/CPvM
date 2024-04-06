@@ -150,6 +150,20 @@ unsigned short current_pos(void) {
     return ((unsigned short)(fcb_buffer.module & 0x7F) * 4096) + ((unsigned short)fcb_buffer.extent * 128) + fcb_buffer.current_record;
 }
 
+// closes any other open files matching the FCB-style filename at addr (for subsequent delete/rename)
+void purge_file(char* addr) {
+    unsigned char i;
+    for (i = 0; i < 8; ++i) {
+        if (handles_used[i]) {
+            Banking_Copy(bnk_tpa, handles_fcb[i], bnk_vm, (unsigned short)buffer2, 12);
+            if (!memcmp(addr, buffer2, 12)) {
+                File_Close(i);
+                handles_used[i] = 0;
+            }
+        }
+    }
+}
+
 // finds a (read-only) file handle that can be marked as reclaimed; returns 1 on success
 unsigned char reclaim_handle(void) {
     unsigned char i, t;
@@ -314,6 +328,7 @@ unsigned char close_file(unsigned short fcb) {
 
 unsigned char delete_file(unsigned short fcb) {
     path_from_fcb(fcb);
+    purge_file((char*)&fcb_buffer);
     close_fcb(fcb);
     if (!write_err()) {
         if (!Directory_DeleteFile(bnk_vm, buffer))
@@ -327,8 +342,10 @@ unsigned char delete_file(unsigned short fcb) {
 
 unsigned char rename_file(unsigned short pseudo_fcb) {
     path_from_fcb(pseudo_fcb);
-    filename_to_symbos(buffer2, ((char*)&fcb_buffer) + 17);
+    purge_file((char*)&fcb_buffer);
+    purge_file(((char*)&fcb_buffer) + 16);
     close_fcb(pseudo_fcb);
+    filename_to_symbos(buffer2, ((char*)&fcb_buffer) + 17);
     if (!write_err()) {
         if (!Directory_RenameFile(bnk_vm, buffer, buffer2))
             return 0;
@@ -962,13 +979,21 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
         case 40: // Write Random w/Fill
             reg_hl = write_random(de); // (no actual disk blocks, so just behaves like Write Random)
             break;
+        default:
+            refresh_out_buffer();
+            strcpy(out_ptr, "[UNIMPLEMENTED: ");
+            out_ptr += strlen(out_ptr);
+            __itoa(c, out_ptr, 10);
+            strcat(out_ptr, "]");
+            strout(out_buffer);
+            break;
         }
     }
 
     #ifdef TRACE
     out_buffer[0] = '=';
     __itoa(reg_hl, out_buffer + 1, 16);
-    out_buffer(buffer);
+    strout(out_buffer);
     #endif // TRACE
 
     // load return values into HL and return (will be copied to BA TPA-side)
