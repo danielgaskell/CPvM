@@ -724,8 +724,8 @@ void string_output(unsigned short addr) {
 
 // get a character from the console, remapping control chars as specified in keyconv[]
 unsigned char convert_key(unsigned char ch) {
-    if (ch >= 136 && ch <= 139)
-        ch = keyconv[ch - 136];
+    if (ch >= 127 && ch <= 139)
+        ch = keyconv[ch - 127];
     ch &= 0x7F;
     return ch;
 }
@@ -980,6 +980,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
         case 40: // Write Random w/Fill
             reg_hl = write_random(de); // (no actual disk blocks, so just behaves like Write Random)
             break;
+        #ifdef UNIMPLEMENTED
         default:
             refresh_out_buffer();
             strcpy(out_ptr, "[UNIMPLEMENTED: ");
@@ -988,6 +989,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
             strcat(out_ptr, "]");
             strout(out_buffer);
             break;
+        #endif
         }
     }
 

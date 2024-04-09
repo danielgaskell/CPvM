@@ -80,7 +80,7 @@ unsigned char bnk_tpa;
 unsigned char bnk_tpa2vm; // tpa to cpmvm (low=tpa, high=cpmvm)
 unsigned char bnk_vm2tpa; // cpmvm to tpa (low=cpmvm, high=tpa)
 unsigned char tpa_error;
-unsigned char keyconv[4];
+unsigned char keyconv[13];
 unsigned char inverse;
 unsigned char adm_attribs[2];
 unsigned char adm_foreground;
