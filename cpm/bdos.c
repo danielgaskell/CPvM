@@ -116,6 +116,7 @@ unsigned char search_for_first(unsigned short fcb) {
     path_from_fcb(fcb);
 
     // call DIRINP (automatically deals with wildcards)
+    wait_for_async();
     dir_buffer_ptr = dir_buffer;
     dir_buffer_on = 0;
     if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, dir_buffer, sizeof(dir_buffer), 0, &dir_buffer_count))
@@ -130,6 +131,7 @@ void seek_sequential(unsigned char handle, unsigned short pos) {
     unsigned short remaining_records;
     if (handles_pos[handle] != pos) {
         handles_pos[handle] = pos;
+        wait_for_async();
         File_Seek(handle, (unsigned long)pos * 128, 0);
         fcb_buffer.current_record = pos & 0x7F;
         fcb_buffer.extent = (pos >> 7) & 0x1F;
@@ -157,6 +159,7 @@ void purge_file(char* addr) {
         if (handles_used[i]) {
             Banking_Copy(bnk_tpa, handles_fcb[i], bnk_vm, (unsigned short)buffer2, 12);
             if (!memcmp(addr, buffer2, 12)) {
+                wait_for_async();
                 File_Close(i);
                 handles_used[i] = 0;
             }
@@ -174,6 +177,7 @@ unsigned char reclaim_handle(void) {
                 t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 13) - 1;
                 if (t == i) // sanity check: only mark this as reclaimed if it still points to the handle (probably not overwritten)
                     Banking_WriteByte(bnk_tpa, (char*)handles_fcb[i] + 13, 0xFF);
+                wait_for_async();
                 File_Close(i);
                 handles_used[i] = 0;
                 return 1;
@@ -188,6 +192,7 @@ void reopen_reclaimed(unsigned short fcb) {
     unsigned char handle;
     if (fcb_buffer.handle == 0xFF) {
         path_from_fcb(fcb);
+        wait_for_async();
         reopen_reclaimed_try:
         handle = File_Open(bnk_vm, buffer);
         if (handle <= 7) {
@@ -213,6 +218,7 @@ unsigned char close_fcb(unsigned short fcb) {
     if (fcb_buffer.handle >= 1 && fcb_buffer.handle <= 8) {
         handle = fcb_buffer.handle - 1;
         if (handles_used[handle]) {
+            wait_for_async();
             File_Close(handle);
             handles_used[handle] = 0;
             handles_fcb[handle] = 0;
@@ -222,6 +228,7 @@ unsigned char close_fcb(unsigned short fcb) {
     }
     for (handle = 0; handle < 8; ++handle) {
         if (handles_fcb[handle] == fcb && handles_used[handle]) {
+            wait_for_async();
             File_Close(handle);
             handles_used[handle] = 0;
             handles_fcb[handle] = 0;
@@ -256,6 +263,7 @@ unsigned char open_file(unsigned short fcb) {
 
     // if it has a wildcard, use DIRINP to get first filename
     if (strchr(buffer, '?')) {
+        wait_for_async();
         if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open)) {
             if (dir_buffer_count_open) {
                 // found at least one matching file, create absolute path
@@ -270,6 +278,7 @@ unsigned char open_file(unsigned short fcb) {
     }
 
     // try opening file
+    wait_for_async();
     open_file_try:
     handle = File_Open(bnk_vm, buffer);
     if (handle <= 7) {
@@ -297,6 +306,7 @@ unsigned char new_file(unsigned short fcb) {
 
     // try creating file
     if (!write_err()) {
+        wait_for_async();
         new_file_try:
         f = File_New(bnk_vm, buffer, 0);
         if (f <= 7) {
@@ -331,6 +341,7 @@ unsigned char delete_file(unsigned short fcb) {
     purge_file((char*)&fcb_buffer);
     close_fcb(fcb);
     if (!write_err()) {
+        wait_for_async();
         if (!Directory_DeleteFile(bnk_vm, buffer))
             return 0;
         else
@@ -347,6 +358,7 @@ unsigned char rename_file(unsigned short pseudo_fcb) {
     close_fcb(pseudo_fcb);
     filename_to_symbos(buffer2, ((char*)&fcb_buffer) + 17);
     if (!write_err()) {
+        wait_for_async();
         if (!Directory_RenameFile(bnk_vm, buffer, buffer2))
             return 0;
         else
@@ -385,6 +397,7 @@ unsigned char read_sequential(unsigned short fcb) {
         seek_sequential(handle, current_pos()); // ensure all positional information is updated to match FCB
         if (handles_pos[handle] < handles_len[handle]) {
             // read to DMA
+            wait_for_async();
             read_bytes = File_Read(handle, bnk_tpa, (unsigned char*)dma, 128);
             if (read_bytes == 0)
                 return 1; // EOF (nothing was read, error or EOF)
@@ -416,6 +429,7 @@ unsigned char write_sequential(unsigned short fcb) {
         if (!write_err()) {
             pos = current_pos();
             seek_sequential(handle, pos); // ensure all positional information is updated to match FCB
+            wait_for_async();
             wrote_bytes = File_Write(handle, bnk_tpa, (unsigned char*)dma, 128);
             if (wrote_bytes < 128)
                 return 1; // directory full (something went wrong, unable to finish write)
@@ -456,6 +470,7 @@ unsigned char read_random(unsigned short fcb) {
     if (handle <= 7) {
         update_record_to_random(fcb);
         if (fcb_buffer.random_record < handles_len[handle]) {
+            wait_for_async();
             if (handles_pos[handle] != fcb_buffer.random_record) {
                 handles_pos[handle] = fcb_buffer.random_record;
                 File_Seek(handle, (unsigned long)fcb_buffer.random_record * 128, 0);
@@ -483,6 +498,7 @@ unsigned char write_random(unsigned short fcb) {
 
     if (handle <= 7) {
         if (!write_err()) {
+            wait_for_async();
             if (handles_len[handle] < fcb_buffer.random_record) {
                 // too short, extend file
                 File_Seek(handle, 0, 2); // seek to end
@@ -524,6 +540,7 @@ unsigned char get_file_size(unsigned short fcb) {
     } else {
         // file is not already open, get size from directory info
         path_from_fcb(fcb);
+        wait_for_async();
         if (!Directory_Input(bnk_vm, buffer, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, buffer2, 23, 0, &dir_buffer_count_open)) {
             fcb_buffer.random_record = ((*(unsigned long*)buffer2) + 127) >> 7;
         } else {

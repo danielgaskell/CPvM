@@ -22,6 +22,8 @@
 =============================================================================*/
 
 // wait until last asynchronous command finishes, if any
+// note that this needs to be called before many built-in SDK functions because
+// they may not properly discriminate between shell and other messages
 void wait_for_async(void) {
     if (termresp) {
         msg_buf[0] = 0;
@@ -63,6 +65,7 @@ void strout(char* str) {
 // Close all open files
 void close_all_files(void) {
     char i;
+    wait_for_async();
     for (i = 0; i < 8; ++i) {
         if (handles_used[i])
             File_Close(i);
@@ -81,6 +84,7 @@ void symbos_exit(void) {
     // close app/shell
 	if (termpid != 0) {
         strout("\r\n"); // since some apps expect this
+        wait_for_async();
         Shell_Exit(termpid, 0);
 	}
 	Sys_Program_End(GET_APPLICATION_ID());
@@ -196,6 +200,7 @@ void parse_command_tail(char* command, unsigned char ccp_mode) {
         symbos_exit();
 
     // set up FCBs/boot options
+    wait_for_async();
 	if (file_on) {
         // get .COM file
         if (!ccp_mode)

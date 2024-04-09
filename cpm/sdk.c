@@ -210,18 +210,3 @@ unsigned char Shell_CharTest(unsigned char shellPID, unsigned char channel, unsi
     else
         return 0;
 }
-
-// Timer_Add_Counter call (not provided by SDK)
-unsigned char Timer_Add_Counter(unsigned char bank, unsigned short addr, unsigned char PID, unsigned char speed) {
-    msg_buf[0] = 0;
-    while (msg_buf[0] != MSR_KRL_TMADDT) {
-        msg_buf[0] = MSC_KRL_TMADDT;
-        *(unsigned short*)(msg_buf + 1) = addr;
-        msg_buf[3] = bank;
-        msg_buf[4] = PID;
-        msg_buf[5] = speed;
-        Message_Send(PID, 1, msg_buf);
-        while (!Message_Sleep_And_Receive(PID, 1, msg_buf));
-    }
-    return msg_buf[1];
-}

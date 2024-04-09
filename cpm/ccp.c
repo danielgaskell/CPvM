@@ -53,6 +53,7 @@ void ccp_dir(void) {
         ccp_path(ccp_parameters);
     else
         ccp_path("*.*");
+    wait_for_async();
     reg_a = Directory_Input(bnk_vm, buffer2, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, dir_buffer, sizeof(dir_buffer), 0, &dir_buffer_count);
     if (!reg_a && dir_buffer_count) {
         dir_buffer_on = 0;
@@ -93,6 +94,7 @@ void ccp_dir(void) {
 
 void ccp_era(void) {
     ccp_path(ccp_parameters);
+    wait_for_async();
     reg_a = Directory_DeleteFile(bnk_vm, buffer2);
     if (reg_a)
         strout("No file\r\n");
@@ -102,6 +104,7 @@ void ccp_type(void) {
     unsigned char handle;
     unsigned short read_bytes;
     ccp_path(ccp_parameters);
+    wait_for_async();
     handle = File_Open(bnk_vm, buffer2);
     if (handle <= 7) {
         read_bytes = 255;
