@@ -27,8 +27,8 @@ void ccp_parm_error(void) {
     strout(out_buffer);
 }
 
-// Converts the CCP-style file specification (A:FILE.DAT) in ptr to a SymbOS-style path in buffer2.
-void ccp_path(char* ptr) {
+// Converts the CCP-style file specification (A:FILE.DAT) in ptr to a SymbOS-style path in dest.
+void ccp_path(char* ptr, char* dest) {
     unsigned char drive;
     if (*ptr >= 'A' && *ptr <= 'P' && *(ptr+1) == ':') {
         drive = *ptr - 'A';
@@ -37,22 +37,22 @@ void ccp_path(char* ptr) {
         drive = default_drive;
     }
     if (drive < 4) {
-        strcpy(buffer2, drive_paths[drive]);
+        strcpy(dest, drive_paths[drive]);
     } else {
-        buffer2[0] = drive + 'A';
-        buffer2[1] = ':';
-        buffer2[2] = '\\';
-        buffer2[3] = 0;
+        dest[0] = drive + 'A';
+        dest[1] = ':';
+        dest[2] = '\\';
+        dest[3] = 0;
     }
-    strcat(buffer2, ptr);
+    strcat(dest, ptr);
 }
 
 void ccp_dir(void) {
     unsigned char spacing_ticker, max_spacing;
     if (ccp_parameters)
-        ccp_path(ccp_parameters);
+        ccp_path(ccp_parameters, buffer2);
     else
-        ccp_path("*.*");
+        ccp_path("*.*", buffer2);
     wait_for_async();
     reg_a = Directory_Input(bnk_vm, buffer2, ATTRIB_VOLUME | ATTRIB_DIRECTORY, bnk_vm, dir_buffer, sizeof(dir_buffer), 0, &dir_buffer_count);
     if (!reg_a && dir_buffer_count) {
@@ -93,7 +93,7 @@ void ccp_dir(void) {
 }
 
 void ccp_era(void) {
-    ccp_path(ccp_parameters);
+    ccp_path(ccp_parameters, buffer2);
     wait_for_async();
     reg_a = Directory_DeleteFile(bnk_vm, buffer2);
     if (reg_a)
@@ -103,7 +103,7 @@ void ccp_era(void) {
 void ccp_type(void) {
     unsigned char handle;
     unsigned short read_bytes;
-    ccp_path(ccp_parameters);
+    ccp_path(ccp_parameters, buffer2);
     wait_for_async();
     handle = File_Open(bnk_vm, buffer2);
     if (handle <= 7) {
@@ -131,6 +131,60 @@ void ccp_user(void) {
     }
 }
 
+void ccp_ren(void) {
+    unsigned char found_equals = 0;
+    gen_ptr = ccp_parameters;
+    if (*gen_ptr) {
+        while (*gen_ptr++) {
+            if (*gen_ptr == '=') {
+                found_equals = 1;
+                *gen_ptr = 0;
+            }
+        }
+    }
+    if (found_equals) {
+        ccp_path(ccp_parameters, buffer2);
+        ccp_path(gen_ptr, dir_buffer);
+        gen_ptr = tail_after_backslash(buffer2);
+        wait_for_async();
+        reg_a = Directory_RenameFile(bnk_vm, dir_buffer, gen_ptr);
+        if (reg_a)
+            strout("No file\r\n");
+    } else {
+        strout("No file\r\n");
+    }
+}
+
+void ccp_save(void) {
+    unsigned char pages, handle;
+    unsigned char found_space = 0;
+    gen_ptr = ccp_parameters;
+    if (*gen_ptr) {
+        while (*gen_ptr++) {
+            if (*gen_ptr == ' ') {
+                found_space = 1;
+                *gen_ptr = 0;
+            }
+        }
+        if (found_space) {
+            pages = atoi(ccp_parameters);
+            ccp_path(gen_ptr, buffer2);
+            wait_for_async();
+            handle = File_New(bnk_vm, buffer2, 0);
+            if (handle <= 7) {
+                File_Write(handle, bnk_tpa, (char*)0x100, (unsigned short)pages * 256);
+                File_Close(handle);
+            } else {
+                ccp_parm_error();
+            }
+        } else {
+            ccp_parm_error();
+        }
+    } else {
+        ccp_parm_error();
+    }
+}
+
 void ccp_cd(void) {
     if (*ccp_parameters) {
         if (default_drive < 4) {
@@ -147,7 +201,7 @@ void ccp_cd(void) {
             strout("Not a redefinable drive\r\n");
         }
     } else {
-        ccp_path("");
+        ccp_path("", buffer2);
         strcat(buffer2, "\r\n");
         strout(buffer2);
     }
@@ -161,7 +215,7 @@ void ccp_execute(void) {
 }
 
 void ccp_run(void) {
-    ccp_path(buffer);
+    ccp_path(buffer, buffer2);
     if (!app_load(0x100)) {
         ccp_execute();
     } else {
@@ -212,6 +266,10 @@ void ccp(void) {
             ccp_type();
         } else if (!strcmp(buffer, "USER")) {
             ccp_user();
+        } else if (!strcmp(buffer, "REN")) {
+            ccp_ren();
+        } else if (!strcmp(buffer, "SAVE")) {
+            ccp_save();
         } else if (!strcmp(buffer, "CD")) {
             ccp_cd();
         } else if (!strcmp(buffer, "CLS")) {
