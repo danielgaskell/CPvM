@@ -149,32 +149,37 @@ unsigned short current_pos(void) {
     return ((unsigned short)(fcb_buffer.module & 0x7F) * 4096) + ((unsigned short)fcb_buffer.extent * 128) + fcb_buffer.current_record;
 }
 
-// closes any other open files matching the FCB-style filename at addr (for subsequent delete/rename)
+// closes and marks as reclaimed the FCB pointed to by handle (assumed to be open/valid)
+void close_and_reclaim(unsigned char handle) {
+    unsigned char i;
+    i = Banking_ReadByte(bnk_tpa, ((char*)handles_fcb[handle]) + 13) - 1;
+    if (i == handle) // sanity check: only mark this as reclaimed if it still points to the handle (probably not overwritten)
+        Banking_WriteByte(bnk_tpa, ((char*)handles_fcb[handle] + 13), 0xFF);
+    File_Close(handle);
+    handles_used[handle] = 0;
+    handles_fcb[handle] = 0;
+}
+
+// closes/marks as reclaimed any other open files matching the FCB-style filename at addr (for subsequent delete/rename)
 void purge_file(char* addr) {
     unsigned char i;
     for (i = 0; i < 8; ++i) {
         if (handles_used[i]) {
             Banking_Copy(bnk_tpa, handles_fcb[i], bnk_vm, (unsigned short)buffer2, 12);
-            if (!memcmp(addr, buffer2, 12)) {
-                File_Close(i);
-                handles_used[i] = 0;
-            }
+            if (!memcmp(addr, buffer2, 12))
+                close_and_reclaim(i);
         }
     }
 }
 
-// finds a (read-only) file handle that can be marked as reclaimed; returns 1 on success
+// finds a (read-only) file handle that can be marked as reclaimed; reclaims and returns 1 on success
 unsigned char reclaim_handle(void) {
     unsigned char i, t;
     for (i = 0; i < 8; ++i) {
         if (handles_used[i]) {
             t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 14) & 0x80;
             if (t) { // reclaim unmodified FCBs only (since only read-only FCBs should be truly abandoned)
-                t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 13) - 1;
-                if (t == i) // sanity check: only mark this as reclaimed if it still points to the handle (probably not overwritten)
-                    Banking_WriteByte(bnk_tpa, (char*)handles_fcb[i] + 13, 0xFF);
-                File_Close(i);
-                handles_used[i] = 0;
+                close_and_reclaim(i);
                 return 1;
             }
         }
@@ -200,8 +205,10 @@ void reopen_reclaimed(unsigned short fcb) {
             File_Seek(handle, 0, 0); // seek back to start
             seek_sequential(handle, current_pos());
         } else {
-            if (reclaim_handle())
-                goto reopen_reclaimed_try;
+            if (symbos_info.msgBuffer[7] == 128) { // happens on "too many files open" (note: internal to SDK, does not match documented return message)
+                if (reclaim_handle())
+                    goto reopen_reclaimed_try;
+            }
         }
     }
 }
@@ -212,18 +219,13 @@ unsigned char close_fcb(unsigned short fcb) {
     if (fcb_buffer.handle >= 1 && fcb_buffer.handle <= 8) {
         handle = fcb_buffer.handle - 1;
         if (handles_used[handle]) {
-            File_Close(handle);
-            handles_used[handle] = 0;
-            handles_fcb[handle] = 0;
-            Banking_WriteByte(bnk_tpa, (char*)fcb + 13, 0);
+            close_and_reclaim(handle);
             return 0;
         }
     }
     for (handle = 0; handle < 8; ++handle) {
         if (handles_fcb[handle] == fcb && handles_used[handle]) {
-            File_Close(handle);
-            handles_used[handle] = 0;
-            handles_fcb[handle] = 0;
+            close_and_reclaim(handle);
             return 0;
         }
     }
@@ -278,10 +280,11 @@ unsigned char open_file(unsigned short fcb) {
         new_fcb(fcb, handle);
         return 0;
     } else {
-        if (reclaim_handle())
-            goto open_file_try;
-        else // error (FIXME more specific message)
-            return 0xFF;
+        if (symbos_info.msgBuffer[7] == 128) { // happens on "too many files open" (note: internal to SDK, does not match documented return message)
+            if (reclaim_handle())
+                goto open_file_try;
+        }
+        return 0xFF; // FIXME more specific message
     }
 }
 
