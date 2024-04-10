@@ -88,7 +88,11 @@ tpairq1 ld sp,0
 ;### Output     AB,HL=return parameters
 tpabds  ld (tpabds1+1),sp   ;normal entry point - sets up/destroys temp stack
         ld sp,tpastk
+        push ix
+        push iy
         call tpabds2
+        pop iy
+        pop ix
 tpabds1 ld sp,0
         ret
 

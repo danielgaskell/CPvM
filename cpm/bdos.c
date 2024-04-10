@@ -172,18 +172,33 @@ void purge_file(char* addr) {
     }
 }
 
-// finds a (read-only) file handle that can be marked as reclaimed; reclaims and returns 1 on success
+// finds a file handle that can be marked as reclaimed; reclaims and returns 1 on success
 unsigned char reclaim_handle(void) {
     unsigned char i, t;
+
+    // pass 1: look for an FCB whose handle no longer matches what is on file
     for (i = 0; i < 8; ++i) {
         if (handles_used[i]) {
-            t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 14) & 0x80;
-            if (t) { // reclaim unmodified FCBs only (since only read-only FCBs should be truly abandoned)
+            t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 13) - 1;
+            if (t != i) {
                 close_and_reclaim(i);
                 return 1;
             }
         }
     }
+
+    // pass 2: look for any read-only FCB
+    for (i = 0; i < 8; ++i) {
+        if (handles_used[i]) {
+            t = Banking_ReadByte(bnk_tpa, (char*)handles_fcb[i] + 14);
+            if (t & 0x80) {
+                close_and_reclaim(i);
+                return 1;
+            }
+        }
+    }
+
+    // found nothing reclaimable, fail
     return 0;
 }
 
