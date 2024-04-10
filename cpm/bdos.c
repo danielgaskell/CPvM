@@ -187,10 +187,12 @@ unsigned char reclaim_handle(void) {
     return 0;
 }
 
-// checks to see if the FCB in fcb_buffer has had its handle reclaimed, and if so, re-opens/re-syncs it
+// checks to see if the FCB in fcb_buffer has had its handle reclaimed, and if so, re-opens/re-syncs it.
+// also fires if the FCB handle/address does not match what is on file (*stares pointedly at Hi-Tech C*)
 void reopen_reclaimed(unsigned short fcb) {
     unsigned char handle;
-    if (fcb_buffer.handle == 0xFF) {
+    handle = fcb_buffer.handle - 1;
+    if (handle == 0xFE || !handles_used[handle] || handles_fcb[handle] != fcb) {
         path_from_fcb(fcb);
         reopen_reclaimed_try:
         handle = File_Open(bnk_vm, buffer);
