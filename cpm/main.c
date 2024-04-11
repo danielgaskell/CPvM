@@ -98,6 +98,7 @@ void main(void) {
     Banking_Copy(bnk_vm, (unsigned short)&generic_dpb, bnk_tpa, DPBADDR, 16);
 
     // load app
+    strout("\x18\x0E\x08\x16\x0E\x08\x16\x0E\x08\x16\x0E\x08\x16\x0E\x08\x16\x0E\x08\x16\x0C"); // set up tabs
     if (launch_ccp) {
         strout("\r\nCP\\/M - SymbOS CP/M Virtual Machine\r\n");
         strout("(c) 2024 Prevtenet & Prodatron\r\n");
