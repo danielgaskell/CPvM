@@ -47,13 +47,40 @@ This handles the typical case of allowing CP/M applications to see files in thei
 Logical drive B will now show the files in the physical folder C:\CPMAPPS.<br>
 <br>
 
-<h2>2300-Terminal Features</h2>
+<h2>2300-CCP Commands</h2>
+<br>
+<b>CCP COMMANDS</b><br>
+<br>
+In "live CCP" mode, CPvM emulates a subset of the CP/M 2.2 command line (CCP). Available CP/M commands are:<br>
+<br>
+<b>DIR</b> - display files on the current logical disk. Wildcards are allowed (DIR *.COM).<br>
+<br>
+<b>ERA file</b> - erase <b>file</b>. Wildcards are allowed (ERA ??FIL.*).<br>
+<br>
+<b>REN new=old</b> - rename file <b>old</b> to <b>new</b>. Wildcards are not allowed.<br>
+<br>
+<b>TYPE file</b> - display the contents of <b>file</b> to the terminal.<br>
+<br>
+<b>SAVE pages file</b> - save <b>pages</b>*256 bytes of memory (starting at 0x100) to <b>file</b>.<br>
+<br>
+<b>USER number</b> - set the system user number to <b>number</b>. (User numbers are not supported by the filesystem, so this does nothing except give the fake value to any CP/M app that needs it.)<br>
+<br>
+Additional control commands are also implemented:<br>
+<br>
+<b>EXIT</b> - quit to SymShell.<br>
+<br>
+<b>CLS</b> - clear the screen.<br>
+<br>
+<b>CD path</b> - set the current logical drive's physical path to <b>path</b>. (See <b>Files & Drives</b> above.)<br>
+<br>
+
+<h2>2400-Terminal Features</h2>
 <br>
 <b>TERMINAL FEATURES</b><br>
 <br>
 As usual for SymShell, terminal input/output will run much faster when SymShell is in fullscreen mode than when it is in windowed mode. Many fullscreen CP/M apps also expect the terminal to have the dimensions 80x24 characters (a bit larger than the default); this can be set from the SymShell menu bar.<br>
 <br>
-CP/M has no standard features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 terminal most directly, but also supports the most common control codes for ADM-3A and VT-100/ANSI terminals. For configurable applications, you may need to try a few different configurations to see which one works best for a given application.<br>
+CP/M has no standardized features for advanced display management, like cursor placement; this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
 <br>
 
 <h1>3000-Technical Details</h2>
