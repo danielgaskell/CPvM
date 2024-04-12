@@ -234,7 +234,7 @@ tpabio_14   ld a,1:ret                              ;WRITE      *illegal*   (ret
 tpabio_15   ld a,#ff:ret                            ;LISTST                 (not yet implemented)
 tpabio_16   ld l,c:ld h,b:ret                       ;SECTRAN    *ignored*   (returns HL=BC)
 
-;C_WRITE buffer (here to ensure BIOS can start on a page boundary)
+;C_WRITE buffer
 cwblen  db 0
 cwbbuf  ds 128+1
 
