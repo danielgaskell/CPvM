@@ -1,8 +1,8 @@
-<title>CPvM</title>
+<title>CP\/M</title>
 
 <h1>1000-CPvM</h2>
 <br>
-<b>CPvM</b><br>
+<b>CP\/M</b><br>
 <br>
 CPvM is a compatibility layer that allows running many CP/M 2.2 applications natively on SymbOS.<br>
 <br>
@@ -71,7 +71,7 @@ Additional control commands are also implemented:<br>
 <br>
 <b>CLS</b> - clear the screen.<br>
 <br>
-<b>CD path</b> - set the current logical drive's physical path to <b>path</b>. (See <b>Files & Drives</b> above.)<br>
+<b>CD path</b> - set the current logical drive's physical path to <b>path</b>. (See <u 2200>Files and Drives</u>.)<br>
 <br>
 
 <h2>2400-Terminal Features</h2>
@@ -80,14 +80,60 @@ Additional control commands are also implemented:<br>
 <br>
 As usual for SymShell, terminal input/output will run much faster when SymShell is in fullscreen mode than when it is in windowed mode. Many fullscreen CP/M apps also expect the terminal to have the dimensions 80x24 characters (a bit larger than the default); this can be set from the SymShell menu bar.<br>
 <br>
-CP/M has no standardized features for advanced display management, like cursor placement; this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
+CP/M 2.2 had no standardized features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
+<br>
+Special keys were not standardized across terminals, so most CP/M software uses Ctrl+Key combinations instead of special keys. (Check each program's documentation for details.) For convenience, CPvM maps the arrow keys and delete/backspace onto the default WordStar keyboard shortcuts, the closest thing to a universal standard:<br>
+<br>
+Left            <t6>Ctrl+S<br>
+Right           <t6>Ctrl+D<br>
+Up              <t6>Ctrl+E<br>
+Down            <t6>Ctrl+X<br>
+Delete          <t6>Ctrl+G<br>
+Backspace       <t6>Ctrl+H<br>
+Tab             <t6>Ctrl+I<br>
 <br>
 
-<h1>3000-Technical Details</h2>
+<h1>3000-Detailed Topics</h2>
+<br>
+<h2>3100-Troubleshooting</h2>
+<br>
+<b>TROUBLESHOOTING</b><br>
+<br>
+<b>Text output is slow or too small to read:</b> Try running SymShell in fullscreen mode (Alt+Enter).<br>
+<br>
+<b>A program crashes or does not run:</b> Not all CP/M software is compatible with CPvM.<br>
+<br>
+1) Verify that the program is designed for CP/M-80 2.2 (not CP/M Plus, CP/M 3, CP/M-86, or another version of CP/M).<br>
+<br>
+2) Verify that the program does not expect system-specific features or hardware (like modems), or direct block-level disk access.<br>
+<br>
+3) Try the program in a BDOS-level emulator like MockbaTheBorg's RunCPM (i.e., one that uses the native filesystem rather than running off of CP/M-formatted disk images). Programs that run correctly in this type of emulation are more likely to work in CPvM.<br>
+<br>
+<b>Screen output is garbled, with extra characters and text in the wrong places:</b> The program is most likely outputting terminal codes CPvM does not understand (see <u 2400>Terminal Features</u>). If the program provides an option to configure the terminal, try a different setting (e.g., ADM-3A).<br>
+<br>
+<b>Screen output is misaligned, miswrapped, or is not scrolling correctly:</b> The SymShell window is most likely set to a different size than the program expects. Most CP/M programs expect a terminal size of 80x24 or 80x25; change the SymShell window size to match (using the menu bar) and try again.<br>
+<br>
+NOTE: SymShell may not allow you to change the terminal size while CPvM is running. In this case, open a new SymShell window, change the size, and exit to save the setting as the new default. Subsequent SymShell windows will now start with the requested size.<br>
+<br>
+<b>Special keys (arrows, backspace, etc.) aren't doing what I expect:</b> Most CP/M software uses Ctrl+Key combinations rather than special keys. See <u 2400>Terminal Features</u> for a listing of the default keybindings in CPvM.<br>
+<br>
+<b>Running out of memory after running several apps in a row</b> (or: <b>CPvM is closed, but it still appears in the task manager):</b> Be sure to close CPvM correctly (by typing EXIT on the command-line, NOT by using the 'X' button!)<br>
+<br>
+<b>Bug reports:</b> If you find a program that (1) should work according to all of the above, (2) does not work, and (3) you actually care about getting it to work, bug reports may be emailed to p<b></b>r<b></b>e<b></b>v<b></b>t<b></b>e<b></b>n<b></b>e<b></b>t<b></b>@<b></b>g<b></b>m<b></b>a<b></b>i<b></b>l<b></b>.<b></b>c<b></b>o<b></b>m. Please include a copy of the non-working program (or instructions on how to obtain it) and step-by-step instructions for reproducing the problem.<br>
+<br>
+
+<h2>3200-Technical Details</h2>
 <br>
 <b>TECHNICAL DETAILS</b><br>
 <br>
 Because CP/M applications are not relocatable, CPvM runs each CP/M session in its own 64K statically-addressed memory bank. This allow multiple CP/M sessions to run simultaneously in the multitasking environment, but also uses a lot of memory. Therefore, CPvM will not run on a 128K system without expanded memory.<br>
 <br>
+
+<h2>3300-Copyright</h2>
+<br>
+<b>COPYRIGHT</b><br>
+<br>
 CPvM is (C) Copyright 2024, Prevtenet and Prodatron. It is freeware. Source code is licensed under the MIT License and may be found at https://github.com/danielgaskell/CPvM.<br>
+<br>
+CP/M 2.2 is (C) Copyright 1979, Digital Research. CP/M is a trademark of DRDOS, Inc., which now owns the Digital Research copyrights. The original Digital Research code and binaries for CP/M 2.2 have been made open-source and are available from http://www.cpm.z80.de/. CPVM.COM itself does not contain any original Digital Research code.<br>
 <br>
