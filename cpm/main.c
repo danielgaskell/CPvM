@@ -42,7 +42,7 @@
 
 void main(void) {
     // set up single-char control-code mappings (mostly ADM-3A)
-    control_codes = "        \x08\x19\x0A\x0B\x09\x0D   \x06 \x15   \x14\x12 \x0C     ";
+    control_codes = "        \x08\x19\x0A\x0B\x09\x0D   \x06 \x15   \x14\x12 \x0C    ";
     keyconv[0]  = 7;  //      delete = Wordstar-style Ctrl+G
     keyconv[9]  = 5;  //    up arrow = Wordstar-style Ctrl+E
     keyconv[10] = 24; //  down arrow = Wordstar-style Ctrl+X

@@ -80,7 +80,7 @@ Additional control commands are also implemented:<br>
 <br>
 As usual for SymShell, terminal input/output will run much faster when SymShell is in fullscreen mode than when it is in windowed mode. Many fullscreen CP/M apps also expect the terminal to have the dimensions 80x24 characters (a bit larger than the default); this can be set from the SymShell menu bar.<br>
 <br>
-CP/M 2.2 had no standardized features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
+CP/M 2.2 had no standardized features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common Soroc IQ-120 and VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
 <br>
 Special keys were not standardized across terminals, so most CP/M software uses Ctrl+Key combinations instead of special keys. (Check each program's documentation for details.) For convenience, CPvM maps the arrow keys and delete/backspace onto the default WordStar keyboard shortcuts, the closest thing to a universal standard:<br>
 <br>
@@ -95,7 +95,22 @@ Tab             <t6>Ctrl+I<br>
 
 <h1>3000-Detailed Topics</h2>
 <br>
-<h2>3100-Troubleshooting</h2>
+<h2>3100-Best Settings</h2>
+<br>
+<b>BEST SETTINGS</b><br>
+<br>
+<b>Perfect Writer</b>: Use Soroq IQ-120 setting with 80x24 terminal.<br>
+<br>
+<b>Turbo Pascal</b>: Use Soroq IQ-120 setting with 80x24 terminal.<br>
+<br>
+<b>VEDIT</b>: Use Dec VT-52 setting with 80x24 terminal.<br>
+<br>
+<b>Vezza</b>: Use "RunCPM Adm3a" version (vezza-A8.com) with 80x24 terminal.<br>
+<br>
+<b>WordStar</b>: Use ADM-3A setting with 80x24 terminal.<br>
+<br>
+
+<h2>3200-Troubleshooting</h2>
 <br>
 <b>TROUBLESHOOTING</b><br>
 <br>
@@ -122,14 +137,14 @@ NOTE: SymShell may not allow you to change the terminal size while CPvM is runni
 <b>Bug reports:</b> If you find a program that (1) should work according to all of the above, (2) does not work, and (3) you actually care about getting it to work, bug reports may be emailed to p<b></b>r<b></b>e<b></b>v<b></b>t<b></b>e<b></b>n<b></b>e<b></b>t<b></b>@<b></b>g<b></b>m<b></b>a<b></b>i<b></b>l<b></b>.<b></b>c<b></b>o<b></b>m. Please include a copy of the non-working program (or instructions on how to obtain it) and step-by-step instructions for reproducing the problem.<br>
 <br>
 
-<h2>3200-Technical Details</h2>
+<h2>3300-Technical Details</h2>
 <br>
 <b>TECHNICAL DETAILS</b><br>
 <br>
 Because CP/M applications are not relocatable, CPvM runs each CP/M session in its own 64K statically-addressed memory bank. This allow multiple CP/M sessions to run simultaneously in the multitasking environment, but also uses a lot of memory. Therefore, CPvM will not run on a 128K system without expanded memory.<br>
 <br>
 
-<h2>3300-Copyright</h2>
+<h2>3400-Copyright</h2>
 <br>
 <b>COPYRIGHT</b><br>
 <br>

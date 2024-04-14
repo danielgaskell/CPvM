@@ -673,7 +673,13 @@ void buffer_char(unsigned char ch) {
         }
     } else if (reg_a < 32) {
         // single-character control code, translate
-        *out_ptr++ = control_codes[reg_a];
+        if (reg_a == 31) {
+            // Soroc IQ-120 "new line" (used by, e.g., Turbo Pascal)
+            *out_ptr++ = 0x0A;
+            *out_ptr++ = 0x0D;
+        } else {
+            *out_ptr++ = control_codes[reg_a];
+        }
     } else {
         // regular character, emit as-is
         if (inverse && reg_a == ' ')

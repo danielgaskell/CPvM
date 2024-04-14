@@ -126,8 +126,8 @@ void escapes(void) __naked {
 __asm
     .dw esc_null 	; ESC (, handled separately
     .dw esc_null 	; ESC ), handled separately
-    .dw esc_apos 	; ESC *
-    .dw esc_null
+    .dw esc_astr 	; ESC *
+    .dw esc_astr    ; ESC +
     .dw esc_null
     .dw esc_null
     .dw esc_null
@@ -207,7 +207,7 @@ __asm
     .dw esc_y
 
     esc_null::	.db 0
-    esc_apos::	.db 0x0C
+    esc_astr::	.db 0x0C
                 .db 0
     esc_1::		.db 0x11
                 .db 0x12
