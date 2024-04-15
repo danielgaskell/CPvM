@@ -866,7 +866,6 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     }
     #endif // TRACE
 
-    wait_for_async(); // theoretically only required before shell calls, but generically waiting here avoids some hard-to-track-down freezes
     reg_hl = 0; // default return value
     if (c == 255) {
         __asm
@@ -880,6 +879,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     } else if (c == 252) {
         reg_hl = bios_console_input(); // unlike normal BDOS #1, does not echo result
     } else {
+        wait_for_async(); // theoretically only required before shell calls, but generically waiting here avoids some hard-to-track-down freezes
         switch (c) {
         case 0: // System Reset
             system_reset();

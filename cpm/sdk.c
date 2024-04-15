@@ -34,6 +34,8 @@
 #define MSR_SHL_PTHADD 197
 #define MSC_SHL_CHRTST 70
 #define MSR_SHL_CHRTST 198
+#define MSC_SHL_CHRWTC 71
+#define MSR_SHL_CHRWTC 199
 
 void library(void) __naked {
 __asm
@@ -209,4 +211,18 @@ unsigned char Shell_CharTest(unsigned char shellPID, unsigned char channel, unsi
         return msg_buf[2];
     else
         return 0;
+}
+
+// SymShell CharWatch call (not provided by SDK)
+unsigned char Shell_CharWatch(unsigned char shellPID, unsigned char mode, unsigned char bank, unsigned short addr) {
+    msg_buf[0] = 0;
+    while (msg_buf[0] != MSR_SHL_CHRWTC) {
+        msg_buf[0] = MSC_SHL_CHRWTC;
+        msg_buf[1] = mode;
+        msg_buf[2] = bank;
+        *(unsigned short*)(msg_buf + 3) = addr;
+        Message_Send(symbos_info.processID, shellPID, msg_buf);
+        while (!Message_Sleep_And_Receive(symbos_info.processID, shellPID, msg_buf));
+    }
+    return msg_buf[3];
 }

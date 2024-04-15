@@ -85,6 +85,7 @@ void symbos_exit(void) {
 	if (termpid != 0) {
         strout("\r\n"); // since some apps expect this
         wait_for_async();
+        Shell_CharWatch(termpid, 0, bnk_tpa, TPA_WTC); // remove char watch byte
         Shell_Exit(termpid, 0);
 	}
 	Sys_Program_End(GET_APPLICATION_ID());

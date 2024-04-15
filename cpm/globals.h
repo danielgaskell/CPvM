@@ -24,6 +24,7 @@
 // NOTE: make sure this stays set to a blank 16-byte part of the TPA, including buffers
 #define DPBADDR 0xFDF0
 #define TPA_END 0xFC00
+#define TPA_WTC 0xFC15
 
 typedef struct {
     unsigned char drive;

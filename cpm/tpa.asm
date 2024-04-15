@@ -37,6 +37,7 @@ ds 16-8
 vm_bnk  db 0
 vm_adr  dw 0
 vm_stk  dw 0
+vm_wtc  db 0
 
 
 ;==============================================================================
@@ -67,7 +68,7 @@ tpairq  db 0
         db #3e:ret
         ld (tpairq),a
         ld l,255
-        call tpabds4
+        call tpabds5
         di
         xor a
         ld (tpairq),a
@@ -109,8 +110,8 @@ tpabds3 ld a,(cwblen)
         call nz,cwbsnd
 
 ;direct-call entry point (assumes temp stack has already been set up)
-        ld l,c          ;C,DE -> L,DE=bdos call registers
-tpabds4 ld a,(vm_bnk)
+tpabds4 ld l,c          ;C,DE -> L,DE=bdos call registers
+tpabds5 ld a,(vm_bnk)
         ld b,a
         ld ix,(vm_adr)
         ld iy,(vm_stk)
@@ -161,7 +162,7 @@ cwbsnd  push bc         ;print and empty buffer
         ld (hl),b
         ld l,253
         ld de,cwbbuf
-        call tpabds4
+        call tpabds5
         pop hl
         pop de
         pop bc
@@ -171,18 +172,26 @@ C_RAWIO_tpa
         ld a,e
         inc a
         jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
+		ld a,(vm_wtc)     ;else check char byte
+		or a
+		jr nz,tpabds4     ;key waiting, do BDOS call (to clear keyboard buffer)
 CONST   ld a,0
-        cp #4
-        ld a,#0
-        jr nc,tparawc     ;>=4 IRQs since last call = normal BDOS call
-        ld b,#0           ;...else respond with "no char waiting"
-        ld hl,#0
-        jp tpabds1
-tparawc ld (CONST+1),a    ;reset IRQ count
-        jr tpabds3
-;Technically, C_STAT should repeat the last status rather than "no char", but
-;since apps almost always use this for single-step decision-making it would be
-;surprising if this causes problems.
+        cp #16
+        call nc,tparawf   ;>=16 IRQs since last call = flush output first (to
+		ld a,(vm_wtc)     ;ensure output always appears even while waiting)
+		or a
+		jr z,CONST1
+		ld a,#FF          ;for C_STAT, return 0 or FF
+CONST1  ld b,#0
+        ld h,#0
+		ld l,a
+        ret
+tparawf ld a,0            ;reset IRQ count and flush output if needed
+        ld (CONST+1),a
+        ld a,(cwblen)
+        inc a
+		jr nz,cwbsnd
+        ret
         
 ;temp stack for BDOS calls (separate from IRQ since that may interrupt BDOS)
         ds 32
