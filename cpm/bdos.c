@@ -870,7 +870,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
     if (c == 255) {
         __asm
             rst #0x38             ;special function 255 -> interrupt occured, call scheduler
-            jp jmp_bnkret
+            jp finish_bdos
         __endasm;
     } else if (c == 254) {
         system_reset();
@@ -1025,6 +1025,7 @@ void bdos_calls(unsigned char c, unsigned short de) __naked {
 
     // load return values into HL and return (will be copied to BA TPA-side)
     __asm
+    finish_bdos::
         ld hl, (_reg_hl)
 		di              ;save VM-side shadow registers
     __endasm;

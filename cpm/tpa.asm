@@ -169,7 +169,7 @@ cwbsnd  push bc         ;print and empty buffer
         ret
 
 C_RAWIO_tpa
-        ld a,e
+		ld a,e
         inc a
         jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
 		ld a,(vm_wtc)     ;else check char byte
