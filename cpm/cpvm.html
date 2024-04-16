@@ -6,7 +6,7 @@
 <br>
 CPvM is a compatibility layer that allows running many CP/M 2.2 applications natively on SymbOS.<br>
 <br>
-Not all CP/M software is supported (but a lot is). Applications for generic CP/M 2.2 on the 8080 or Z80 processors (i.e., CP/M-80) generally work best, while applications designed for other variants of CP/M or that expect low-level or platform-specific features (like special terminal features or block-level disk access) may not work at all.<br>
+Not all CP/M software is supported, but a lot is. Applications for generic CP/M 2.2 on the 8080 or Z80 processors (i.e., CP/M-80) generally work best, while applications designed for other variants of CP/M or that expect low-level or platform-specific features (like special terminal features or block-level disk access) may not work at all.<br>
 <br>
 
 <h1>2000-Usage</h1>
@@ -30,7 +30,7 @@ In this "direct" mode, any subsequent parameters after the application name will
 <br>
 <b>FILES & DRIVES</b><br>
 <br>
-Unlike CP/M emulators on many other platforms, the CPvM BDOS redirects file access requests to the SymbOS filesystem rather that emulating the CP/M filesystem directly. This allows CP/M applications to access files on FAT and AMSDOS-format disks as if they were on CP/M disks.<br>
+Unlike many CP/M emulators, the CPvM BDOS redirects file access requests to the SymbOS filesystem rather that emulating the CP/M filesystem directly. This allows CP/M applications to access files on FAT and AMSDOS-format disks as if they were on CP/M disks.<br>
 <br>
 CP/M 2.2 does not have a concept of directories, only disks (indicated by the letters A to P). To accommodate this, CPvM maps physical paths on the SymbOS filesystem to logical disk drives visible to the CP/M application. The default configuration is:<br>
 <br>
@@ -71,7 +71,7 @@ Additional control commands are also implemented:<br>
 <br>
 <b>CLS</b> - clear the screen.<br>
 <br>
-<b>CD path</b> - set the current logical drive's physical path to <b>path</b>. (See <u 2200>Files and Drives</u>.)<br>
+<b>CD path</b> - set the current logical drive's physical path to <b>path</b>. (See <u 2200>Files and Drives</u>.) Only full absolute paths are allowed.<br>
 <br>
 
 <h2>2400-Terminal Features</h2>
@@ -80,9 +80,9 @@ Additional control commands are also implemented:<br>
 <br>
 As usual for SymShell, terminal input/output will run much faster when SymShell is in fullscreen mode than when it is in windowed mode. Many fullscreen CP/M apps also expect the terminal to have the dimensions 80x24 characters (a bit larger than the default); this can be set from the SymShell menu bar.<br>
 <br>
-CP/M 2.2 had no standardized features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common Soroc IQ-120 and VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application.<br>
+CP/M 2.2 had no standardized features for advanced display management (like cursor placement); this was left to the terminal. Because so many different terminal types were available on the market, many major software packages could be configured for use with multiple different types of terminals. CPvM emulates the DEC VT-52 and ADM-3A terminals most completely, but also supports the most common Soroc IQ-120 and VT-100/ANSI control codes. For configurable applications, you may need to try a few different terminal types to see which one works best for a given application. (Soroc IQ-120 is often a good fallback because of its simplicity.)<br>
 <br>
-Special keys were not standardized across terminals, so most CP/M software uses Ctrl+Key combinations instead of special keys. (Check each program's documentation for details.) For convenience, CPvM maps the arrow keys and delete/backspace onto the default WordStar keyboard shortcuts, the closest thing to a universal standard:<br>
+Special keys were also not standardized across terminals, so most CP/M software uses Ctrl+Key combinations instead of special keys. (Check each program's documentation for details.) For convenience, CPvM maps the arrow keys and delete/backspace onto the default WordStar keyboard shortcuts, the closest thing to a universal standard:<br>
 <br>
 Left            <t6>Ctrl+S<br>
 Right           <t6>Ctrl+D<br>
@@ -103,11 +103,11 @@ Tab             <t6>Ctrl+I<br>
 <br>
 <b>Turbo Pascal</b>: Use Soroc 120/Apple CP/M setting with 80x24 terminal.<br>
 <br>
-<b>VEDIT</b>: Use Dec VT-52 setting with 80x24 terminal.<br>
+<b>VEDIT</b>: Use DEC VT-52 setting with 80x24 terminal.<br>
 <br>
 <b>Vezza</b>: Use "RunCPM Adm3a" version (vezza-A8.com) with 80x24 terminal.<br>
 <br>
-<b>WordStar</b>: Use ADM-3A setting with 80x24 terminal.<br>
+<b>WordStar</b>: Use Soroc IQ-120/140 setting with 80x24 terminal.<br>
 <br>
 
 <h2>3200-Troubleshooting</h2>
@@ -126,7 +126,7 @@ Tab             <t6>Ctrl+I<br>
 <br>
 <b>Screen output is garbled, with extra characters and text in the wrong places:</b> The program is most likely outputting terminal codes CPvM does not understand (see <u 2400>Terminal Features</u>). If the program provides an option to configure the terminal, try a different setting (e.g., ADM-3A).<br>
 <br>
-<b>Screen output is misaligned, miswrapped, or is not scrolling correctly:</b> The SymShell window is most likely set to a different size than the program expects. Most CP/M programs expect a terminal size of 80x24 or 80x25; change the SymShell window size to match (using the menu bar) and try again.<br>
+<b>Screen output is misaligned, miswrapped, or is not scrolling correctly:</b> The SymShell window is most likely set to a different size than the program expects. Most CP/M programs expect a terminal size of 80x24 (or sometimes 80x25); change the SymShell window size to match (using the menu bar) and try again.<br>
 <br>
 NOTE: SymShell may not allow you to change the terminal size while CPvM is running. In this case, open a new SymShell window, change the size, and exit to save the setting as the new default. Subsequent SymShell windows will now start with the requested size.<br>
 <br>
@@ -137,14 +137,29 @@ NOTE: SymShell may not allow you to change the terminal size while CPvM is runni
 <b>Bug reports:</b> If you find a program that (1) should work according to all of the above, (2) does not work, and (3) you actually care about getting it to work, bug reports may be emailed to p<b></b>r<b></b>e<b></b>v<b></b>t<b></b>e<b></b>n<b></b>e<b></b>t<b></b>@<b></b>g<b></b>m<b></b>a<b></b>i<b></b>l<b></b>.<b></b>c<b></b>o<b></b>m. Please include a copy of the non-working program (or instructions on how to obtain it) and step-by-step instructions for reproducing the problem.<br>
 <br>
 
-<h2>3300-Technical Details</h2>
+<h2>3300-Getting Software</h2>
+<br>
+<b>GETTING SOFTWARE</b><br>
+<br>
+CP/M 2.2 software is available from a variety of sources:<br>
+<br>
+The Unofficial CP/M Website (http://www.cpm.z80.de/) hosts free, legal downloads of software by Digital Research and other companies, particularly programming languages.<br>
+<br>
+The Humongous CP/M Software Archives (http://cpmarchives.classiccmp.org/) hosts a huge amount of CP/M material, including both public-domain collections such as the Walnut Creek CD-ROM and offsite links to archives of commercial software.<br>
+<br>
+Software from vintage archives is often in CP/M-specific archive formats like Squeeze, Crunch, or Library (LBR). A good one-stop CP/M program for extracting these formats is LT31, which can be found here (or, in compressed format, on many other CP/M archives):<br>
+<br>
+http://www.retroarchive.org/maslin/disks/cpmprog/lt31.com<br>
+<br>
+
+<h2>3400-Technical Details</h2>
 <br>
 <b>TECHNICAL DETAILS</b><br>
 <br>
-Because CP/M applications are not relocatable, CPvM runs each CP/M session in its own 64K statically-addressed memory bank. This allow multiple CP/M sessions to run simultaneously in the multitasking environment, but also uses a lot of memory. Therefore, CPvM will not run on a 128K system without expanded memory.<br>
+Because CP/M applications are not relocatable, CPvM runs each CP/M session in its own 64K statically-addressed memory bank. This allow multiple CP/M sessions to run simultaneously in the multitasking environment, but requires each CP/M program to reserve memory for SymShell, CPvM, and a full 64K bank of its own. Therefore, CPvM will not run on a 128K system without expanded memory.<br>
 <br>
 
-<h2>3400-Copyright</h2>
+<h2>3500-Copyright</h2>
 <br>
 <b>COPYRIGHT</b><br>
 <br>
