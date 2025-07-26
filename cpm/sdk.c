@@ -169,30 +169,30 @@ unsigned char Directory_RenameFile(unsigned char path_bank, char* path_addr, cha
     return msg_buf[2] & 0x01; // carry bit = error
 }
 
+void wait_for_async(void);
+
 // SymShell PathAdd call (not provided by SDK)
 void Shell_PathAdd(unsigned char shellPID, unsigned char bank, char *basepath, char *component, char* str) {
-    msg_buf[0] = 0;
-    while (msg_buf[0] != MSR_SHL_PTHADD) {
-        msg_buf[0] = MSC_SHL_PTHADD;
-        *(unsigned short*)(msg_buf + 1) = (unsigned short)&basepath[0];
-        *(unsigned short*)(msg_buf + 3) = (unsigned short)&component[0];
-        *(unsigned short*)(msg_buf + 5) = (unsigned short)&str[0];
-        msg_buf[7] = bank;
-        Message_Send(symbos_info.processID, shellPID, msg_buf);
-        while (!Message_Sleep_And_Receive(symbos_info.processID, shellPID, msg_buf));
-    }
+    wait_for_async();
+    msg_buf[0] = MSC_SHL_PTHADD;
+    *(unsigned short*)(msg_buf + 1) = (unsigned short)&basepath[0];
+    *(unsigned short*)(msg_buf + 3) = (unsigned short)&component[0];
+    *(unsigned short*)(msg_buf + 5) = (unsigned short)&str[0];
+    msg_buf[7] = bank;
+    while (Message_Send(symbos_info.processID, shellPID, msg_buf) == 0);
+    termresp = MSR_SHL_PTHADD;
+    wait_for_async();
 }
 
 // SymShell CharTest call (not provided by SDK)
 unsigned char Shell_CharTest(unsigned char shellPID, unsigned char channel, unsigned char lookahead) {
-    msg_buf[0] = 0;
-    while (msg_buf[0] != MSR_SHL_CHRTST) {
-        msg_buf[0] = MSC_SHL_CHRTST;
-        msg_buf[1] = channel;
-        msg_buf[2] = lookahead;
-        Message_Send(symbos_info.processID, shellPID, msg_buf);
-        while (!Message_Sleep_And_Receive(symbos_info.processID, shellPID, msg_buf));
-    }
+    wait_for_async();
+    msg_buf[0] = MSC_SHL_CHRTST;
+    msg_buf[1] = channel;
+    msg_buf[2] = lookahead;
+    while (Message_Send(symbos_info.processID, shellPID, msg_buf) == 0);
+    termresp = MSR_SHL_CHRTST;
+    wait_for_async();
     if (msg_buf[1] == 2)
         return msg_buf[2];
     else
@@ -201,14 +201,13 @@ unsigned char Shell_CharTest(unsigned char shellPID, unsigned char channel, unsi
 
 // SymShell CharWatch call (not provided by SDK)
 unsigned char Shell_CharWatch(unsigned char shellPID, unsigned char mode, unsigned char bank, unsigned short addr) {
-    msg_buf[0] = 0;
-    while (msg_buf[0] != MSR_SHL_CHRWTC) {
-        msg_buf[0] = MSC_SHL_CHRWTC;
-        msg_buf[1] = mode;
-        msg_buf[2] = bank;
-        *(unsigned short*)(msg_buf + 3) = addr;
-        Message_Send(symbos_info.processID, shellPID, msg_buf);
-        while (!Message_Sleep_And_Receive(symbos_info.processID, shellPID, msg_buf));
-    }
+    wait_for_async();
+    msg_buf[0] = MSC_SHL_CHRWTC;
+    msg_buf[1] = mode;
+    msg_buf[2] = bank;
+    *(unsigned short*)(msg_buf + 3) = addr;
+    while (Message_Send(symbos_info.processID, shellPID, msg_buf) == 0);
+    termresp = MSR_SHL_CHRWTC;
+    wait_for_async();
     return msg_buf[3];
 }

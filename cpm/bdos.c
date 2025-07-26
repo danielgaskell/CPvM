@@ -783,7 +783,6 @@ unsigned char direct_io(unsigned char e) {
             chrout(3); // cursor on
             cursor_on = 1;
         }
-        wait_for_async();
         reg_a = convert_key(Shell_CharTest(termpid, 0, 1));
     } else {
         buffer[0] = e;
