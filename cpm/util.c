@@ -21,14 +21,22 @@
  THE SOFTWARE.
 =============================================================================*/
 
+void symbos_exit(void);
+
 // wait until last asynchronous command finishes, if any
 // note that this needs to be called before many built-in SDK functions because
 // they may not properly discriminate between shell and other messages
 void wait_for_async(void) {
-    if (termresp) {
+    if (termresp && termpid) {
         msg_buf[0] = 0;
-        while (msg_buf[0] != termresp)
-            Message_Sleep_And_Receive(proc_id, termpid, msg_buf);
+        while (msg_buf[0] != termresp) {
+            if (Message_Sleep_And_Receive(proc_id, termpid, msg_buf) & 1) {
+                if (msg_buf[0] == 0) { // "shell closed" message: cleanly exit
+                    termpid = 0;
+                    symbos_exit();
+                }
+            }
+        }
         termresp = 0;
     }
 }
@@ -40,7 +48,7 @@ void chrout(unsigned char ch) {
     msg_buf[1] = 0;
     msg_buf[2] = ch;
     termresp = MSR_SHL_CHROUT;
-    Message_Send(proc_id, termpid, msg_buf);
+    while (Message_Send(proc_id, termpid, msg_buf) == 0);
 }
 
 // send a string to shell (asynchronously)
@@ -52,7 +60,7 @@ void strout(char* str) {
     *(unsigned short*)(msg_buf + 3) = (unsigned short)str;
     msg_buf[5] = strlen(str);
     termresp = MSR_SHL_STROUT;
-    Message_Send(proc_id, termpid, msg_buf);
+    while (Message_Send(proc_id, termpid, msg_buf) == 0);
 
     if (str == out_buffer) {
         if (out_buffer == buffer3)
@@ -60,6 +68,30 @@ void strout(char* str) {
         else
             out_buffer = buffer3;
     }
+}
+
+// receive a single character from shell (with safe exit-trapping)
+unsigned char chrin(void) {
+    wait_for_async();
+    msg_buf[0] = 64;
+    msg_buf[1] = 0;
+    while (Message_Send(proc_id, termpid, msg_buf) == 0);
+    termresp = 192;
+    wait_for_async();
+    return msg_buf[2];
+}
+
+// receive a string from shell (with safe exit-trapping)
+unsigned char strin(char* buf) {
+    wait_for_async();
+    msg_buf[0] = 65;
+    msg_buf[1] = 0;
+    msg_buf[2] = bnk_vm;
+    *(unsigned short*)(msg_buf + 3) = (unsigned short)buf;
+    while (Message_Send(proc_id, termpid, msg_buf) == 0);
+    termresp = 193;
+    wait_for_async();
+    return msg_buf[1];
 }
 
 // Close all open files

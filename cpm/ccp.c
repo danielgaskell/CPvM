@@ -240,8 +240,7 @@ void ccp(void) {
             __itoa(user_number, out_buffer + 1, 10);
         strcat(out_buffer, ">");
         strout(out_buffer);
-        wait_for_async();
-        Shell_StringInput(termpid, 0, bnk_vm, buffer);
+        strin(buffer);
         cursor_on = 0; // because Shell_StringInput resets it
 
         // convert command

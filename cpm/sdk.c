@@ -169,20 +169,6 @@ unsigned char Directory_RenameFile(unsigned char path_bank, char* path_addr, cha
     return msg_buf[2] & 0x01; // carry bit = error
 }
 
-// SymShell Shell_StringInput call (broken in SDK, so we redefine it here)
-int Shell_StringInput(unsigned char shellPID, unsigned char channel, unsigned char bank, char *str) __sdcccall(0) {
-    msg_buf[0] = 0;
-    while (msg_buf[0] != MSR_SHL_STRINP) {
-        msg_buf[0] = MSC_SHL_STRINP;
-        msg_buf[1] = channel;
-        msg_buf[2] = bank;
-        *(unsigned short*)(msg_buf + 3) = (unsigned short)&str[0];
-        Message_Send(symbos_info.processID, shellPID, msg_buf);
-        while (!Message_Sleep_And_Receive(symbos_info.processID, shellPID, msg_buf));
-    }
-    return msg_buf[1];
-}
-
 // SymShell PathAdd call (not provided by SDK)
 void Shell_PathAdd(unsigned char shellPID, unsigned char bank, char *basepath, char *component, char* str) {
     msg_buf[0] = 0;

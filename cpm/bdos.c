@@ -760,8 +760,7 @@ unsigned char bios_console_input(void) {
         chrout(3); // cursor on
         cursor_on = 1;
     }
-    wait_for_async();
-    reg_a = convert_key(Shell_CharInput(termpid, 0));
+    reg_a = convert_key(chrin());
     return reg_a;
 }
 
@@ -770,8 +769,7 @@ unsigned char console_input(void) {
         chrout(3); // cursor on
         cursor_on = 1;
     }
-    wait_for_async();
-    reg_a = convert_key(Shell_CharInput(termpid, 0));
+    reg_a = convert_key(chrin());
     if (reg_a == 13)
         reg_a = 10; // CP/M programs expect ENTER to be 10 for this input type only
     chrout(reg_a);
@@ -797,7 +795,7 @@ unsigned char direct_io(unsigned char e) {
 
 unsigned char read_string(unsigned short addr) {
     unsigned char max_chars = Banking_ReadByte(bnk_tpa, (char*)addr);
-    reg_a = Shell_StringInput(termpid, 0, bnk_vm, buffer + 1);
+    reg_a = strin(buffer + 1);
     cursor_on = 0; // because Shell_StringInput resets it
     if (reg_a) { // Ctrl+C
         __asm
