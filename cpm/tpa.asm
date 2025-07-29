@@ -174,11 +174,11 @@ C_RAWIO_tpa
         jr nz,C_WRITE_buf ;E != 0xFF, treat as C_WRITE
         ld a,(vm_wtc)     ;else check char byte
         or a
-        jr nz,tpabds4     ;key waiting, do BDOS call (to clear keyboard buffer)
+        jr nz,tpabds4     ;key waiting, do as BDOS call (to clear key buffer)
 CONST   ld a,0
         cp #16
-        call nc,tparawf   ;>=16 IRQs since last call = flush output first (to
-        ld a,(vm_wtc)     ;ensure output always appears even while waiting)
+        call nc,tparawf   ;>=16 IRQs since last call = flush output (to ensure
+        ld a,(vm_wtc)     ;output appears when waiting) and do as BDOS call
         or a
         jr z,CONST1
         ld a,#FF          ;for C_STAT, return 0 or FF
@@ -186,12 +186,12 @@ CONST1  ld b,#0
         ld h,#0
         ld l,a
         ret
-tparawf ld a,0            ;reset IRQ count and flush output if needed
-        ld (CONST+1),a
+tparawf ld a,0            ;reset IRQ count, flush output, and do as BDOS call
+        ld (CONST+1),a    ;(to periodically check for shell exit while waiting)
         ld a,(cwblen)
         inc a
-        jr nz,cwbsnd
-        ret
+        call nz,cwbsnd
+        jr tpabds4
         
 ;temp stack for BDOS calls (separate from IRQ since that may interrupt BDOS)
         ds 32

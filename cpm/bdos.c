@@ -709,10 +709,12 @@ void refresh_out_buffer(void) {
 // Note: CP/M will convert character 9 inline to spaces, even when used as a control code; this can probably be ignored,
 // but it means that programs may send the binary number 9 (e.g., for addresses) with the high bit set (stripped above).
 void print_to_terminal(char* addr) {
-    refresh_out_buffer();
-    while (*addr)
-        buffer_char(*addr++);
-    output_buffer();
+    if (*addr) {
+        refresh_out_buffer();
+        while (*addr)
+            buffer_char(*addr++);
+        output_buffer();
+    }
 }
 
 void console_output(unsigned char ch) {
